@@ -4,6 +4,7 @@ import { useSpring, animated, config } from '@react-spring/web';
 import { SectionWrapper, SectionContent } from '../../styles/Section';
 import useInView from '../../hooks/useInView';
 import useCardDeck from './CardDeck';
+import { ProjectsDoodles } from '../Doodles/Doodles';
 // CardDeck also exports DeckContainer styled component
 
 const ProjectsWrapper = styled(SectionWrapper)`
@@ -94,6 +95,7 @@ function Projects() {
 
   return (
     <ProjectsWrapper id="projects">
+      <ProjectsDoodles />
       <ProjectsContent>
         <AnimatedContent ref={ref} style={sectionSpring}>
           <Heading>projects</Heading>

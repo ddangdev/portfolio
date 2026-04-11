@@ -1,0 +1,9 @@
+<svg width="200" height="300" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M100 290 C100 290 98 220 100 160 C102 120 100 100 100 100
+    M100 100 C90 85 60 70 30 80 C55 65 80 70 100 100
+    M100 100 C85 80 55 55 25 50 C55 45 85 65 100 100
+    M100 100 C110 85 140 70 170 80 C145 65 120 70 100 100
+    M100 100 C115 80 145 55 175 50 C145 45 115 65 100 100
+    M100 100 C95 75 80 40 70 20 C85 35 95 65 100 100"
+    stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
