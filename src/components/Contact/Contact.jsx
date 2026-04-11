@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useSpring, animated, config } from '@react-spring/web';
 import { SectionWrapper, SectionContent } from '../../styles/Section';
 import useInView from '../../hooks/useInView';
+import { ContactDoodles } from '../Doodles/Doodles';
 
 const ContactWrapper = styled(SectionWrapper)`
   background: linear-gradient(
@@ -88,6 +89,7 @@ function Contact() {
 
   return (
     <ContactWrapper id="contact">
+      <ContactDoodles />
       <ContactContent>
         <AnimatedContent ref={ref} style={spring}>
           <Heading>say hello</Heading>

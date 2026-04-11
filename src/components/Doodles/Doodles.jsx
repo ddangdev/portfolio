@@ -1,0 +1,265 @@
+import { useEffect, useRef, useState, useCallback } from 'react';
+import styled, { keyframes, css } from 'styled-components';
+
+import PalmTree from '../../assets/illustrations/palm-tree.svg?raw';
+import Wave from '../../assets/illustrations/wave.svg?raw';
+import ShaveIce from '../../assets/illustrations/shave-ice.svg?raw';
+import Musubi from '../../assets/illustrations/musubi.svg?raw';
+import Plumeria from '../../assets/illustrations/plumeria.svg?raw';
+import Sun from '../../assets/illustrations/sun.svg?raw';
+import Surfboard from '../../assets/illustrations/surfboard.svg?raw';
+import Hibiscus from '../../assets/illustrations/hibiscus.svg?raw';
+import Turtle from '../../assets/illustrations/turtle.svg?raw';
+import Ukulele from '../../assets/illustrations/ukulele.svg?raw';
+
+const float = keyframes`
+  0% { transform: var(--base-rotate) translateY(0px); }
+  50% { transform: var(--base-rotate) translateY(-8px) rotate(2deg); }
+  100% { transform: var(--base-rotate) translateY(0px); }
+`;
+
+const DoodleWrapper = styled.div`
+  position: absolute;
+  pointer-events: none;
+  opacity: ${({ $opacity }) => $opacity || 0.3};
+  --base-rotate: rotate(${({ $rotate }) => $rotate || 0}deg);
+  transform: var(--base-rotate);
+  width: ${({ $size }) => $size || 100}px;
+  z-index: 0;
+  animation: ${float} ${({ $floatDuration }) => $floatDuration || 6}s ease-in-out infinite;
+  animation-delay: ${({ $floatDelay }) => $floatDelay || 0}s;
+
+  svg {
+    width: 100%;
+    height: auto;
+  }
+
+  svg path, svg circle, svg rect, svg line {
+    transition: none;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    --base-rotate: rotate(${({ $rotate }) => $rotate || 0}deg) scale(0.7);
+    opacity: ${({ $opacity }) => ($opacity || 0.3) * 0.7};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
+const doodleConfigs = [
+  // Hero section
+  { svg: PalmTree, x: 'right: 12%', y: 'top: 50%', color: '#2D3436', size: 130, rotate: 10, opacity: 0.18, delay: 200, id: 'hero-palm' },
+  { svg: Sun, x: 'right: 25%', y: 'top: 5%', color: '#2D3436', size: 90, opacity: 0.15, delay: 0, id: 'hero-sun' },
+  { svg: Wave, x: 'left: 10%', y: 'top: 75%', color: '#2D3436', size: 180, rotate: -3, opacity: 0.12, delay: 400, id: 'hero-wave' },
+  { svg: Surfboard, x: 'left: 20%', y: 'top: 55%', color: '#2D3436', size: 50, rotate: 25, opacity: 0.14, delay: 600, id: 'hero-surfboard' },
+
+  // About section
+  { svg: Plumeria, x: 'right: 15%', y: 'top: 15%', color: '#2D3436', size: 90, rotate: 15, opacity: 0.18, delay: 0, id: 'about-plumeria' },
+  { svg: Turtle, x: 'left: 12%', y: 'top: 25%', color: '#2D3436', size: 120, rotate: -5, opacity: 0.15, delay: 300, id: 'about-turtle' },
+  { svg: Hibiscus, x: 'right: 20%', y: 'top: 60%', color: '#2D3436', size: 80, rotate: -10, opacity: 0.12, delay: 500, id: 'about-hibiscus' },
+  { svg: Wave, x: 'left: 18%', y: 'top: 70%', color: '#2D3436', size: 150, rotate: 3, opacity: 0.12, delay: 200, id: 'about-wave' },
+
+  // Projects section
+  { svg: ShaveIce, x: 'left: 12%', y: 'top: 10%', color: '#2D3436', size: 90, rotate: -8, opacity: 0.18, delay: 0, id: 'projects-shaveice' },
+  { svg: Musubi, x: 'right: 12%', y: 'top: 45%', color: '#2D3436', size: 100, rotate: 12, opacity: 0.16, delay: 300, id: 'projects-musubi' },
+  { svg: Ukulele, x: 'left: 18%', y: 'top: 50%', color: '#2D3436', size: 60, rotate: -20, opacity: 0.14, delay: 500, id: 'projects-ukulele' },
+  { svg: Plumeria, x: 'right: 22%', y: 'top: 80%', color: '#2D3436', size: 70, rotate: 30, opacity: 0.12, delay: 700, id: 'projects-plumeria' },
+
+  // Contact section
+  { svg: PalmTree, x: 'left: 10%', y: 'top: 5%', color: '#2D3436', size: 120, rotate: -15, opacity: 0.18, delay: 0, id: 'contact-palm' },
+  { svg: Sun, x: 'right: 15%', y: 'top: 10%', color: '#2D3436', size: 80, opacity: 0.15, delay: 200, id: 'contact-sun' },
+  { svg: Wave, x: 'right: 10%', y: 'top: 60%', color: '#2D3436', size: 170, rotate: 5, opacity: 0.12, delay: 400, id: 'contact-wave' },
+  { svg: Surfboard, x: 'left: 22%', y: 'top: 55%', color: '#2D3436', size: 55, rotate: -30, opacity: 0.14, delay: 600, id: 'contact-surfboard' },
+];
+
+// Individual doodle that draws itself on when triggered
+// Stable random per doodle — seeded from delay so it's consistent across renders
+function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
+  const floatDuration = useRef(5 + (delay % 7) * 0.6);
+  const floatDelay = useRef((delay % 5) * 0.4);
+  const ref = useRef(null);
+  const animated = useRef(false);
+
+  useEffect(() => {
+    if (!draw || animated.current || !ref.current) return;
+    animated.current = true;
+
+    const paths = ref.current.querySelectorAll('svg path, svg circle, svg rect, svg line');
+
+    const DRAW_IN = 3000;       // draw-on duration
+    const HOLD = 6000;          // stay visible
+    const FADE_OUT = 2000;      // fade away
+    const PAUSE = 2000;         // pause before next cycle
+
+    // Measure and store path lengths
+    const pathLengths = [];
+    paths.forEach((path) => {
+      try {
+        pathLengths.push(path.getTotalLength ? path.getTotalLength() : 500);
+      } catch {
+        pathLengths.push(500);
+      }
+    });
+
+    // Reset all paths to fully hidden (dashoffset = full length, no transition)
+    function resetPaths() {
+      paths.forEach((path, i) => {
+        path.style.transition = 'none';
+        path.style.strokeDasharray = `${pathLengths[i]}`;
+        path.style.strokeDashoffset = `${pathLengths[i]}`;
+        // Force reflow on EACH path element individually so the browser
+        // commits the dashoffset value before we later add a transition
+        void path.getBoundingClientRect();
+      });
+    }
+
+    resetPaths();
+
+    const wrapper = ref.current;
+    wrapper.style.opacity = String(opacity);
+
+    let cancelled = false;
+    const timers = [];
+    const rafs = [];
+
+    function schedule(fn, ms) {
+      const id = setTimeout(() => { if (!cancelled) fn(); }, ms);
+      timers.push(id);
+      return id;
+    }
+
+    function runCycle() {
+      if (cancelled) return;
+      let t = 0;
+
+      // Phase 1: Draw in each path with stagger
+      // Use double-rAF to guarantee the reset state was painted before transitioning
+      schedule(() => {
+        const raf1 = requestAnimationFrame(() => {
+          const raf2 = requestAnimationFrame(() => {
+            if (cancelled) return;
+            paths.forEach((path, i) => {
+              setTimeout(() => {
+                if (cancelled) return;
+                path.style.transition = `stroke-dashoffset ${DRAW_IN}ms ease-in-out`;
+                path.style.strokeDashoffset = '0';
+              }, i * 200);
+            });
+          });
+          rafs.push(raf2);
+        });
+        rafs.push(raf1);
+      }, t);
+
+      // Phase 2: Hold (just wait after draw completes + stagger)
+      const staggerTotal = (paths.length - 1) * 200;
+      t += DRAW_IN + staggerTotal + HOLD;
+
+      // Phase 3: Fade out wrapper
+      schedule(() => {
+        wrapper.style.transition = `opacity ${FADE_OUT}ms ease-out`;
+        wrapper.style.opacity = '0';
+      }, t);
+      t += FADE_OUT;
+
+      // Phase 4: While invisible, reset paths and prepare for next cycle
+      schedule(() => {
+        // Reset all paths back to hidden state
+        resetPaths();
+
+        // Reset wrapper opacity instantly (still invisible because dashoffset hides paths)
+        wrapper.style.transition = 'none';
+        wrapper.style.opacity = String(opacity);
+        void wrapper.getBoundingClientRect();
+      }, t);
+      t += PAUSE;
+
+      // Phase 5: Start next draw cycle
+      schedule(() => {
+        runCycle();
+      }, t);
+    }
+
+    // Start with random offset so doodles aren't synchronized
+    const initialDelay = delay + Math.random() * 2000;
+    schedule(() => runCycle(), initialDelay);
+
+    return () => {
+      cancelled = true;
+      timers.forEach(clearTimeout);
+      rafs.forEach(cancelAnimationFrame);
+    };
+  }, [draw, delay, opacity]);
+
+  const coloredSvg = svg.replaceAll('currentColor', color);
+
+  return (
+    <DoodleWrapper
+      ref={ref}
+      $size={size}
+      $rotate={rotate}
+      $opacity={opacity}
+      $floatDuration={floatDuration.current}
+      $floatDelay={floatDelay.current}
+      style={style}
+      dangerouslySetInnerHTML={{ __html: coloredSvg }}
+    />
+  );
+}
+
+function SectionDoodles({ prefix }) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const items = doodleConfigs.filter(d => d.id.startsWith(prefix));
+
+  return (
+    <div ref={ref} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'visible' }}>
+      {items.map(d => (
+        <Doodle
+          key={d.id}
+          svg={d.svg}
+          color={d.color}
+          size={d.size}
+          rotate={d.rotate}
+          opacity={d.opacity}
+          delay={d.delay}
+          draw={inView}
+          style={{
+            [d.x.split(':')[0].trim()]: d.x.split(':')[1].trim(),
+            [d.y.split(':')[0].trim()]: d.y.split(':')[1].trim(),
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+export function HeroDoodles() { return <SectionDoodles prefix="hero" />; }
+export function AboutDoodles() { return <SectionDoodles prefix="about" />; }
+export function ProjectsDoodles() { return <SectionDoodles prefix="projects" />; }
+export function ContactDoodles() { return <SectionDoodles prefix="contact" />; }
