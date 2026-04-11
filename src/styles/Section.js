@@ -3,6 +3,8 @@ import styled from 'styled-components';
 // Full-width outer wrapper for section backgrounds
 export const SectionWrapper = styled.section`
   width: 100%;
+  position: relative;
+  overflow: visible;
 `;
 
 // Centered inner container for content

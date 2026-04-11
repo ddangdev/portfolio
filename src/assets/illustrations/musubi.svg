@@ -1,0 +1,10 @@
+<svg width="160" height="140" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rice block -->
+  <path d="M30 50 C30 35 35 25 50 25 L110 25 C125 25 130 35 130 50 L130 90 C130 105 125 115 110 115 L50 115 C35 115 30 105 30 90 Z"
+    stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Nori wrap (filled dark) -->
+  <rect x="25" y="60" width="110" height="20" rx="2" fill="currentColor" stroke="currentColor" stroke-width="6"/>
+  <!-- Rice texture lines -->
+  <path d="M55 25 L55 60 M105 25 L105 60 M55 80 L55 115 M105 80 L105 115"
+    stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+</svg>

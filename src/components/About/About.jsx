@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useSpring, animated, config } from '@react-spring/web';
 import { SectionWrapper, SectionContent } from '../../styles/Section';
 import useInView from '../../hooks/useInView';
+import { AboutDoodles } from '../Doodles/Doodles';
 
 const AboutWrapper = styled(SectionWrapper)`
   background: linear-gradient(
@@ -48,6 +49,7 @@ function About() {
 
   return (
     <AboutWrapper id="about">
+      <AboutDoodles />
       <SectionContent>
         <AnimatedContent ref={ref} style={spring}>
           <Heading>about me</Heading>
