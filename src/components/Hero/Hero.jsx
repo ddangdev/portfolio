@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useSpring, animated, config } from '@react-spring/web';
 import { SectionWrapper, SectionContent } from '../../styles/Section';
 import { HeroDoodles } from '../Doodles/Doodles';
+import HeroIllustration from './HeroIllustration';
 
 const HeroWrapper = styled(SectionWrapper)`
   background: #FFF3E0;
@@ -106,24 +107,10 @@ const SecondaryButton = styled.a`
   }
 `;
 
-const IllustrationPlaceholder = styled(animated.div)`
-  width: 400px;
-  height: 350px;
-  background: linear-gradient(135deg, rgba(255, 205, 178, 0.2), rgba(255, 229, 160, 0.15));
-  border-radius: ${({ theme }) => theme.radii.md};
+const IllustrationWrapper = styled(animated.div)`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: ${({ theme }) => theme.fontSizes.nav};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
-  text-transform: lowercase;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 100%;
-    height: 220px;
-    margin-top: 40px;
-  }
 `;
 
 function Hero() {
@@ -154,9 +141,9 @@ function Hero() {
             <SecondaryButton href="#contact">say hello</SecondaryButton>
           </ButtonGroup>
         </HeroText>
-        <IllustrationPlaceholder style={illustrationSpring}>
-          illustration placeholder
-        </IllustrationPlaceholder>
+        <IllustrationWrapper style={illustrationSpring}>
+          <HeroIllustration />
+        </IllustrationWrapper>
       </HeroContent>
     </HeroWrapper>
   );
