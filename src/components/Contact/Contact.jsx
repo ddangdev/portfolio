@@ -35,7 +35,7 @@ const IconRow = styled.div`
   gap: 24px;
 `;
 
-const IconCircle = styled.div`
+const IconCircle = styled.a`
   width: 48px;
   height: 48px;
   border-radius: ${({ theme }) => theme.radii.full};
@@ -50,6 +50,7 @@ const IconCircle = styled.div`
   cursor: pointer;
   text-transform: lowercase;
   font-weight: ${({ theme }) => theme.fontWeights.medium};
+  text-decoration: none;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
 
   ${({ $accent }) => $accent && `background: rgba(217, 139, 168, 0.08);`}
@@ -58,6 +59,11 @@ const IconCircle = styled.div`
     border-color: ${({ theme }) => theme.colors.accentPink};
     box-shadow: ${({ theme }) => theme.shadows.md};
     transform: scale(1.05);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 3px;
   }
 `;
 
@@ -90,9 +96,23 @@ function Contact() {
           <Heading>say hello</Heading>
           <Body>want to chat, collaborate, or just say hi?</Body>
           <IconRow>
-            <IconCircle>chat</IconCircle>
-            <IconCircle>in</IconCircle>
-            <ConstructionIcon $accent>🚧</ConstructionIcon>
+            <IconCircle href="#" aria-label="chat">chat</IconCircle>
+            <IconCircle
+              href="https://www.linkedin.com/in/duong-dang-68802a201/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="linkedin profile"
+            >
+              in
+            </IconCircle>
+            <ConstructionIcon
+              as="a"
+              href="#"
+              $accent
+              aria-label="more coming soon"
+            >
+              🚧
+            </ConstructionIcon>
           </IconRow>
         </AnimatedContent>
       </ContactContent>

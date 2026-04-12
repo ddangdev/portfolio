@@ -224,6 +224,9 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
       cancelled = true;
       timers.forEach(clearTimeout);
       activeAnimations.forEach((a) => a.cancel());
+      // Reset the guard so StrictMode's second effect invocation (or any
+      // legitimate re-run via dep change) can start a fresh cycle.
+      animated.current = false;
     };
   }, [draw, delay, opacity]);
 
@@ -248,20 +251,24 @@ function SectionDoodles({ prefix }) {
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    // Observe the parent section element (the nearest element with an id),
+    // not the absolutely-positioned doodle wrapper. Absolute + inset:0 can
+    // produce inconsistent IntersectionObserver behavior across browsers.
+    const wrapper = ref.current;
+    if (!wrapper) return;
+    const section = wrapper.closest('section, [id]') || wrapper;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setInView(true);
-          observer.unobserve(el);
+          observer.unobserve(section);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0, rootMargin: '0px 0px -10% 0px' }
     );
 
-    observer.observe(el);
+    observer.observe(section);
     return () => observer.disconnect();
   }, []);
 
