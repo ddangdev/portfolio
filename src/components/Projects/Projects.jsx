@@ -8,13 +8,7 @@ import { ProjectsDoodles } from '../Doodles/Doodles';
 // CardDeck also exports DeckContainer styled component
 
 const ProjectsWrapper = styled(SectionWrapper)`
-  background: linear-gradient(
-    180deg,
-    ${({ theme }) => theme.sectionTints.about} 0%,
-    ${({ theme }) => theme.sectionTints.projects} 15%,
-    ${({ theme }) => theme.sectionTints.projects} 85%,
-    ${({ theme }) => theme.sectionTints.contact} 100%
-  );
+  background: linear-gradient(to bottom, #E8F5EC 0%, #EDE7F6 6%, #EDE7F6 100%);
 `;
 
 const ProjectsContent = styled(SectionContent)`
@@ -52,8 +46,8 @@ const DealButton = styled(animated.button)`
   left: 50%;
   margin-top: -24px;
   margin-left: -70px;
-  background: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.accentLavender};
+  color: ${({ theme }) => theme.colors.white};
   padding: 12px 32px;
   border-radius: ${({ theme }) => theme.radii.lg};
   font-size: ${({ theme }) => theme.fontSizes.button};
@@ -65,7 +59,7 @@ const DealButton = styled(animated.button)`
   z-index: 30;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.primaryHover};
+    background: #8879C9;
     box-shadow: ${({ theme }) => theme.shadows.md};
   }
 `;
@@ -110,9 +104,9 @@ function Projects() {
             )}
           </DeckContainer>
 
-          {!deckEmpty && <SwipeHint>drag to discover next dish</SwipeHint>}
+          <SwipeHint style={{ opacity: deckEmpty ? 0 : 1 }}>drag to discover next dish</SwipeHint>
 
-          <RestaurantLabel>luca's — a tarot card menu</RestaurantLabel>
+          <RestaurantLabel>luca's — food & beverage menu</RestaurantLabel>
         </AnimatedContent>
       </ProjectsContent>
     </ProjectsWrapper>

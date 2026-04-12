@@ -4,7 +4,7 @@ import { SectionWrapper, SectionContent } from '../../styles/Section';
 import { HeroDoodles } from '../Doodles/Doodles';
 
 const HeroWrapper = styled(SectionWrapper)`
-  background: linear-gradient(180deg, ${({ theme }) => theme.sectionTints.hero} 0%, ${({ theme }) => theme.colors.bg} 100%);
+  background: #FFF3E0;
 `;
 
 const HeroContent = styled(SectionContent)`

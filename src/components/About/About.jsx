@@ -5,13 +5,7 @@ import useInView from '../../hooks/useInView';
 import { AboutDoodles } from '../Doodles/Doodles';
 
 const AboutWrapper = styled(SectionWrapper)`
-  background: linear-gradient(
-    180deg,
-    ${({ theme }) => theme.sectionTints.hero} 0%,
-    ${({ theme }) => theme.sectionTints.about} 15%,
-    ${({ theme }) => theme.sectionTints.about} 85%,
-    ${({ theme }) => theme.sectionTints.projects} 100%
-  );
+  background: linear-gradient(to bottom, #FFF3E0 0%, #E8F5EC 6%, #E8F5EC 100%);
 `;
 
 const AnimatedContent = styled(animated.div)``;

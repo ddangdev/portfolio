@@ -4,15 +4,17 @@
 const theme = {
   // ── Colors ────────────────────────────────────
   colors: {
-    bg: '#FFFAF5',
+    bg: '#FBF5EE',
     text: '#2D3436',
-    textMuted: '#7F8C8D',
-    primary: '#FFCDB2',
-    primaryHover: '#FFB899',
-    secondary: '#FFE5A0',
-    accentPink: '#FDCCE5',
-    accentSeafoam: '#B8E8E0',
-    accentLavender: '#C3BFFF',
+    textMuted: '#8B8480',
+    primary: '#F4A27D',          // deeper coral (Option A)
+    primaryHover: '#E88A60',     // darker coral for hover
+    secondary: '#FFE5A0',        // kept for hero illustration placeholder
+    accentPink: '#D98BA8',       // deeper rose (contact section)
+    accentSeafoam: '#4A9088',    // deeper teal (about section)
+    accentLavender: '#9B8AD9',   // richer lavender (projects section)
+    cardBg: '#FFFBF4',           // warm cream cards
+    cardBorder: 'rgba(150, 140, 230, 0.2)', // lavender-tinted
     white: '#FFFFFF',
     divider: 'rgba(45, 52, 54, 0.08)',
   },
