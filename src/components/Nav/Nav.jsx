@@ -71,6 +71,9 @@ const NavLink = styled.a`
 `;
 
 const LocationTime = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: ${({ theme }) => theme.fonts.code};
   font-size: 0.8125rem;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
@@ -79,10 +82,29 @@ const LocationTime = styled.div`
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
 
+  svg {
+    flex-shrink: 0;
+    color: #E53E3E;
+  }
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     font-size: 0.6875rem;
+    gap: 4px;
   }
 `;
+
+const PinIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 7 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" />
+    <circle cx="12" cy="10" r="3" fill="#FBF5EE" />
+  </svg>
+);
 
 const Hamburger = styled.button`
   display: none;
@@ -138,7 +160,7 @@ function Nav() {
     <>
       <NavOuter style={navSpring}>
         <NavInner>
-          <LocationTime>honolulu, hi — {formatHonoluluTime(now)}</LocationTime>
+          <LocationTime><PinIcon />honolulu, hi — {formatHonoluluTime(now)}</LocationTime>
           <Links>
             {SECTIONS.map((id) => (
               <NavLink key={id} href={`#${id}`} $active={activeId === id}>
