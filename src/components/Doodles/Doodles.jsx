@@ -98,35 +98,57 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
     const PAUSE = 2000;         // pause before next cycle
 
     // Measure and store path lengths
-    const pathLengths = [];
-    paths.forEach((path) => {
-      try {
-        pathLengths.push(path.getTotalLength ? path.getTotalLength() : 500);
-      } catch {
-        pathLengths.push(500);
+    // circle/rect/line don't support getTotalLength — compute perimeter manually
+    function getStrokeLength(el) {
+      const tag = el.tagName.toLowerCase();
+      if (tag === 'circle') {
+        const r = parseFloat(el.getAttribute('r') || el.getAttribute('R') || 0);
+        return 2 * Math.PI * r;
       }
-    });
-
-    // Reset all paths to fully hidden (dashoffset = full length, no transition)
-    function resetPaths() {
-      paths.forEach((path, i) => {
-        path.style.transition = 'none';
-        path.style.strokeDasharray = `${pathLengths[i]}`;
-        path.style.strokeDashoffset = `${pathLengths[i]}`;
-        // Force reflow on EACH path element individually so the browser
-        // commits the dashoffset value before we later add a transition
-        void path.getBoundingClientRect();
-      });
+      if (tag === 'ellipse') {
+        const rx = parseFloat(el.getAttribute('rx') || 0);
+        const ry = parseFloat(el.getAttribute('ry') || 0);
+        // Ramanujan approximation
+        return Math.PI * (3 * (rx + ry) - Math.sqrt((3 * rx + ry) * (rx + 3 * ry)));
+      }
+      if (tag === 'rect') {
+        const w = parseFloat(el.getAttribute('width') || 0);
+        const h = parseFloat(el.getAttribute('height') || 0);
+        return 2 * (w + h);
+      }
+      if (tag === 'line') {
+        const x1 = parseFloat(el.getAttribute('x1') || 0);
+        const y1 = parseFloat(el.getAttribute('y1') || 0);
+        const x2 = parseFloat(el.getAttribute('x2') || 0);
+        const y2 = parseFloat(el.getAttribute('y2') || 0);
+        return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+      }
+      // path, polyline, polygon — all support getTotalLength
+      try {
+        return el.getTotalLength();
+      } catch {
+        return 500;
+      }
     }
 
-    resetPaths();
+    const pathLengths = [];
+    paths.forEach((path) => {
+      pathLengths.push(getStrokeLength(path));
+    });
+
+    // Set up dasharray once — Web Animations API handles dashoffset from here
+    paths.forEach((path, i) => {
+      path.style.strokeDasharray = `${pathLengths[i]}`;
+      path.style.strokeDashoffset = `${pathLengths[i]}`;
+    });
 
     const wrapper = ref.current;
     wrapper.style.opacity = String(opacity);
 
     let cancelled = false;
     const timers = [];
-    const rafs = [];
+    // Track active Web Animations so we can cancel on cleanup
+    const activeAnimations = [];
 
     function schedule(fn, ms) {
       const id = setTimeout(() => { if (!cancelled) fn(); }, ms);
@@ -136,54 +158,62 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
 
     function runCycle() {
       if (cancelled) return;
+      // Clear previous animation references
+      activeAnimations.length = 0;
       let t = 0;
 
-      // Phase 1: Draw in each path with stagger
-      // Use double-rAF to guarantee the reset state was painted before transitioning
+      // Phase 1: Draw in each path with stagger using Web Animations API
+      // Each animate() call creates a fresh animation from explicit keyframes —
+      // no reflow hacks needed, works reliably on every cycle
       schedule(() => {
-        const raf1 = requestAnimationFrame(() => {
-          const raf2 = requestAnimationFrame(() => {
-            if (cancelled) return;
-            paths.forEach((path, i) => {
-              setTimeout(() => {
-                if (cancelled) return;
-                path.style.transition = `stroke-dashoffset ${DRAW_IN}ms ease-in-out`;
-                path.style.strokeDashoffset = '0';
-              }, i * 200);
-            });
-          });
-          rafs.push(raf2);
+        if (cancelled) return;
+        paths.forEach((path, i) => {
+          const anim = path.animate(
+            [
+              { strokeDashoffset: `${pathLengths[i]}` },
+              { strokeDashoffset: '0' },
+            ],
+            {
+              duration: DRAW_IN,
+              easing: 'ease-in-out',
+              delay: i * 200,
+              fill: 'forwards',
+            }
+          );
+          activeAnimations.push(anim);
         });
-        rafs.push(raf1);
       }, t);
 
-      // Phase 2: Hold (just wait after draw completes + stagger)
+      // Phase 2: Hold (wait for draw + stagger to finish)
       const staggerTotal = (paths.length - 1) * 200;
       t += DRAW_IN + staggerTotal + HOLD;
 
       // Phase 3: Fade out wrapper
       schedule(() => {
-        wrapper.style.transition = `opacity ${FADE_OUT}ms ease-out`;
-        wrapper.style.opacity = '0';
+        if (cancelled) return;
+        const fadeAnim = wrapper.animate(
+          [
+            { opacity: String(opacity) },
+            { opacity: '0' },
+          ],
+          { duration: FADE_OUT, easing: 'ease-out', fill: 'forwards' }
+        );
+        activeAnimations.push(fadeAnim);
       }, t);
       t += FADE_OUT;
 
-      // Phase 4: While invisible, reset paths and prepare for next cycle
+      // Phase 4: While invisible, cancel all animations to reset state
       schedule(() => {
-        // Reset all paths back to hidden state
-        resetPaths();
-
-        // Reset wrapper opacity instantly (still invisible because dashoffset hides paths)
-        wrapper.style.transition = 'none';
-        wrapper.style.opacity = String(opacity);
-        void wrapper.getBoundingClientRect();
+        if (cancelled) return;
+        // Cancel all Web Animations — elements snap back to their stylesheet values
+        // (dashoffset = full length from the inline style, wrapper opacity from inline style)
+        activeAnimations.forEach((a) => a.cancel());
+        activeAnimations.length = 0;
       }, t);
       t += PAUSE;
 
       // Phase 5: Start next draw cycle
-      schedule(() => {
-        runCycle();
-      }, t);
+      schedule(() => runCycle(), t);
     }
 
     // Start with random offset so doodles aren't synchronized
@@ -193,7 +223,7 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
     return () => {
       cancelled = true;
       timers.forEach(clearTimeout);
-      rafs.forEach(cancelAnimationFrame);
+      activeAnimations.forEach((a) => a.cancel());
     };
   }, [draw, delay, opacity]);
 
