@@ -5,12 +5,7 @@ import useInView from '../../hooks/useInView';
 import { ContactDoodles } from '../Doodles/Doodles';
 
 const ContactWrapper = styled(SectionWrapper)`
-  background: linear-gradient(
-    180deg,
-    ${({ theme }) => theme.sectionTints.projects} 0%,
-    ${({ theme }) => theme.sectionTints.contact} 15%,
-    ${({ theme }) => theme.sectionTints.contact} 100%
-  );
+  background: linear-gradient(to bottom, #EDE7F6 0%, #FCE4EC 6%, #FCE4EC 100%);
 `;
 
 const ContactContent = styled(SectionContent)`
@@ -45,7 +40,7 @@ const IconCircle = styled.div`
   height: 48px;
   border-radius: ${({ theme }) => theme.radii.full};
   background: ${({ theme }) => theme.colors.white};
-  border: 2px solid ${({ $accent, theme }) => $accent ? theme.colors.secondary : theme.colors.divider};
+  border: 2px solid ${({ $accent, theme }) => $accent ? theme.colors.accentPink : theme.colors.divider};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,10 +52,10 @@ const IconCircle = styled.div`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
 
-  ${({ $accent }) => $accent && `background: rgba(255, 229, 160, 0.1);`}
+  ${({ $accent }) => $accent && `background: rgba(217, 139, 168, 0.08);`}
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.colors.accentPink};
     box-shadow: ${({ theme }) => theme.shadows.md};
     transform: scale(1.05);
   }
