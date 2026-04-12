@@ -17,12 +17,12 @@ const theme = {
     divider: 'rgba(45, 52, 54, 0.08)',
   },
 
-  // Section background tints (8% opacity over bg)
+  // Section background tints (4% opacity over bg)
   sectionTints: {
-    hero: 'rgba(255, 229, 160, 0.08)',
-    about: 'rgba(184, 232, 224, 0.08)',
-    projects: 'rgba(195, 191, 255, 0.08)',
-    contact: 'rgba(253, 204, 229, 0.08)',
+    hero: 'rgba(255, 229, 160, 0.04)',
+    about: 'rgba(184, 232, 224, 0.04)',
+    projects: 'rgba(195, 191, 255, 0.04)',
+    contact: 'rgba(253, 204, 229, 0.04)',
   },
 
   // ── Typography ────────────────────────────────

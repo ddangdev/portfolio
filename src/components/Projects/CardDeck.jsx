@@ -87,18 +87,19 @@ function shuffleArray(arr) {
 }
 
 // Individual card with its own spring — completely self-contained
-function DeckCard({ item, stackIndex, totalCards, isTopRef, myIndex, onGone }) {
+function DeckCard({ item, stackIndex, totalCards, isTopRef, myIndex, onGone, dealDelay }) {
   const cardRef = useRef(null);
   const goneRef = useRef(false);
   const draggingRef = useRef(false);
   const startRef = useRef({ x: 0, y: 0 });
   const [hidden, setHidden] = useState(false);
 
+  // Deal-in: start above with opacity 0, spring into place after staggered delay
   const [spring, api] = useSpring(() => ({
-    x: 0,
-    y: 0,
-    rot: 0,
-    scale: 1,
+    from: { x: 0, y: -60, rot: 0, scale: 0.85, opacity: 0 },
+    to: { x: 0, y: 0, rot: 0, scale: 1, opacity: 1 },
+    delay: dealDelay,
+    config: { tension: 180, friction: 18 },
   }), []);  // empty deps — never re-create
 
   const onDown = useCallback((e) => {
@@ -159,6 +160,7 @@ function DeckCard({ item, stackIndex, totalCards, isTopRef, myIndex, onGone }) {
       style={{
         x: spring.x,
         y: spring.y,
+        opacity: spring.opacity,
         rotateZ: spring.rot.to((r) => `${r}deg`),
         scale: spring.scale,
         zIndex: goneRef.current ? totalCards + 5 : zBase,
@@ -205,6 +207,7 @@ export default function useCardDeck() {
   }, []);
 
   // Don't render cards at all when deck is empty — prevents re-render from resetting springs
+  // Deal-in stagger: bottom card (i=0) first, 80ms apart
   const cards = empty ? [] : deck.map((item, i) => (
     <DeckCard
       key={`${deckId}-${i}`}
@@ -214,6 +217,7 @@ export default function useCardDeck() {
       isTopRef={isTopRef}
       myIndex={i}
       onGone={onGone}
+      dealDelay={i * 80}
     />
   ));
 
