@@ -23,8 +23,8 @@ const CardEl = styled(animated.div)`
   width: ${({ theme }) => theme.layout.cardWidth};
   height: ${({ theme }) => theme.layout.cardHeight};
   border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.divider};
-  background: ${({ theme }) => theme.colors.white};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  background: ${({ theme }) => theme.colors.cardBg};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,6 +41,15 @@ const CardEl = styled(animated.div)`
   }
 `;
 
+const DishIconWrapper = styled.div`
+  position: relative;
+  margin-bottom: 24px;
+  pointer-events: none;
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    margin-bottom: 20px;
+  }
+`;
+
 const DishIcon = styled.div`
   width: 80px;
   height: 80px;
@@ -50,10 +59,26 @@ const DishIcon = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  margin-bottom: 24px;
-  pointer-events: none;
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 64px; height: 64px; font-size: 1.5rem; margin-bottom: 20px;
+    width: 64px; height: 64px; font-size: 1.5rem;
+  }
+`;
+
+const PriceBadge = styled.div`
+  position: absolute;
+  bottom: -4px;
+  right: -8px;
+  background: ${({ theme }) => theme.colors.accentLavender};
+  color: ${({ theme }) => theme.colors.white};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: 0.625rem;
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  padding: 3px 8px;
+  border-radius: ${({ theme }) => theme.radii.lg};
+  box-shadow: ${({ theme }) => theme.shadows.subtle};
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    font-size: 0.5625rem;
+    padding: 2px 6px;
   }
 `;
 
@@ -73,6 +98,7 @@ const DishDesc = styled.div`
   text-align: center;
   pointer-events: none;
 `;
+
 
 const DISMISS_THRESHOLD = 120;
 const FLY_DISTANCE = 1500;
@@ -170,7 +196,10 @@ function DeckCard({ item, stackIndex, totalCards, isTopRef, myIndex, onGone, dea
         ),
       }}
     >
-      <DishIcon>{item.emoji}</DishIcon>
+      <DishIconWrapper>
+        <DishIcon>{item.emoji}</DishIcon>
+        <PriceBadge>${item.price}</PriceBadge>
+      </DishIconWrapper>
       <DishName>{item.name}</DishName>
       <DishDesc>{item.desc}</DishDesc>
     </CardEl>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from '@react-spring/web';
 import useScrollDirection from '../../hooks/useScrollDirection';
@@ -9,8 +10,9 @@ const NavOuter = styled(animated.nav)`
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(255, 250, 245, 0.85);
-  backdrop-filter: blur(12px);
+  background: rgba(251, 245, 238, 0.72);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
   border-bottom: 1px solid ${({ theme }) => theme.colors.divider};
   box-shadow: ${({ theme }) => theme.shadows.nav};
 `;
@@ -30,13 +32,6 @@ const NavInner = styled.div`
   }
 `;
 
-const Logo = styled.div`
-  font-family: ${({ theme }) => theme.fonts.heading};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-  font-size: 1.25rem;
-  text-transform: lowercase;
-`;
-
 const Links = styled.div`
   display: flex;
   gap: 32px;
@@ -50,10 +45,42 @@ const Links = styled.div`
 `;
 
 const NavLink = styled.a`
-  color: ${({ $active, theme }) => $active ? theme.colors.primary : theme.colors.textMuted};
-  transition: color 0.2s;
+  color: ${({ $active, theme }) => $active ? theme.colors.text : theme.colors.textMuted};
+  font-weight: ${({ $active, theme }) => $active ? theme.fontWeights.semibold : theme.fontWeights.medium};
+  transition: color 0.2s, font-weight 0.2s;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: ${({ theme }) => theme.colors.primary};
+    border-radius: 1px;
+    transform: scaleX(${({ $active }) => $active ? 1 : 0});
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.text};
+    &::after { transform: scaleX(1); }
+  }
+`;
+
+const LocationTime = styled.div`
+  font-family: ${({ theme }) => theme.fonts.code};
+  font-size: 0.8125rem;
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  color: ${({ theme }) => theme.colors.text};
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: 0.6875rem;
   }
 `;
 
@@ -79,9 +106,28 @@ const NavSpacer = styled.div`
 
 const SECTIONS = ['about', 'projects', 'contact'];
 
+function formatHonoluluTime(date) {
+  // Honolulu is UTC-10, no DST
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Pacific/Honolulu',
+    hour12: true,
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+  }).formatToParts(date);
+  const get = (t) => parts.find((p) => p.type === t)?.value || '';
+  return `${get('hour')}:${get('minute')}:${get('second')} ${get('dayPeriod').toLowerCase()}`;
+}
+
 function Nav() {
   const { scrollDir, atTop } = useScrollDirection();
   const activeId = useScrollSpy(SECTIONS);
+
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
 
   const navSpring = useSpring({
     transform: scrollDir === 'down' && !atTop ? 'translateY(-100%)' : 'translateY(0%)',
@@ -92,7 +138,7 @@ function Nav() {
     <>
       <NavOuter style={navSpring}>
         <NavInner>
-          <Logo>dean</Logo>
+          <LocationTime>honolulu, hi — {formatHonoluluTime(now)}</LocationTime>
           <Links>
             {SECTIONS.map((id) => (
               <NavLink key={id} href={`#${id}`} $active={activeId === id}>
