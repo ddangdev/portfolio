@@ -10,12 +10,16 @@ const projectList = [
     id: 'lucas',
     name: "luca's",
     label: "luca's — food & beverage menu",
+    description: 'a fictional restaurant menu presented as a deck of tarot cards. drag to dismiss and discover the next dish.',
+    tech: ['react', 'react-spring', 'pointer events'],
     component: LucasExperience,
   },
   {
     id: 'cafe-dock',
     name: 'cafe dock',
     label: 'cafe dock — react-spring magnification demo',
+    description: 'a macOS-style magnifier dock reimagined as a cafe menu. icons grow toward your cursor, click to see details and preparation.',
+    tech: ['react', 'react-spring', 'svg'],
     component: CafeDock,
   },
 ];
