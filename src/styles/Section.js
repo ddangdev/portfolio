@@ -14,7 +14,7 @@ export const SectionContent = styled.div`
   padding: ${({ theme }) => theme.spacing.sectionPadding} ${({ theme }) => theme.spacing.contentPadding};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    padding: 80px 20px;
+    padding: 112px 20px;
   }
 `;
 

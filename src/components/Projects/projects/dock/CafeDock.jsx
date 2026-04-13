@@ -1,12 +1,29 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useSpring, useSprings } from '@react-spring/web';
+import { useTheme } from 'styled-components';
 import { cafeIconList } from './CafeIcons';
 import CafeItemPopup from './CafeItemPopup';
 import {
   BASE_SIZE, MAX_SCALE, FALLOFF, ICON_GAP, DOCK_PADDING_X, CELL_WIDTH,
   Wrapper, Tooltip, DockShell, DockArrow,
   IconTrack, IconCell, IconBody, Caption,
+  MobileGrid, MobileTile,
 } from './cafeDockStyles';
+
+// Live match against the tablet breakpoint — mobile layout swaps below it.
+function useIsMobile(breakpoint) {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' &&
+    window.matchMedia?.(`(max-width: ${breakpoint})`).matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint})`);
+    const onChange = (e) => setIsMobile(e.matches);
+    mq.addEventListener?.('change', onChange);
+    return () => mq.removeEventListener?.('change', onChange);
+  }, [breakpoint]);
+  return isMobile;
+}
 
 // ── Single icon with its own spring, driven by distance ────────
 
@@ -56,6 +73,8 @@ function DockIcon({ Icon, name, distance, onHover, onClick, cellStyle }) {
 // ── Main dock ──────────────────────────────────────────────────
 
 function CafeDock() {
+  const theme = useTheme();
+  const isMobile = useIsMobile(theme.breakpoints.tablet);
   const [mouseX, setMouseX] = useState(null);
   const [hoveredName, setHoveredName] = useState(null);
   const [openItemIndex, setOpenItemIndex] = useState(null); // ORIGINAL index in cafeIconList
@@ -133,9 +152,46 @@ function CafeDock() {
     openItem = cafeIconList[openItemIndex];
   }
 
-  // Total track width accommodates all icons laid out at their spring x.
-  const trackWidth = count * CELL_WIDTH - ICON_GAP;
+  // Only this many icons are visible at once on desktop — the rest rotate in
+  // via the left/right arrows. Keeps the dock from overflowing the carousel.
+  const VISIBLE_COUNT = Math.min(count, 6);
+  const trackWidth = VISIBLE_COUNT * CELL_WIDTH - ICON_GAP;
 
+  // ── Mobile layout: 3-col grid, tap opens centered modal popup ──
+  if (isMobile) {
+    const openItem = openItemIndex !== null ? cafeIconList[openItemIndex] : null;
+    return (
+      <Wrapper>
+        <MobileGrid role="list" aria-label="cafe menu">
+          {cafeIconList.map((item, idx) => {
+            const Icon = item.Icon;
+            return (
+              <MobileTile
+                key={item.id}
+                role="listitem"
+                onClick={() => onIconClick(idx)}
+                aria-label={`${item.name} details`}
+                $selected={openItemIndex === idx}
+              >
+                <Icon />
+              </MobileTile>
+            );
+          })}
+        </MobileGrid>
+        {openItem && (
+          <CafeItemPopup
+            item={openItem}
+            leftX={0}
+            onClose={onPopupClose}
+            modal
+          />
+        )}
+        <Caption>tap any icon for details.</Caption>
+      </Wrapper>
+    );
+  }
+
+  // ── Desktop layout: magnifying horizontal dock ──
   return (
     <Wrapper>
       <Tooltip style={tooltipSpring}>{hoveredName || '\u00A0'}</Tooltip>

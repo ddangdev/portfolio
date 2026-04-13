@@ -205,7 +205,7 @@ function Hero() {
         <HeroText style={textSpring}>
           <StatusBadge>
             <StatusDot aria-hidden="true" />
-            open for projects
+            accepting new web clients
           </StatusBadge>
           <Headline>hi, i'm dean.</Headline>
           <Tagline>i make things people enjoy using.</Tagline>

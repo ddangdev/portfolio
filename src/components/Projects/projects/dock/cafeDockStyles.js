@@ -111,10 +111,14 @@ export const DockArrow = styled.button`
 `;
 
 // Track holds all icons as absolute-positioned children with individual springs.
+// overflow:visible lets the magnified icon grow past the top, but we clip
+// horizontally via the inline style (width prop) so extra icons stay hidden.
 export const IconTrack = styled.div`
   position: relative;
   height: ${BASE_SIZE}px;
   flex-shrink: 0;
+  overflow-x: clip;
+  overflow-y: visible;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     height: 36px;
@@ -162,6 +166,69 @@ export const IconBody = styled(animated.div)`
     outline: 2px solid ${({ theme }) => theme.colors.primary};
     outline-offset: 4px;
     border-radius: 4px;
+  }
+`;
+
+// ── Mobile grid (shown below tablet breakpoint) ─────────────────
+// Replaces the horizontal dock with a 3-col grid of tappable icons.
+// Magnification + arrows are desktop-only (cursor behavior + fits in one row).
+export const MobileGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 16px;
+  background: rgba(255, 251, 244, 0.7);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-radius: 20px;
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  width: 100%;
+  max-width: 320px;
+`;
+
+export const MobileTile = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-radius: 14px;
+  background: ${({ theme }) => theme.colors.cardBg};
+  color: ${({ theme }) => theme.colors.text};
+  cursor: pointer;
+  font-family: inherit;
+  padding: 10px;
+  transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s;
+
+  svg {
+    width: 70%;
+    height: 70%;
+    shape-rendering: geometricPrecision;
+  }
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.accentLavender};
+    box-shadow: ${({ theme }) => theme.shadows.subtle};
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 3px;
+  }
+
+  ${({ $selected, theme }) => $selected && `
+    border-color: ${theme.colors.accentLavender};
+    background: ${theme.colors.accentLavender}1A;
+  `}
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:active { transform: none; }
   }
 `;
 

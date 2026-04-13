@@ -132,12 +132,19 @@ const Stage = styled.div`
   min-height: 440px;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    min-height: 400px;
+    /* Grid single-cell stacking so all SlideLayers share one cell and
+       Stage auto-sizes to the tallest project. Prevents tall projects
+       from overflowing and rendering behind dots/label/description. */
+    display: grid;
+    grid-template-areas: "stack";
+    min-height: 0;
   }
 `;
 
 // All layers absolutely positioned so entering + leaving layers
 // never push each other out of center during rapid transitions.
+// On mobile we switch to grid-area stacking (see Stage) so the container
+// grows with the currently mounted project.
 const SlideLayer = styled(animated.div)`
   position: absolute;
   top: 0;
@@ -147,6 +154,11 @@ const SlideLayer = styled(animated.div)`
   display: flex;
   justify-content: center;
   will-change: transform, opacity;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    position: relative;
+    grid-area: stack;
+  }
 `;
 
 const ProjectDots = styled.div`
