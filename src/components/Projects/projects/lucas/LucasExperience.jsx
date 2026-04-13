@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useSpring, animated } from '@react-spring/web';
-import useCardDeck from '../../CardDeck';
+import useCardDeck from './CardDeck';
 
 const Wrapper = styled.div`
   display: flex;
