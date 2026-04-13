@@ -16,6 +16,24 @@ const Wrapper = styled(animated.div)`
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 240px;
   }
+
+  ${({ $modal }) => $modal && `
+    position: fixed;
+    bottom: auto;
+    top: 50%;
+    left: 50% !important;
+    margin-left: -140px !important;
+    transform-origin: center;
+    width: 280px;
+    margin-top: -140px;
+  `}
+`;
+
+const Backdrop = styled(animated.div)`
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 52, 54, 0.35);
+  z-index: 15;
 `;
 
 const Card = styled.div`
@@ -141,7 +159,7 @@ const PrepText = styled.p`
   text-transform: lowercase;
 `;
 
-function CafeItemPopup({ item, leftX, onClose }) {
+function CafeItemPopup({ item, leftX, onClose, modal = false }) {
   const cardRef = useRef(null);
   const closeBtnRef = useRef(null);
 
@@ -184,43 +202,47 @@ function CafeItemPopup({ item, leftX, onClose }) {
   }, []);
 
   return (
-    <Wrapper
-      role="dialog"
-      aria-labelledby="cafe-item-name"
-      aria-describedby="cafe-item-prep"
-      style={{
-        left: `${leftX}px`,
-        marginLeft: '-140px', // half of width to center on icon
-        ...spring,
-      }}
-    >
-      <Card ref={cardRef}>
-        <CloseButton
-          ref={closeBtnRef}
-          onClick={onClose}
-          aria-label="close details"
-        >
-          ×
-        </CloseButton>
-        <Header>
-          <Name id="cafe-item-name">{item.name}</Name>
-          <PriceBadge>${item.price.toFixed(2)}</PriceBadge>
-        </Header>
-        <Section>
-          <Label>ingredients</Label>
-          <Ingredients>
-            {item.ingredients.map((ing) => (
-              <IngredientPill key={ing}>{ing}</IngredientPill>
-            ))}
-          </Ingredients>
-        </Section>
-        <Section>
-          <Label>preparation</Label>
-          <PrepText id="cafe-item-prep">{item.preparation}</PrepText>
-        </Section>
-        <Arrow />
-      </Card>
-    </Wrapper>
+    <>
+      {modal && <Backdrop onClick={onClose} style={{ opacity: spring.opacity }} />}
+      <Wrapper
+        role="dialog"
+        aria-labelledby="cafe-item-name"
+        aria-describedby="cafe-item-prep"
+        $modal={modal}
+        style={{
+          left: modal ? undefined : `${leftX}px`,
+          marginLeft: modal ? undefined : '-140px',
+          ...spring,
+        }}
+      >
+        <Card ref={cardRef}>
+          <CloseButton
+            ref={closeBtnRef}
+            onClick={onClose}
+            aria-label="close details"
+          >
+            ×
+          </CloseButton>
+          <Header>
+            <Name id="cafe-item-name">{item.name}</Name>
+            <PriceBadge>${item.price.toFixed(2)}</PriceBadge>
+          </Header>
+          <Section>
+            <Label>ingredients</Label>
+            <Ingredients>
+              {item.ingredients.map((ing) => (
+                <IngredientPill key={ing}>{ing}</IngredientPill>
+              ))}
+            </Ingredients>
+          </Section>
+          <Section>
+            <Label>preparation</Label>
+            <PrepText id="cafe-item-prep">{item.preparation}</PrepText>
+          </Section>
+          {!modal && <Arrow />}
+        </Card>
+      </Wrapper>
+    </>
   );
 }
 
