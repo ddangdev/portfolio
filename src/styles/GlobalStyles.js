@@ -9,6 +9,7 @@ const GlobalStyles = createGlobalStyle`
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
@@ -19,6 +20,7 @@ const GlobalStyles = createGlobalStyle`
     line-height: ${({ theme }) => theme.lineHeights.body};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
   }
 
   /* Soft vignette — darkens edges to draw eye inward */
