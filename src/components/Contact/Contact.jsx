@@ -1,8 +1,10 @@
+import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated, config } from '@react-spring/web';
 import { SectionWrapper, SectionContent } from '../../styles/Section';
 import useInView from '../../hooks/useInView';
 import { ContactDoodles } from '../Doodles/Doodles';
+import ContactFormPopup from './ContactFormPopup';
 
 const ContactWrapper = styled(SectionWrapper)`
   background: linear-gradient(to bottom, #EDE7F6 0%, #FCE4EC 6%, #FCE4EC 100%);
@@ -81,6 +83,9 @@ const ConstructionIcon = styled(IconCircle)`
 
 function Contact() {
   const [ref, inView] = useInView();
+  const [formOpen, setFormOpen] = useState(false);
+  const openForm = useCallback((e) => { e?.preventDefault(); setFormOpen(true); }, []);
+  const closeForm = useCallback(() => setFormOpen(false), []);
 
   const spring = useSpring({
     opacity: inView ? 1 : 0,
@@ -96,7 +101,13 @@ function Contact() {
           <Heading>say hello</Heading>
           <Body>want to chat, collaborate, or just say hi?</Body>
           <IconRow>
-            <IconCircle href="#" aria-label="chat">chat</IconCircle>
+            <IconCircle
+              href="#"
+              onClick={openForm}
+              aria-label="open contact form"
+            >
+              chat
+            </IconCircle>
             <IconCircle
               href="https://www.linkedin.com/in/duong-dang-68802a201/"
               target="_blank"
@@ -116,6 +127,8 @@ function Contact() {
           </IconRow>
         </AnimatedContent>
       </ContactContent>
+
+      <ContactFormPopup open={formOpen} onClose={closeForm} />
     </ContactWrapper>
   );
 }

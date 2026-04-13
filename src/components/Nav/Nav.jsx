@@ -126,7 +126,13 @@ const NavSpacer = styled.div`
   }
 `;
 
-const SECTIONS = ['about', 'projects', 'contact'];
+// Section id stays as "projects" for URL/anchor stability; label is what shows in nav.
+const SECTIONS = [
+  { id: 'about',    label: 'about' },
+  { id: 'projects', label: 'features' },
+  { id: 'contact',  label: 'contact' },
+];
+const SECTION_IDS = SECTIONS.map((s) => s.id);
 
 function formatHonoluluTime(date) {
   // Honolulu is UTC-10, no DST
@@ -143,7 +149,7 @@ function formatHonoluluTime(date) {
 
 function Nav() {
   const { scrollDir, atTop } = useScrollDirection();
-  const activeId = useScrollSpy(SECTIONS);
+  const activeId = useScrollSpy(SECTION_IDS);
 
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
@@ -162,9 +168,9 @@ function Nav() {
         <NavInner>
           <LocationTime><PinIcon />honolulu, hi — {formatHonoluluTime(now)}</LocationTime>
           <Links>
-            {SECTIONS.map((id) => (
+            {SECTIONS.map(({ id, label }) => (
               <NavLink key={id} href={`#${id}`} $active={activeId === id}>
-                {id}
+                {label}
               </NavLink>
             ))}
           </Links>
