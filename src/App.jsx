@@ -2,6 +2,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
 import GlobalStyles from './styles/GlobalStyles';
 import Nav from './components/Nav/Nav';
+import ScrollProgress from './components/ScrollProgress';
 import Hero from './components/Hero/Hero';
 import About from './components/About/About';
 import Projects from './components/Projects/Projects';
@@ -13,6 +14,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <a href="#about" className="sr-only">skip to content</a>
+      <ScrollProgress />
       <Nav />
       <main>
         <Hero />
