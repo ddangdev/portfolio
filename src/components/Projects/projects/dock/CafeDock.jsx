@@ -16,7 +16,14 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 440px; /* match the Stage min-height so dock centers vertically */
   padding: 24px 8px;
+  width: 100%;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    min-height: 400px;
+  }
 `;
 
 const Tooltip = styled(animated.div)`

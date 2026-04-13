@@ -1,12 +1,38 @@
 <svg width="180" height="140" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M90 30 C60 30 35 50 35 75 C35 100 60 115 90 115 C120 115 145 100 145 75 C145 50 120 30 90 30 Z
-    M55 55 C50 45 40 38 30 40
-    M125 55 C130 45 140 38 150 40
-    M55 95 C50 105 42 112 32 110
-    M125 95 C130 105 138 112 148 110
-    M145 75 C155 73 165 70 170 65
-    M70 50 C75 60 85 60 90 50
-    M90 50 C95 60 105 60 110 50
-    M70 75 C80 85 100 85 110 75"
-    stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Top-view sea turtle: oval shell + round head poking out + 4 flippers + short tail -->
+
+  <!-- Shell -->
+  <ellipse cx="90" cy="70" rx="52" ry="40"
+           stroke="currentColor" stroke-width="6"/>
+
+  <!-- Head: round and clearly separate from the shell -->
+  <circle cx="152" cy="70" r="12"
+          stroke="currentColor" stroke-width="5"/>
+  <!-- Eye dot -->
+  <circle cx="156" cy="67" r="1.8" fill="currentColor"/>
+
+  <!-- Tail: simple V on the left side -->
+  <path d="M 38 70 L 22 62"
+        stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 38 70 L 22 78"
+        stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Front-right flipper -->
+  <path d="M 118 42 Q 138 28 148 35"
+        stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+  <!-- Back-right flipper -->
+  <path d="M 118 98 Q 138 112 148 105"
+        stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+  <!-- Front-left flipper -->
+  <path d="M 62 42 Q 42 28 32 35"
+        stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+  <!-- Back-left flipper -->
+  <path d="M 62 98 Q 42 112 32 105"
+        stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Shell pattern: centerline + a horizontal curve to suggest scute divisions -->
+  <path d="M 90 34 L 90 106"
+        stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 48 86 Q 90 74 132 86"
+        stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
 </svg>

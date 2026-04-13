@@ -84,31 +84,26 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
   const floatDuration = useRef(5 + (delay % 7) * 0.6);
   const floatDelay = useRef((delay % 5) * 0.4);
   const ref = useRef(null);
-  const animated = useRef(false);
 
   useEffect(() => {
-    if (!draw || animated.current || !ref.current) return;
-    animated.current = true;
+    if (!draw || !ref.current) return;
 
-    const paths = ref.current.querySelectorAll('svg path, svg circle, svg rect, svg line');
+    const wrapper = ref.current;
+    const paths = wrapper.querySelectorAll(
+      'svg path, svg circle, svg rect, svg line, svg ellipse, svg polyline, svg polygon'
+    );
+    if (paths.length === 0) return;
 
-    const DRAW_IN = 3000;       // draw-on duration
-    const HOLD = 6000;          // stay visible
-    const FADE_OUT = 2000;      // fade away
-    const PAUSE = 2000;         // pause before next cycle
-
-    // Measure and store path lengths
-    // circle/rect/line don't support getTotalLength — compute perimeter manually
+    // Measure path lengths (circle/rect/line/ellipse don't support getTotalLength)
     function getStrokeLength(el) {
       const tag = el.tagName.toLowerCase();
       if (tag === 'circle') {
-        const r = parseFloat(el.getAttribute('r') || el.getAttribute('R') || 0);
+        const r = parseFloat(el.getAttribute('r') || 0);
         return 2 * Math.PI * r;
       }
       if (tag === 'ellipse') {
         const rx = parseFloat(el.getAttribute('rx') || 0);
         const ry = parseFloat(el.getAttribute('ry') || 0);
-        // Ramanujan approximation
         return Math.PI * (3 * (rx + ry) - Math.sqrt((3 * rx + ry) * (rx + 3 * ry)));
       }
       if (tag === 'rect') {
@@ -123,110 +118,91 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
         const y2 = parseFloat(el.getAttribute('y2') || 0);
         return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
       }
-      // path, polyline, polygon — all support getTotalLength
-      try {
-        return el.getTotalLength();
-      } catch {
-        return 500;
-      }
+      try { return el.getTotalLength(); } catch { return 500; }
     }
+    const pathLengths = Array.from(paths).map(getStrokeLength);
 
-    const pathLengths = [];
-    paths.forEach((path) => {
-      pathLengths.push(getStrokeLength(path));
-    });
-
-    // Set up dasharray once — Web Animations API handles dashoffset from here
+    // Initialize: set dasharray, start paths hidden, wrapper visible at target.
     paths.forEach((path, i) => {
-      path.style.strokeDasharray = `${pathLengths[i]}`;
-      path.style.strokeDashoffset = `${pathLengths[i]}`;
+      path.style.strokeDasharray = String(pathLengths[i]);
+      path.style.strokeDashoffset = String(pathLengths[i]);
     });
-
-    const wrapper = ref.current;
     wrapper.style.opacity = String(opacity);
 
+    // ── Timing constants ────────────────────────────────────
+    const DRAW_IN = 3000;
+    const STAGGER = 200;
+    const HOLD = 6000;
+    const FADE_OUT = 2000;
+    const PAUSE = 2000;
+    const staggerTotal = (paths.length - 1) * STAGGER;
+    const drawEnd = DRAW_IN + staggerTotal;         // everyone finished drawing
+    const holdEnd = drawEnd + HOLD;
+    const fadeEnd = holdEnd + FADE_OUT;
+    const CYCLE = fadeEnd + PAUSE;
+
+    // Random start offset so doodles aren't synchronized
+    const startTime = performance.now() + delay + Math.random() * 2000;
+
+    // ── Single rAF loop drives every frame ──────────────────
+    // The phase within the cycle is a pure function of elapsed time.
+    // No setTimeout chains to drift, no Web Animations to cancel/race.
+    // When the tab is backgrounded rAF pauses; when it resumes, `now`
+    // jumps forward and we pick up cleanly at the new phase.
+    function easeInOut(t) {
+      return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    }
+
+    let rafId = 0;
     let cancelled = false;
-    const timers = [];
-    // Track active Web Animations so we can cancel on cleanup
-    const activeAnimations = [];
 
-    function schedule(fn, ms) {
-      const id = setTimeout(() => { if (!cancelled) fn(); }, ms);
-      timers.push(id);
-      return id;
-    }
-
-    function runCycle() {
+    function tick(now) {
       if (cancelled) return;
-      // Clear previous animation references
-      activeAnimations.length = 0;
-      let t = 0;
+      const elapsed = now - startTime;
+      if (elapsed < 0) {
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+      const phase = elapsed % CYCLE;
 
-      // Phase 1: Draw in each path with stagger using Web Animations API
-      // Each animate() call creates a fresh animation from explicit keyframes —
-      // no reflow hacks needed, works reliably on every cycle
-      schedule(() => {
-        if (cancelled) return;
-        paths.forEach((path, i) => {
-          const anim = path.animate(
-            [
-              { strokeDashoffset: `${pathLengths[i]}` },
-              { strokeDashoffset: '0' },
-            ],
-            {
-              duration: DRAW_IN,
-              easing: 'ease-in-out',
-              delay: i * 200,
-              fill: 'forwards',
-            }
-          );
-          activeAnimations.push(anim);
-        });
-      }, t);
+      // Per-path draw-in with stagger
+      for (let i = 0; i < paths.length; i++) {
+        const pathStart = i * STAGGER;
+        const pathEnd = pathStart + DRAW_IN;
+        let dashoffset;
+        if (phase < pathStart) {
+          dashoffset = pathLengths[i];                              // hidden (not started)
+        } else if (phase < pathEnd) {
+          const t = (phase - pathStart) / DRAW_IN;
+          dashoffset = pathLengths[i] * (1 - easeInOut(t));         // drawing
+        } else if (phase < fadeEnd) {
+          dashoffset = 0;                                            // fully drawn (held or fading)
+        } else {
+          dashoffset = pathLengths[i];                              // hidden during PAUSE
+        }
+        paths[i].style.strokeDashoffset = String(dashoffset);
+      }
 
-      // Phase 2: Hold (wait for draw + stagger to finish)
-      const staggerTotal = (paths.length - 1) * 200;
-      t += DRAW_IN + staggerTotal + HOLD;
+      // Wrapper opacity: visible during draw+hold, fade during FADE_OUT, hidden during PAUSE
+      let op;
+      if (phase < holdEnd) {
+        op = opacity;
+      } else if (phase < fadeEnd) {
+        const t = (phase - holdEnd) / FADE_OUT;
+        op = opacity * (1 - t);
+      } else {
+        op = 0;
+      }
+      wrapper.style.opacity = String(op);
 
-      // Phase 3: Fade out wrapper
-      schedule(() => {
-        if (cancelled) return;
-        const fadeAnim = wrapper.animate(
-          [
-            { opacity: String(opacity) },
-            { opacity: '0' },
-          ],
-          { duration: FADE_OUT, easing: 'ease-out', fill: 'forwards' }
-        );
-        activeAnimations.push(fadeAnim);
-      }, t);
-      t += FADE_OUT;
-
-      // Phase 4: While invisible, cancel all animations to reset state
-      schedule(() => {
-        if (cancelled) return;
-        // Cancel all Web Animations — elements snap back to their stylesheet values
-        // (dashoffset = full length from the inline style, wrapper opacity from inline style)
-        activeAnimations.forEach((a) => a.cancel());
-        activeAnimations.length = 0;
-      }, t);
-      t += PAUSE;
-
-      // Phase 5: Start next draw cycle
-      schedule(() => runCycle(), t);
+      rafId = requestAnimationFrame(tick);
     }
 
-    // Start with random offset so doodles aren't synchronized
-    const initialDelay = delay + Math.random() * 2000;
-    schedule(() => runCycle(), initialDelay);
+    rafId = requestAnimationFrame(tick);
 
     return () => {
       cancelled = true;
-      timers.forEach(clearTimeout);
-      activeAnimations.forEach((a) => a.cancel());
-      // Reset the guard so StrictMode's second effect invocation (or any
-      // legitimate re-run via dep change) can start a fresh cycle.
-      animated.current = false;
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [draw, delay, opacity]);
 
