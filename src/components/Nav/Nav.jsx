@@ -70,7 +70,7 @@ const NavLink = styled.a`
   }
 `;
 
-const LocationTime = styled.div`
+const LocationTime = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -81,10 +81,23 @@ const LocationTime = styled.div`
   text-transform: lowercase;
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
 
   svg {
     flex-shrink: 0;
     color: #E53E3E;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -166,7 +179,16 @@ function Nav() {
     <>
       <NavOuter style={navSpring}>
         <NavInner>
-          <LocationTime><PinIcon />honolulu, hi — {formatHonoluluTime(now)}</LocationTime>
+          <LocationTime
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            aria-label="back to top"
+          >
+            <PinIcon />honolulu, hi — {formatHonoluluTime(now)}
+          </LocationTime>
           <Links>
             {SECTIONS.map(({ id, label }) => (
               <NavLink key={id} href={`#${id}`} $active={activeId === id}>

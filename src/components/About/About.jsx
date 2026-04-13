@@ -25,6 +25,10 @@ const Bio = styled.p`
   color: ${({ theme }) => theme.colors.textMuted};
   max-width: 640px;
   text-transform: lowercase;
+
+  & + & {
+    margin-top: 20px;
+  }
 `;
 
 const Keyword = styled.strong`
@@ -48,11 +52,25 @@ function About() {
         <AnimatedContent ref={ref} style={spring}>
           <Heading>about me</Heading>
           <Bio>
-            i'm <Keyword>dean</Keyword>, a developer and maker based in{' '}
-            <Keyword>honolulu</Keyword>. i build <Keyword>games</Keyword>,{' '}
-            <Keyword>apps</Keyword>, and <Keyword>tools</Keyword> — mostly driven
-            by whatever sounds fun at the time. i work with <Keyword>ai</Keyword> to
-            design and create, and i care about making things that feel good to use.
+            i'm <Keyword>dean</Keyword>, based in <Keyword>honolulu</Keyword>.
+            i build <Keyword>websites</Keyword> that are fun to use and easy
+            to make your own — every project gets its own <Keyword>personality</Keyword>,
+            not a stamped-out template.
+          </Bio>
+          <Bio>
+            if you've got an idea — a <Keyword>small business site</Keyword>,
+            a <Keyword>portfolio</Keyword>, a <Keyword>landing page</Keyword>,
+            a <Keyword>passion project</Keyword> — i'd love to help you get it
+            off the ground. my process is <Keyword>collaborative</Keyword>:
+            we start with what matters to you, i prototype fast, and we iterate
+            until it feels right. i work with <Keyword>ai</Keyword> to design
+            and ship quickly, and i care about making things that feel
+            <Keyword> good to use</Keyword>.
+          </Bio>
+          <Bio>
+            i also tinker with <Keyword>games</Keyword>, <Keyword>apps</Keyword>,
+            and <Keyword>tools</Keyword> on the side, mostly for the joy of it.
+            reach out any time — i'm always down to chat about a new project.
           </Bio>
         </AnimatedContent>
       </SectionContent>
