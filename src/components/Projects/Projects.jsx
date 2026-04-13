@@ -8,6 +8,9 @@ import projectList from './projects/projectList.jsx';
 
 const ProjectsWrapper = styled(SectionWrapper)`
   background: linear-gradient(to bottom, #E8F5EC 0%, #EDE7F6 6%, #EDE7F6 100%);
+  /* Lift the whole section above neighboring sections so cards dragged
+     off-edge paint over Contact/About instead of disappearing behind them. */
+  z-index: 2;
 `;
 
 const ProjectsContent = styled(SectionContent)`
@@ -214,19 +217,19 @@ function Projects() {
       <ProjectsDoodles />
       <ProjectsContent>
         <AnimatedContent ref={ref} style={sectionSpring}>
-          <Heading>projects</Heading>
-          <Subtext>things i've been working on</Subtext>
+          <Heading>features</Heading>
+          <Subtext>interactive things i've been building</Subtext>
 
           <SwitcherShell>
             <ArrowGroup $side="left">
               <SectionArrow
                 onClick={() => goProject(-1)}
-                aria-label="previous project"
+                aria-label="previous feature"
                 disabled={projectList.length <= 1}
               >
                 ←
               </SectionArrow>
-              <ArrowLabel>prev project</ArrowLabel>
+              <ArrowLabel>prev feature</ArrowLabel>
             </ArrowGroup>
 
             <Stage>
@@ -243,16 +246,16 @@ function Projects() {
             <ArrowGroup $side="right">
               <SectionArrow
                 onClick={() => goProject(1)}
-                aria-label="next project"
+                aria-label="next feature"
                 disabled={projectList.length <= 1}
               >
                 →
               </SectionArrow>
-              <ArrowLabel>next project</ArrowLabel>
+              <ArrowLabel>next feature</ArrowLabel>
             </ArrowGroup>
           </SwitcherShell>
 
-          <ProjectDots role="tablist" aria-label="project position">
+          <ProjectDots role="tablist" aria-label="feature position">
             {projectList.map((p, i) => (
               <ProjectDot
                 key={p.id}
