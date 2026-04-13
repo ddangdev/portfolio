@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated, config } from '@react-spring/web';
-import { SectionWrapper, SectionContent } from '../../styles/Section';
+import { SectionWrapper, SectionContent, SectionNumber } from '../../styles/Section';
 import useInView from '../../hooks/useInView';
 import { ContactDoodles } from '../Doodles/Doodles';
 import ContactFormPopup from './ContactFormPopup';
@@ -34,7 +34,36 @@ const Body = styled.p`
 const IconRow = styled.div`
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 28px;
+  margin-bottom: 32px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    gap: 18px;
+  }
+`;
+
+const IconItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+const IconLabel = styled.span`
+  font-size: 0.6875rem;
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+`;
+
+const ResponseNote = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-transform: lowercase;
+  font-style: italic;
+  margin-top: 32px;
+  opacity: 0.8;
 `;
 
 const IconCircle = styled.a`
@@ -95,36 +124,64 @@ function Contact() {
 
   return (
     <ContactWrapper id="contact">
+      <SectionNumber>04 / contact</SectionNumber>
       <ContactDoodles />
       <ContactContent>
         <AnimatedContent ref={ref} style={spring}>
           <Heading>say hello</Heading>
           <Body>want to chat, collaborate, or just say hi?</Body>
           <IconRow>
-            <IconCircle
-              href="#"
-              onClick={openForm}
-              aria-label="open contact form"
-            >
-              chat
-            </IconCircle>
-            <IconCircle
-              href="https://www.linkedin.com/in/duong-dang-68802a201/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="linkedin profile"
-            >
-              in
-            </IconCircle>
-            <ConstructionIcon
-              as="a"
-              href="#"
-              $accent
-              aria-label="more coming soon"
-            >
-              🚧
-            </ConstructionIcon>
+            <IconItem>
+              <IconCircle
+                href="#"
+                onClick={openForm}
+                aria-label="open contact form"
+              >
+                chat
+              </IconCircle>
+              <IconLabel>message</IconLabel>
+            </IconItem>
+
+            <IconItem>
+              <IconCircle
+                href="https://www.linkedin.com/in/duong-dang-68802a201/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="linkedin profile"
+              >
+                in
+              </IconCircle>
+              <IconLabel>linkedin</IconLabel>
+            </IconItem>
+
+            <IconItem>
+              <IconCircle
+                href="https://github.com/ddangdev"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="github profile"
+              >
+                gh
+              </IconCircle>
+              <IconLabel>github</IconLabel>
+            </IconItem>
+
+            <IconItem>
+              <ConstructionIcon
+                as="a"
+                href="#"
+                $accent
+                aria-label="more coming soon"
+              >
+                🚧
+              </ConstructionIcon>
+              <IconLabel>more soon</IconLabel>
+            </IconItem>
           </IconRow>
+
+          <ResponseNote>
+            typical response time: within a day or two · based in honolulu (hst)
+          </ResponseNote>
         </AnimatedContent>
       </ContactContent>
 

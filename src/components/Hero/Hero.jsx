@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useSpring, animated, config } from '@react-spring/web';
-import { SectionWrapper, SectionContent } from '../../styles/Section';
+import { SectionWrapper, SectionContent, SectionNumber } from '../../styles/Section';
 import { HeroDoodles } from '../Doodles/Doodles';
 import HeroIllustration from './HeroIllustration';
 
@@ -113,6 +113,75 @@ const IllustrationWrapper = styled(animated.div)`
   justify-content: center;
 `;
 
+// Small pill shown above the headline: a pulsing green dot + "open for projects"
+const StatusBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  margin-bottom: 20px;
+  background: rgba(74, 144, 136, 0.1);
+  border: 1px solid rgba(74, 144, 136, 0.3);
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.accentSeafoam};
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  width: fit-content;
+`;
+
+const StatusDot = styled.span`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.accentSeafoam};
+  box-shadow: 0 0 0 0 rgba(74, 144, 136, 0.5);
+  animation: pulse 2s ease-out infinite;
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(74, 144, 136, 0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(74, 144, 136, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(74, 144, 136, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
+// "Scroll to explore" cue below the CTAs — subtle, with a bouncing arrow
+const ScrollCue = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 56px;
+  font-family: ${({ theme }) => theme.fonts.code};
+  font-size: 0.6875rem;
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-transform: lowercase;
+  letter-spacing: 0.12em;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    margin-top: 40px;
+    justify-content: center;
+  }
+`;
+
+const ScrollArrow = styled.span`
+  display: inline-block;
+  animation: bob 2s ease-in-out infinite;
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
 function Hero() {
   const textSpring = useSpring({
     from: { opacity: 0, transform: 'translateY(30px)' },
@@ -130,9 +199,14 @@ function Hero() {
 
   return (
     <HeroWrapper>
+      <SectionNumber>01 / intro</SectionNumber>
       <HeroDoodles />
       <HeroContent>
         <HeroText style={textSpring}>
+          <StatusBadge>
+            <StatusDot aria-hidden="true" />
+            open for projects
+          </StatusBadge>
           <Headline>hi, i'm dean.</Headline>
           <Tagline>i make things people enjoy using.</Tagline>
           <Subtitle>building software, games, and whatever sounds fun.</Subtitle>
@@ -140,6 +214,10 @@ function Hero() {
             <PrimaryButton href="#projects">see my work</PrimaryButton>
             <SecondaryButton href="#contact">say hello</SecondaryButton>
           </ButtonGroup>
+          <ScrollCue aria-hidden="true">
+            scroll to explore
+            <ScrollArrow>↓</ScrollArrow>
+          </ScrollCue>
         </HeroText>
         <IllustrationWrapper style={illustrationSpring}>
           <HeroIllustration />

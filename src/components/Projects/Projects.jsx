@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated, config, useTransition } from '@react-spring/web';
-import { SectionWrapper, SectionContent } from '../../styles/Section';
+import { SectionWrapper, SectionContent, SectionNumber } from '../../styles/Section';
 import useInView from '../../hooks/useInView';
 import { ProjectsDoodles } from '../Doodles/Doodles';
 import projectList from './projects/projectList.jsx';
@@ -181,6 +181,35 @@ const ProjectLabel = styled.p`
   margin-top: 24px;
 `;
 
+const ProjectDescription = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-transform: lowercase;
+  max-width: 560px;
+  margin: 20px auto 0;
+  line-height: 1.6;
+`;
+
+const TechRow = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+`;
+
+const TechPill = styled.span`
+  font-family: ${({ theme }) => theme.fonts.code};
+  font-size: 0.6875rem;
+  color: ${({ theme }) => theme.colors.accentLavender};
+  background: rgba(155, 138, 217, 0.1);
+  border: 1px solid rgba(155, 138, 217, 0.2);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+`;
+
 function Projects() {
   const [ref, inView] = useInView();
   const [projectIndex, setProjectIndex] = useState(0);
@@ -214,6 +243,7 @@ function Projects() {
 
   return (
     <ProjectsWrapper id="projects">
+      <SectionNumber>03 / features</SectionNumber>
       <ProjectsDoodles />
       <ProjectsContent>
         <AnimatedContent ref={ref} style={sectionSpring}>
@@ -268,6 +298,18 @@ function Projects() {
           </ProjectDots>
 
           <ProjectLabel>{currentProject.label}</ProjectLabel>
+
+          {currentProject.description && (
+            <ProjectDescription>{currentProject.description}</ProjectDescription>
+          )}
+
+          {currentProject.tech && currentProject.tech.length > 0 && (
+            <TechRow aria-label="technologies used">
+              {currentProject.tech.map((t) => (
+                <TechPill key={t}>{t}</TechPill>
+              ))}
+            </TechRow>
+          )}
         </AnimatedContent>
       </ProjectsContent>
     </ProjectsWrapper>
