@@ -40,7 +40,20 @@ const Links = styled.div`
   text-transform: lowercase;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    gap: 18px;
+  }
+`;
+
+const FullLabel = styled.span`
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     display: none;
+  }
+`;
+
+const ShortLabel = styled.span`
+  display: none;
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    display: inline;
   }
 `;
 
@@ -119,18 +132,6 @@ const PinIcon = () => (
   </svg>
 );
 
-const Hamburger = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  color: ${({ theme }) => theme.colors.text};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    display: block;
-  }
-`;
-
 const NavSpacer = styled.div`
   height: ${({ theme }) => theme.layout.navHeight};
 
@@ -141,9 +142,9 @@ const NavSpacer = styled.div`
 
 // Section id stays as "projects" for URL/anchor stability; label is what shows in nav.
 const SECTIONS = [
-  { id: 'about',    label: 'about' },
-  { id: 'projects', label: 'features' },
-  { id: 'contact',  label: 'contact' },
+  { id: 'about',    label: 'about',    short: 'ab' },
+  { id: 'projects', label: 'features', short: 'fe' },
+  { id: 'contact',  label: 'contact',  short: 'co' },
 ];
 const SECTION_IDS = SECTIONS.map((s) => s.id);
 
@@ -190,13 +191,13 @@ function Nav() {
             <PinIcon />honolulu, hi — {formatHonoluluTime(now)}
           </LocationTime>
           <Links>
-            {SECTIONS.map(({ id, label }) => (
-              <NavLink key={id} href={`#${id}`} $active={activeId === id}>
-                {label}
+            {SECTIONS.map(({ id, label, short }) => (
+              <NavLink key={id} href={`#${id}`} $active={activeId === id} aria-label={label}>
+                <FullLabel>{label}</FullLabel>
+                <ShortLabel>{short}</ShortLabel>
               </NavLink>
             ))}
           </Links>
-          <Hamburger aria-label="menu">☰</Hamburger>
         </NavInner>
       </NavOuter>
       <NavSpacer />
