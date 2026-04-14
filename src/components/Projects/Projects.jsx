@@ -51,7 +51,7 @@ const SwitcherShell = styled.div`
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    padding: 0 44px;
+    padding: 0;
     min-height: 400px;
   }
 `;
@@ -68,7 +68,57 @@ const ArrowGroup = styled.div`
   z-index: 5;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    ${({ $side }) => ($side === 'left' ? 'left: -8px;' : 'right: -8px;')}
+    display: none;
+  }
+`;
+
+const MobileControls = styled.div`
+  display: none;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+  }
+`;
+
+const DesktopDotsWrap = styled.div`
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const MobileArrow = styled.button`
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: ${({ theme }) => theme.colors.accentLavender};
+  color: ${({ theme }) => theme.colors.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.125rem;
+  line-height: 1;
+  font-family: inherit;
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  transition: background 0.2s, transform 0.15s;
+
+  &:active {
+    transform: scale(0.94);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 `;
 
@@ -167,6 +217,10 @@ const ProjectDots = styled.div`
   justify-content: center;
   gap: 10px;
   margin-top: 16px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    margin-top: 0;
+  }
 `;
 
 const ProjectDot = styled.button`
@@ -303,17 +357,47 @@ function Projects() {
             </ArrowGroup>
           </SwitcherShell>
 
-          <ProjectDots role="tablist" aria-label="feature position">
-            {projectList.map((p, i) => (
-              <ProjectDot
-                key={p.id}
-                $active={i === projectIndex}
-                onClick={() => goToProject(i)}
-                aria-label={`go to ${p.name}`}
-                aria-selected={i === projectIndex}
-              />
-            ))}
-          </ProjectDots>
+          <MobileControls>
+            <MobileArrow
+              onClick={() => goProject(-1)}
+              aria-label="previous feature"
+              disabled={projectList.length <= 1}
+            >
+              ←
+            </MobileArrow>
+            <ProjectDots role="tablist" aria-label="feature position">
+              {projectList.map((p, i) => (
+                <ProjectDot
+                  key={p.id}
+                  $active={i === projectIndex}
+                  onClick={() => goToProject(i)}
+                  aria-label={`go to ${p.name}`}
+                  aria-selected={i === projectIndex}
+                />
+              ))}
+            </ProjectDots>
+            <MobileArrow
+              onClick={() => goProject(1)}
+              aria-label="next feature"
+              disabled={projectList.length <= 1}
+            >
+              →
+            </MobileArrow>
+          </MobileControls>
+
+          <DesktopDotsWrap>
+            <ProjectDots role="tablist" aria-label="feature position">
+              {projectList.map((p, i) => (
+                <ProjectDot
+                  key={`d-${p.id}`}
+                  $active={i === projectIndex}
+                  onClick={() => goToProject(i)}
+                  aria-label={`go to ${p.name}`}
+                  aria-selected={i === projectIndex}
+                />
+              ))}
+            </ProjectDots>
+          </DesktopDotsWrap>
 
           <ProjectLabel>{currentProject.label}</ProjectLabel>
 
