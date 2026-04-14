@@ -80,7 +80,7 @@ const doodleConfigs = [
 
 // Individual doodle that draws itself on when triggered
 // Stable random per doodle — seeded from delay so it's consistent across renders
-function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
+function Doodle({ svg, color, size, rotate, opacity, delay, style, draw, replayKey }) {
   const floatDuration = useRef(5 + (delay % 7) * 0.6);
   const floatDelay = useRef((delay % 5) * 0.4);
   const ref = useRef(null);
@@ -204,7 +204,7 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
       cancelled = true;
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [draw, delay, opacity]);
+  }, [draw, delay, opacity, replayKey]);
 
   const coloredSvg = svg.replaceAll('currentColor', color);
 
@@ -224,21 +224,24 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw }) {
 
 function SectionDoodles({ prefix }) {
   const ref = useRef(null);
-  const [inView, setInView] = useState(false);
+  // replayKey bumps on every viewport entry. Doodle's effect depends on it,
+  // so re-entry restarts the draw-in from scratch instead of showing whatever
+  // phase the infinite cycle happens to be in.
+  const [replayKey, setReplayKey] = useState(0);
+  const wasInView = useRef(false);
 
   useEffect(() => {
-    // Observe the parent section element (the nearest element with an id),
-    // not the absolutely-positioned doodle wrapper. Absolute + inset:0 can
-    // produce inconsistent IntersectionObserver behavior across browsers.
     const wrapper = ref.current;
     if (!wrapper) return;
     const section = wrapper.closest('section, [id]') || wrapper;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.unobserve(section);
+        if (entry.isIntersecting && !wasInView.current) {
+          wasInView.current = true;
+          setReplayKey((k) => k + 1);
+        } else if (!entry.isIntersecting && wasInView.current) {
+          wasInView.current = false;
         }
       },
       { threshold: 0, rootMargin: '0px 0px -10% 0px' }
@@ -261,7 +264,8 @@ function SectionDoodles({ prefix }) {
           rotate={d.rotate}
           opacity={d.opacity}
           delay={d.delay}
-          draw={inView}
+          draw={replayKey > 0}
+          replayKey={replayKey}
           style={{
             [d.x.split(':')[0].trim()]: d.x.split(':')[1].trim(),
             [d.y.split(':')[0].trim()]: d.y.split(':')[1].trim(),
