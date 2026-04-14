@@ -210,7 +210,7 @@ function Hero() {
           </StatusBadge>
           <Headline>hi, i'm dean.</Headline>
           <Tagline>i make things people enjoy using.</Tagline>
-          <Subtitle>building software, games, and whatever sounds fun.</Subtitle>
+          <Subtitle>honolulu-based web developer building websites for small businesses, restaurants, and creators.</Subtitle>
           <ButtonGroup>
             <PrimaryButton href="#projects" onClick={() => trackEvent('cta_click', { cta: 'see_my_work' })}>see my work</PrimaryButton>
             <SecondaryButton href="#contact" onClick={() => trackEvent('cta_click', { cta: 'say_hello' })}>say hello</SecondaryButton>
