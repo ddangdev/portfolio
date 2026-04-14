@@ -60,8 +60,13 @@ const ButtonGroup = styled.div`
   display: flex;
   gap: 16px;
 
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    justify-content: center;
+  }
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     flex-direction: column;
+    align-items: center;
     gap: 12px;
   }
 `;
