@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef, Fragment } from 'react';
 import { createPortal } from 'react-dom';
 import { useTransition, useSpring, animated } from '@react-spring/web';
+import { trackEvent } from '../../../../utils/analytics';
 
 // Matches a viewport media query reactively.
 function useMedia(query) {
@@ -227,6 +228,7 @@ function PokeExperience() {
 
   const checkout = useCallback(() => {
     if (order.length === 0 || submitted) return;
+    trackEvent('poke_checkout', { items: order.length, loyalty_applied: loyaltyApplied });
     setSubmitted(true);
     // Auto-reset after a moment so the UI is ready for a new order
     setTimeout(() => {
@@ -237,7 +239,7 @@ function PokeExperience() {
       setLoyaltyApplied(false);
       setLoyaltyError(false);
     }, 3500);
-  }, [order.length, submitted]);
+  }, [order.length, submitted, loyaltyApplied]);
 
   // Aggregate identical items into single lines with a quantity counter
   const lines = Object.values(

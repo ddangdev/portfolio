@@ -5,6 +5,7 @@ import { SectionWrapper, SectionContent, SectionNumber } from '../../styles/Sect
 import useInView from '../../hooks/useInView';
 import { ProjectsDoodles } from '../Doodles/Doodles';
 import projectList from './projects/projectList.jsx';
+import { trackEvent } from '../../utils/analytics';
 
 const ProjectsWrapper = styled(SectionWrapper)`
   background: linear-gradient(to bottom, #E8F5EC 0%, #EDE7F6 6%, #EDE7F6 100%);
@@ -235,12 +236,17 @@ function Projects() {
 
   const goProject = useCallback((delta) => {
     setDirection(delta);
-    setProjectIndex((i) => (i + delta + projectList.length) % projectList.length);
+    setProjectIndex((i) => {
+      const next = (i + delta + projectList.length) % projectList.length;
+      trackEvent('feature_switch', { to: projectList[next]?.id ?? next, method: 'arrow' });
+      return next;
+    });
   }, []);
 
   const goToProject = useCallback((target) => {
     setDirection(target > projectIndex ? 1 : -1);
     setProjectIndex(target);
+    trackEvent('feature_switch', { to: projectList[target]?.id ?? target, method: 'dot' });
   }, [projectIndex]);
 
   const projectTransitions = useTransition(projectIndex, {

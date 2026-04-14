@@ -3,6 +3,7 @@ import { useSpring, animated, config } from '@react-spring/web';
 import { SectionWrapper, SectionContent, SectionNumber } from '../../styles/Section';
 import { HeroDoodles } from '../Doodles/Doodles';
 import HeroIllustration from './HeroIllustration';
+import { trackEvent } from '../../utils/analytics';
 
 const HeroWrapper = styled(SectionWrapper)`
   background: #FFF3E0;
@@ -211,8 +212,8 @@ function Hero() {
           <Tagline>i make things people enjoy using.</Tagline>
           <Subtitle>building software, games, and whatever sounds fun.</Subtitle>
           <ButtonGroup>
-            <PrimaryButton href="#projects">see my work</PrimaryButton>
-            <SecondaryButton href="#contact">say hello</SecondaryButton>
+            <PrimaryButton href="#projects" onClick={() => trackEvent('cta_click', { cta: 'see_my_work' })}>see my work</PrimaryButton>
+            <SecondaryButton href="#contact" onClick={() => trackEvent('cta_click', { cta: 'say_hello' })}>say hello</SecondaryButton>
           </ButtonGroup>
           <ScrollCue aria-hidden="true">
             scroll to explore

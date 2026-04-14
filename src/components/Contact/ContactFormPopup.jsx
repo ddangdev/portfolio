@@ -6,6 +6,7 @@ import {
   SubmitButton, HoneypotField, ErrorBanner, Spinner,
   SuccessWrapper, CheckCircle, SuccessHeading, SuccessBody,
 } from './contactFormStyles';
+import { trackEvent } from '../../utils/analytics';
 
 // ── Validation regex ────────────────────────────────────────────
 // Email: HTML5-aligned RFC 5322 subset. Requires local@domain.tld,
@@ -149,6 +150,7 @@ function ContactFormPopup({ open, onClose }) {
       });
 
       if (response.ok) {
+        trackEvent('contact_submit', { has_phone: phone.trim().length > 0 });
         setSubmitted(true);
       } else {
         let msg = 'something went wrong sending your message. try again?';
