@@ -7,7 +7,7 @@ import { ContactDoodles } from '../Doodles/Doodles';
 import ContactFormPopup from './ContactFormPopup';
 
 const ContactWrapper = styled(SectionWrapper)`
-  background: linear-gradient(to bottom, #EDE7F6 0%, #FCE4EC 6%, #FCE4EC 100%);
+  background: ${({ theme }) => `linear-gradient(to bottom, ${theme.colors.projectsBg} 0%, ${theme.colors.contactBg} 6%, ${theme.colors.contactBg} 100%)`};
 `;
 
 const ContactContent = styled(SectionContent)`
@@ -70,7 +70,7 @@ const IconCircle = styled.a`
   width: 48px;
   height: 48px;
   border-radius: ${({ theme }) => theme.radii.full};
-  background: ${({ theme }) => theme.colors.white};
+  background: ${({ theme }) => theme.colors.cardBg};
   border: 2px solid ${({ $accent, theme }) => $accent ? theme.colors.accentPink : theme.colors.divider};
   display: flex;
   align-items: center;

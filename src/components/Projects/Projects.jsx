@@ -8,7 +8,7 @@ import projectList from './projects/projectList.jsx';
 import { trackEvent } from '../../utils/analytics';
 
 const ProjectsWrapper = styled(SectionWrapper)`
-  background: linear-gradient(to bottom, #E8F5EC 0%, #EDE7F6 6%, #EDE7F6 100%);
+  background: ${({ theme }) => `linear-gradient(to bottom, ${theme.colors.aboutBg} 0%, ${theme.colors.projectsBg} 6%, ${theme.colors.projectsBg} 100%)`};
   /* Lift the whole section above neighboring sections so cards dragged
      off-edge paint over Contact/About instead of disappearing behind them. */
   z-index: 2;
@@ -140,7 +140,7 @@ const SectionArrow = styled.button`
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 
   &:hover {
-    background: #8879C9;
+    background: ${({ theme }) => theme.colors.accentLavenderHover};
     box-shadow: ${({ theme }) => theme.shadows.lg};
     transform: scale(1.08);
   }

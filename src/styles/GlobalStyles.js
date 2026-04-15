@@ -1,6 +1,31 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
+  /* CSS var defaults so first paint has correct colors before the spring
+     hook runs. The spring then takes over per-frame. */
+  :root {
+    --color-bg: #FBF5EE;
+    --color-text: #2D3436;
+    --color-textMuted: #8B8480;
+    --color-heroBg: #FFF3E0;
+    --color-aboutBg: #E8F5EC;
+    --color-projectsBg: #EDE7F6;
+    --color-contactBg: #FCE4EC;
+    --color-cardBg: #FFFBF4;
+    --color-primary: #F4A27D;
+  }
+  :root[data-theme="dark"] {
+    --color-bg: #1F1A17;
+    --color-text: #F5EDE2;
+    --color-textMuted: #9A8F85;
+    --color-heroBg: #241E1A;
+    --color-aboutBg: #1E2423;
+    --color-projectsBg: #231F28;
+    --color-contactBg: #281F26;
+    --color-cardBg: #2A2320;
+    --color-primary: #E88A60;
+  }
+
   *, *::before, *::after {
     margin: 0;
     padding: 0;
@@ -21,6 +46,15 @@ const GlobalStyles = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
+  }
+
+  /* Short CSS transition catches only non-spring-driven tokens (rgba overlays
+     like nav bg, modal backdrop, soft cards). Spring-driven CSS vars update
+     every frame and don't need a CSS transition on top. */
+  *, *::before, *::after {
+    transition-property: background-color, border-color, fill, stroke, box-shadow;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out;
   }
 
   /* Soft vignette — darkens edges to draw eye inward */

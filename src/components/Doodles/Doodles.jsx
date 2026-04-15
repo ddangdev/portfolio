@@ -26,6 +26,7 @@ const DoodleWrapper = styled.div`
   transform: var(--base-rotate);
   width: ${({ $size }) => $size || 100}px;
   z-index: 0;
+  color: ${({ theme }) => theme.colors.text};
   animation: ${float} ${({ $floatDuration }) => $floatDuration || 6}s ease-in-out infinite;
   animation-delay: ${({ $floatDelay }) => $floatDelay || 0}s;
 
@@ -207,8 +208,8 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw, replayK
     };
   }, [draw, delay, opacity, replayKey]);
 
-  const coloredSvg = svg.replaceAll('currentColor', color);
-
+  // Let SVG inherit currentColor from the wrapper (which follows theme.text).
+  // Dropping the replaceAll means doodles re-tint with the spring-driven theme.
   return (
     <DoodleWrapper
       ref={ref}
@@ -218,7 +219,7 @@ function Doodle({ svg, color, size, rotate, opacity, delay, style, draw, replayK
       $floatDuration={floatDuration.current}
       $floatDelay={floatDelay.current}
       style={style}
-      dangerouslySetInnerHTML={{ __html: coloredSvg }}
+      dangerouslySetInnerHTML={{ __html: svg }}
     />
   );
 }

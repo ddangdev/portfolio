@@ -5,7 +5,7 @@ import useInView from '../../hooks/useInView';
 import { AboutDoodles } from '../Doodles/Doodles';
 
 const AboutWrapper = styled(SectionWrapper)`
-  background: linear-gradient(to bottom, #FFF3E0 0%, #E8F5EC 6%, #E8F5EC 100%);
+  background: ${({ theme }) => `linear-gradient(to bottom, ${theme.colors.heroBg} 0%, ${theme.colors.aboutBg} 6%, ${theme.colors.aboutBg} 100%)`};
 `;
 
 const AnimatedContent = styled(animated.div)``;
@@ -54,7 +54,7 @@ const StripItem = styled.div`
   padding: 18px 20px;
   border-radius: 14px;
   border: 1px solid rgba(74, 144, 136, 0.2);
-  background: rgba(255, 255, 255, 0.45);
+  background: ${({ theme }) => theme.colors.stripBg};
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 `;

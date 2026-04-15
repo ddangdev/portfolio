@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const FooterOuter = styled.footer`
   width: 100%;
   border-top: 1px solid ${({ theme }) => theme.colors.divider};
-  background: rgba(251, 245, 238, 0.4);
+  background: ${({ theme }) => theme.colors.footerBg};
 `;
 
 const FooterInner = styled.div`

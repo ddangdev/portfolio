@@ -32,7 +32,7 @@ const Wrapper = styled(animated.div)`
 const Backdrop = styled(animated.div)`
   position: fixed;
   inset: 0;
-  background: rgba(45, 52, 54, 0.12);
+  background: ${({ theme }) => theme.colors.modalBackdrop};
   z-index: 15;
 `;
 
