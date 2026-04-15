@@ -6,8 +6,9 @@
 
   <!-- Fade mask for the shirt: white (opaque) at top, black (transparent) at bottom -->
   <defs>
-    <!-- Subtle fade: shoulders stay solid; only the very bottom edges fade out -->
-    <linearGradient id="shirtFade" x1="0" y1="315" x2="0" y2="345" gradientUnits="userSpaceOnUse">
+    <!-- Tight fade: short gradient zone so we don't show mid-alpha gray on
+         dark mode (cream line over dark dusk bg). -->
+    <linearGradient id="shirtFade" x1="0" y1="334" x2="0" y2="342" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="white" />
       <stop offset="1" stop-color="black" />
     </linearGradient>
