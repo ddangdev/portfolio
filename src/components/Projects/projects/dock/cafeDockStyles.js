@@ -54,7 +54,7 @@ export const DockShell = styled.div`
   justify-content: center;
   gap: ${ICON_GAP}px;
   padding: 18px ${DOCK_PADDING_X}px 14px;
-  background: rgba(255, 251, 244, 0.7);
+  background: ${({ theme }) => theme.colors.softCard};
   backdrop-filter: blur(10px) saturate(140%);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -76,7 +76,7 @@ export const DockArrow = styled.button`
   height: 32px;
   border-radius: 50%;
   border: 1.5px solid ${({ theme }) => theme.colors.accentLavender};
-  background: rgba(255, 251, 244, 0.9);
+  background: ${({ theme }) => theme.colors.softCardStrong};
   color: ${({ theme }) => theme.colors.accentLavender};
   display: flex;
   align-items: center;
@@ -177,7 +177,7 @@ export const MobileGrid = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   padding: 16px;
-  background: rgba(255, 251, 244, 0.7);
+  background: ${({ theme }) => theme.colors.softCard};
   backdrop-filter: blur(10px) saturate(140%);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};

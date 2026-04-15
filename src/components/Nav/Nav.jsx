@@ -10,7 +10,7 @@ const NavOuter = styled(animated.nav)`
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(251, 245, 238, 0.72);
+  background: ${({ theme }) => theme.colors.navBg};
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   border-bottom: 1px solid ${({ theme }) => theme.colors.divider};

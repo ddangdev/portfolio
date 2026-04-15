@@ -6,7 +6,7 @@ import HeroIllustration from './HeroIllustration';
 import { trackEvent } from '../../utils/analytics';
 
 const HeroWrapper = styled(SectionWrapper)`
-  background: #FFF3E0;
+  background: ${({ theme }) => theme.colors.heroBg};
 `;
 
 const HeroContent = styled(SectionContent)`
