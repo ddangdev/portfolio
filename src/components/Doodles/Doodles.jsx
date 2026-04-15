@@ -44,7 +44,8 @@ const DoodleWrapper = styled.div`
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    display: none;
+    --base-rotate: rotate(${({ $rotate }) => $rotate || 0}deg) scale(0.5);
+    opacity: ${({ $opacity }) => ($opacity || 0.3) * 0.55};
   }
 
   @media (prefers-reduced-motion: reduce) {
