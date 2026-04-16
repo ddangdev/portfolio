@@ -7,6 +7,7 @@ const shared = {
     heading: "'Poppins', sans-serif",
     body: "'Inter', sans-serif",
     code: "'JetBrains Mono', monospace",
+    blog: "'Fraunces', 'Spectral', Georgia, serif",
   },
   fontSizes: {
     h1: 'clamp(2.75rem, 5vw + 1rem, 4.5rem)',
@@ -76,6 +77,9 @@ export const lightTheme = {
     softCard: 'rgba(255, 251, 244, 0.7)',
     softCardStrong: 'rgba(255, 251, 244, 0.9)',
     stripBg: 'rgba(255, 255, 255, 0.45)',
+    // Blog-specific (Sprint 23)
+    blogRule: '#E8DDC9',
+    blogIlloStroke: '#4A2E1F',
   },
   sectionTints: {
     hero: 'rgba(255, 229, 160, 0.04)',
@@ -123,6 +127,9 @@ export const darkTheme = {
     softCard: 'rgba(58, 48, 42, 0.65)',
     softCardStrong: 'rgba(58, 48, 42, 0.85)',
     stripBg: 'rgba(58, 48, 42, 0.45)',
+    // Blog-specific (Sprint 23)
+    blogRule: '#3A332E',
+    blogIlloStroke: '#E8DDC9',
   },
   sectionTints: {
     hero: 'rgba(255, 229, 160, 0.035)',
