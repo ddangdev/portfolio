@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSpring, animated } from '@react-spring/web';
 import useScrollDirection from '../../hooks/useScrollDirection';
@@ -83,6 +84,21 @@ const NavLink = styled.a`
   }
 `;
 
+const NavSep = styled.span`
+  color: ${({ theme }) => theme.colors.divider};
+  user-select: none;
+`;
+
+const BlogNavLink = styled(Link)`
+  color: ${({ $active, theme }) => $active ? theme.colors.primary : theme.colors.text};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+
+  &:hover { color: ${({ theme }) => theme.colors.primary}; }
+`;
+
 const LocationTime = styled.a`
   display: inline-flex;
   align-items: center;
@@ -163,6 +179,8 @@ function formatHonoluluTime(date) {
 
 function Nav() {
   const { scrollDir, atTop } = useScrollDirection();
+  const location = useLocation();
+  const onBlog = location.pathname.startsWith('/blog');
   const activeId = useScrollSpy(SECTION_IDS);
 
   const [now, setNow] = useState(() => new Date());
@@ -192,11 +210,21 @@ function Nav() {
           </LocationTime>
           <Links>
             {SECTIONS.map(({ id, label, short }) => (
-              <NavLink key={id} href={`#${id}`} $active={activeId === id} aria-label={label}>
+              <NavLink
+                key={id}
+                href={onBlog ? `/#${id}` : `#${id}`}
+                $active={!onBlog && activeId === id}
+                aria-label={label}
+              >
                 <FullLabel>{label}</FullLabel>
                 <ShortLabel>{short}</ShortLabel>
               </NavLink>
             ))}
+            <NavSep>—</NavSep>
+            <BlogNavLink to="/blog" $active={onBlog} aria-label="blog">
+              <FullLabel>blog</FullLabel>
+              <ShortLabel>bl</ShortLabel>
+            </BlogNavLink>
           </Links>
         </NavInner>
       </NavOuter>
