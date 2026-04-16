@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import { getPostBySlug, getAdjacent } from './posts';
@@ -318,6 +319,16 @@ export default function BlogPost() {
     type: post ? 'article' : 'website',
     date: post?.date,
   });
+
+  // GA4 page_view for blog post — fires once per post mount (skips not-found state)
+  useEffect(() => {
+    if (post && typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'blog_post_view', {
+        post_slug: post.slug,
+        post_type: post.type,
+      });
+    }
+  }, [post]);
 
   if (!post) {
     return (
