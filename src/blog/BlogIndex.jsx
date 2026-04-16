@@ -163,22 +163,23 @@ const FeaturedCard = styled(Link)`
   align-items: center;
   text-decoration: none;
   color: inherit;
-  padding: 32px 16px 56px 16px;
-  margin-bottom: 40px;
-  border-bottom: 1px dotted ${({ theme }) => theme.colors.blogRule};
-  background: transparent;
-  transition: opacity 0.2s;
+  border: 1px solid ${({ theme }) => theme.colors.blogRule};
+  border-radius: 12px;
+  padding: 36px 40px;
+  margin-bottom: 8px;
+  background: ${({ theme }) => theme.colors.cardBg};
+  transition: border-color 0.2s ease;
 
   ${Illo} { width: 340px; flex-shrink: 0; height: 240px; }
 
-  &:hover { opacity: 0.92; }
+  &:hover { border-color: ${({ theme }) => theme.colors.primary}; }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     flex-direction: column;
     gap: 20px;
     align-items: stretch;
-    padding: 24px 8px 36px 8px;
-    margin-bottom: 28px;
+    padding: 24px 24px 32px 24px;
+    margin-bottom: 8px;
 
     ${Illo} { width: 100%; height: 180px; margin-bottom: 0; }
   }
