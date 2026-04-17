@@ -26,6 +26,8 @@ dist-ssr
 # QA screenshots
 qa-*.png
 .screenshots/
+Screenshots/
+screenshots/
 
 # Environment
 .env
