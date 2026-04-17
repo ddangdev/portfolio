@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 const NOTES = [
-  { date: 'apr 14', title: 'a thought lives here.', placeholder: true },
-  { date: 'apr 10', title: 'overflow: clip is the unsung hero.' },
-  { date: 'apr 02', title: 'a thought lives here.', placeholder: true },
-  { date: 'mar 28', title: 'spring physics for ui that doesn\u2019t lie.' },
-  { date: 'mar 20', title: 'a thought lives here.', placeholder: true },
+  { date: 'apr 14', title: 'the best pho in honolulu is a 10-minute walk from my desk.' },
+  { date: 'apr 10', title: 'a thought lives here.', placeholder: true },
+  { date: 'apr 02', title: 'why every restaurant menu needs exactly 3 fonts.' },
+  { date: 'mar 28', title: 'a thought lives here.', placeholder: true },
+  { date: 'mar 20', title: 'mise en place applies to code too.' },
 ];
 
 const Aside = styled.aside`
