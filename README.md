@@ -1,16 +1,27 @@
-# React + Vite
+# ddanghnl.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+personal portfolio and blog. built to show small-business clients what working together looks like — interactive demos, not slide decks.
 
-Currently, two official plugins are available:
+**live at [ddanghnl.com](https://ddanghnl.com)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## what's in here
 
-## React Compiler
+- **interactive project demos** — a drag-to-dismiss card deck, a macOS-style dock, a build-a-bowl ordering flow with loyalty codes
+- **blog** at `/blog` — mdx-powered, illustrated cards with hand-drawn svg art, rss feed, dark mode
+- **theme toggle** — spring-driven light/dark transitions, no flash on load
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## stack
 
-## Expanding the ESLint configuration
+react 19 · vite 8 · styled-components · react-spring · react-router · mdx
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## local setup
+
+```bash
+npm install
+npm run dev     # localhost:5173
+npm run build   # production build + rss.xml generation
+```
+
+## license
+
+[MIT](./LICENSE)
