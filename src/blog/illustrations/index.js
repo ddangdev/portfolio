@@ -1,19 +1,26 @@
-// Illustration registry per post type. Phase 4b ships 1 per type (3 total).
-// Sprint 24+ will expand to 3-4 per type — at that point this becomes an array
-// per type and the picker selects via deterministic slug hash.
+// Illustration registry per post type.
+// Sprint 25: food blog pivot — recipe / behind-the-counter / bites
+// Sprint 24+ can expand to 3-4 per type. Hash picker selects deterministically.
 
+import RecipeArt from './RecipeArt';
+import BehindTheCounterArt from './BehindTheCounterArt';
+import BitesArt from './BitesArt';
+
+// Legacy — kept so old type slugs don't crash if any MDX still references them.
 import CaseStudyArt from './CaseStudyArt';
 import ProcessArt from './ProcessArt';
 import FieldNotesArt from './FieldNotesArt';
 
 const FAMILIES = {
-  'case-study': [CaseStudyArt],
-  'process':    [ProcessArt],
-  'field-notes':[FieldNotesArt],
+  'recipe':              [RecipeArt],
+  'behind-the-counter':  [BehindTheCounterArt],
+  'bites':               [BitesArt],
+  // legacy Sprint 23 types
+  'case-study':          [CaseStudyArt],
+  'process':             [ProcessArt],
+  'field-notes':         [FieldNotesArt],
 };
 
-// Simple deterministic string hash (djb2). Stable across runs so the same slug
-// always picks the same illustration once a family has 2+ options.
 function hashSlug(slug) {
   let h = 5381;
   for (let i = 0; i < slug.length; i++) h = ((h << 5) + h + slug.charCodeAt(i)) | 0;
@@ -26,4 +33,4 @@ export function pickIllustration(type, slug) {
   return family[hashSlug(slug || '') % family.length];
 }
 
-export { CaseStudyArt, ProcessArt, FieldNotesArt };
+export { RecipeArt, BehindTheCounterArt, BitesArt, CaseStudyArt, ProcessArt, FieldNotesArt };

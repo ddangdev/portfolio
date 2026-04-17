@@ -341,10 +341,10 @@ export default function BlogIndex() {
       <Intro>
         <IntroLabel>writing</IntroLabel>
         <IntroH1>
-          essays, case studies, and <em>quiet observations</em> from building things people enjoy using.
+          a place for <em>recipes, restaurant walks</em>, and the things i can't stop thinking about between meals.
         </IntroH1>
         <IntroLede>
-          a small garden of writing about craft, client work, and the corners of the web i think about more than i should.
+          cooking, eating out, and the occasional thought about how restaurants and the web quietly overlap.
         </IntroLede>
       </Intro>
 
