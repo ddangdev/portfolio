@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { useState, useEffect, useRef } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { posts } from './posts';
 import { pickIllustration } from './illustrations';
@@ -146,13 +147,60 @@ const Cards = styled.div`
   }
 `;
 
+// Pencil writes down the ticket with varied pacing — some lines get more
+// attention than others, like a real person filling out an order.
+const scribble = keyframes`
+  /* line 1 — careful, first item, takes its time */
+  0%   { transform: translate(0px, 0px); }
+  14%  { transform: translate(75px, 0px); }
+
+  /* line 2 — quicker, knows what to write */
+  16%  { transform: translate(0px, 18px); }
+  24%  { transform: translate(60px, 18px); }
+
+  /* line 3 — writes across, pauses, goes back to correct something */
+  26%  { transform: translate(0px, 36px); }
+  34%  { transform: translate(70px, 36px); }
+  37%  { transform: translate(42px, 37px); }
+  42%  { transform: translate(72px, 35px); }
+
+  /* line 4 — short, quick jot */
+  44%  { transform: translate(0px, 54px); }
+  49%  { transform: translate(35px, 54px); }
+
+  /* thinking pause — pencil holds still */
+  55%  { transform: translate(35px, 54px); }
+
+  /* total line — deliberate, presses harder (slight wobble) */
+  57%  { transform: translate(0px, 83px); }
+  62%  { transform: translate(25px, 85px); }
+  67%  { transform: translate(50px, 82px); }
+  72%  { transform: translate(75px, 83px); }
+
+  /* done — holds at bottom, pen lifts */
+  82%  { transform: translate(75px, 83px); }
+  100% { transform: translate(0px, 0px); }
+`;
+
 // .illo wraps each illustration; sets color so SVG currentColor adapts to theme.
+// Hover animations: parent card :hover triggers transforms on SVG child groups.
 const Illo = styled.div`
   width: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   color: ${({ theme }) => theme.colors.blogIlloStroke};
+
+  /* RecipeArt — chopsticks dip, steam drifts up */
+  .illo-chopsticks { transform: rotate(0deg) translateY(0); }
+  .illo-steam { transform: translateY(0); opacity: 1; }
+
+  /* BehindTheCounterArt — ticket slides up, pencil nudges down */
+  .illo-ticket { transform: translateY(0); }
+  .illo-pencil { transform: translateY(0); }
+
+  /* BitesArt — grabbed dumpling lifts */
+  .illo-grab { transform: translateY(0); }
 `;
 
 const FeaturedCard = styled(Link)`
@@ -172,7 +220,16 @@ const FeaturedCard = styled(Link)`
 
   ${Illo} { width: 340px; flex-shrink: 0; height: 240px; }
 
-  &:hover { border-color: ${({ theme }) => theme.colors.primary}; }
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+    .illo-chopsticks { transform: rotate(-6deg) translateY(4px); }
+    .illo-steam { transform: translateY(-6px); opacity: 0.6; }
+    .steam-1 { animation: steam-rise-1 2.8s linear infinite !important; }
+    .steam-2 { animation: steam-rise-2 3.2s linear infinite !important; animation-delay: -1.1s; }
+    .steam-3 { animation: steam-rise-3 2.5s linear infinite !important; animation-delay: -0.5s; }
+    .illo-ticket { transform: translateY(-6px); }
+    .illo-grab { transform: translateY(-10px); }
+  }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     flex-direction: column;
@@ -247,6 +304,13 @@ const Card = styled(Link)`
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
+    .illo-chopsticks { transform: rotate(-6deg) translateY(4px); }
+    .illo-steam { transform: translateY(-6px); opacity: 0.6; }
+    .steam-1 { animation: steam-rise-1 2.8s linear infinite !important; }
+    .steam-2 { animation: steam-rise-2 3.2s linear infinite !important; animation-delay: -1.1s; }
+    .steam-3 { animation: steam-rise-3 2.5s linear infinite !important; animation-delay: -0.5s; }
+    .illo-ticket { transform: translateY(-6px); }
+    .illo-grab { transform: translateY(-10px); }
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
@@ -300,11 +364,45 @@ const CardExcerpt = styled.p`
 `;
 
 // ── component ────────────────────────────────────────────────
+// rAF-driven progress (0→1) for BehindTheCounterArt pencil + line sync.
+// Loops at 5s/cycle while hovered, resets on mouse-out.
+const TICKET_TYPE = 'behind-the-counter';
+const WRITE_DURATION = 5000;
+
+function useWriteProgress() {
+  const [hovered, setHovered] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    if (!hovered) { setProgress(0); return; }
+    let start = null;
+    const tick = (ts) => {
+      if (!start) start = ts;
+      setProgress(((ts - start) % WRITE_DURATION) / WRITE_DURATION);
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [hovered]);
+
+  return { hovered, setHovered, progress };
+}
+
 function CardEntry({ post }) {
   const Art = pickIllustration(post.type, post.slug);
+  const isTicket = post.type === TICKET_TYPE;
+  const write = isTicket ? useWriteProgress() : null;
+
+  const cardProps = isTicket
+    ? { onMouseEnter: () => write.setHovered(true), onMouseLeave: () => write.setHovered(false) }
+    : {};
+
   return (
-    <Card to={post.href}>
-      <Illo>{Art && <Art size={140} />}</Illo>
+    <Card to={post.href} {...cardProps}>
+      <Illo>
+        {Art && <Art size={140} {...(isTicket ? { progress: write.progress } : {})} />}
+      </Illo>
       <Meta>
         <span>{post.type}</span>
         <Dot>·</Dot>
@@ -320,9 +418,18 @@ function CardEntry({ post }) {
 
 function FeaturedEntry({ post }) {
   const Art = pickIllustration(post.type, post.slug);
+  const isTicket = post.type === TICKET_TYPE;
+  const write = isTicket ? useWriteProgress() : null;
+
+  const cardProps = isTicket
+    ? { onMouseEnter: () => write.setHovered(true), onMouseLeave: () => write.setHovered(false) }
+    : {};
+
   return (
-    <FeaturedCard to={post.href}>
-      <Illo>{Art && <Art size={220} />}</Illo>
+    <FeaturedCard to={post.href} {...cardProps}>
+      <Illo>
+        {Art && <Art size={220} {...(isTicket ? { progress: write.progress } : {})} />}
+      </Illo>
       <FeaturedTextCol>
         <FeaturedTag>★ featured · {post.type}</FeaturedTag>
         <FeaturedTitle>{renderTitle(post.title)}</FeaturedTitle>

@@ -364,7 +364,7 @@ export default function BlogPost() {
 
         {post.excerpt && <PostLede>{post.excerpt}</PostLede>}
 
-        {Art && <Illo><Art size={220} /></Illo>}
+        {Art && <Illo><Art size={220} autoPlay /></Illo>}
 
         <Body><Body_ /></Body>
 
