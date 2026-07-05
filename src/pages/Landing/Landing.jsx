@@ -10,6 +10,15 @@ export default function Landing() {
 
   return (
     <>
+      {/* crawlable, screen-reader-only heading + intro (the visual hero is decorative type) */}
+      <h1 className="sr-only">honolulu web designer &amp; developer — custom websites for small businesses</h1>
+      <p className="sr-only">
+        ddanghnl is dean dang, a freelance web designer and developer based in honolulu, hawaii. i build fast,
+        custom, mobile-first websites — plus google business profile setup and website analytics — for small
+        businesses across hawaii and the united states. clear pricing, personal service, and quick turnaround.
+        got a website? let's build one.
+      </p>
+
       <div className="progress" id="progress"><span className="fill" id="pfill"></span></div>
       <div className="top">
         <span className="logo" id="homeLink" title="back to the start">ddanghnl</span>
@@ -17,7 +26,7 @@ export default function Landing() {
       </div>
 
       {/* scattered background letters + the assembling heading */}
-      <div className="filler" id="filler"></div>
+      <div className="filler" id="filler" aria-hidden="true"></div>
       <div className="assembly" id="assembly"></div>
       <div className="subcta" id="subcta"><span className="go">start a project →</span></div>
 
@@ -78,7 +87,7 @@ export default function Landing() {
       {/* what you get */}
       <section className="get" id="get">
         <div className="getGlow" id="getGlow"></div>
-        <div className="getBg" id="getBg"></div>
+        <div className="getBg" id="getBg" aria-hidden="true"></div>
 
         {/* step 0: the essentials */}
         <div className="stepPanel on" id="stepEss">
