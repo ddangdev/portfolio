@@ -33,3 +33,6 @@ screenshots/
 .env
 .env.*
 .dev.vars
+
+# local wrangler test artifacts
+.wrangler/
