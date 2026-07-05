@@ -23,6 +23,7 @@ export default function Landing() {
       <div className="top">
         <span className="logo" id="homeLink" title="back to the start">ddanghnl</span>
         <span className="r">honolulu web developer</span>
+        <button className="topCta" id="topCta" type="button">start a project →</button>
       </div>
 
       {/* scattered background letters + the assembling heading */}

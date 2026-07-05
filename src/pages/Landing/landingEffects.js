@@ -249,7 +249,7 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
     });
   }
   // ---- section 3: one timeline eased toward a scroll-set target — plays forward AND reverses on the way up ----
-  var TL_FWD=1.85, TL_BACK=1.0;   // seconds to play forward (whip+reveal) / to reverse back out
+  var TL_FWD=1.05, TL_BACK=0.9;   // seconds to play forward (whip+reveal) / to reverse back out
   var tl=0, tlTarget=0, _lt=performance.now()/1000;
   var easeIO=function(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;};
   var easeS=function(p){return p*p*(3-2*p);};
@@ -291,8 +291,8 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
     var vh=innerHeight, trig=vh*1.35;
     if(scrollY>trig) tlTarget=1; else if(scrollY<vh*1.05) tlTarget=0;        // hysteresis band avoids flicker
     if(step>0) tlTarget=1;                                                   // once inside the form, keep the dark panel up
-    var step=dt/((tl>tlTarget)?TL_BACK:TL_FWD);
-    if(tl<tlTarget) tl=Math.min(tlTarget,tl+step); else if(tl>tlTarget) tl=Math.max(tlTarget,tl-step);
+    var stepAmt=dt/((tl>tlTarget)?TL_BACK:TL_FWD);
+    if(tl<tlTarget) tl=Math.min(tlTarget,tl+stepAmt); else if(tl>tlTarget) tl=Math.max(tlTarget,tl-stepAmt);
     // whip crossing (tl 0 -> 0.62), ease-in-out
     var we=easeIO(Math.max(0,Math.min(1,tl/0.62)));
     var edge=104-we*108;
@@ -352,8 +352,17 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
     scrollRAF=requestAnimationFrame(step);
   }
   ['wheel','touchstart','keydown'].forEach(function(ev){on(window,ev,function(){userMoved=true;if(scrollRAF){cancelAnimationFrame(scrollRAF);scrollRAF=null;}},{passive:true});});
+  // jump straight into the intake form (skip the scroll journey) — used by the hero CTA + the always-on top button
+  function jumpToForm(){
+    userMoved=true;
+    if(scrollRAF){cancelAnimationFrame(scrollRAF);scrollRAF=null;}
+    window.scrollTo(0, Math.max(window.scrollY, innerHeight*1.5));   // land past the trigger so state stays consistent
+    showStep(1);
+  }
   var startBtn=document.querySelector('.subcta .go');
-  if(startBtn)startBtn.addEventListener('click',function(){userMoved=true;window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});});
+  if(startBtn)startBtn.addEventListener('click',jumpToForm);
+  var topCta=document.getElementById('topCta');
+  if(topCta)topCta.addEventListener('click',jumpToForm);
   var chaosEl=document.querySelector('.chaos');   // click 'got a website?' -> glide to the 'let's build one' beat
   if(chaosEl)chaosEl.addEventListener('click',function(){userMoved=true;smoothScrollTo(innerHeight*1.02,1800);});
   function autoDrop(){
