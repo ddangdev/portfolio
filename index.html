@@ -91,29 +91,15 @@
     </script>
 
     <!-- Theme color for mobile browsers -->
-    <meta name="theme-color" content="#FFFAF5" />
+    <meta name="theme-color" content="#E9E9E8" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
     <!-- Favicon (simple emoji for now) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌅</text></svg>" />
-
-    <!-- Theme preflight: set data-theme before React renders to avoid FOUC
-         for users with saved or system dark preference. -->
-    <script>
-      (function () {
-        try {
-          var saved = localStorage.getItem('portfolio-theme');
-          var mode = saved === 'light' || saved === 'dark'
-            ? saved
-            : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-          document.documentElement.dataset.theme = mode;
-        } catch (e) {}
-      })();
-    </script>
 
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N61CCQH4KY"></script>
