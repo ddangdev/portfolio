@@ -5,37 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO -->
-    <title>dean dang — honolulu web developer & designer</title>
-    <meta name="description" content="freelance web developer in honolulu building custom websites for small businesses, restaurants, and creators. clean design, fast turnaround, collaborative process." />
+    <title>honolulu web designer &amp; developer — custom websites, nationwide</title>
+    <meta name="description" content="freelance web designer &amp; developer based in honolulu, hawaii — building fast, custom websites for small businesses across the islands and the u.s. clear pricing, personal service, quick turnaround." />
     <meta name="author" content="dean dang" />
+    <meta name="keywords" content="honolulu web designer, web developer honolulu, hawaii web design, freelance web designer, small business website, custom website, oahu web design, website developer" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href="https://ddanghnl.com/" />
 
+    <!-- Geo (honolulu emphasis, serving nationwide) -->
+    <meta name="geo.region" content="US-HI" />
+    <meta name="geo.placename" content="Honolulu" />
+    <meta name="geo.position" content="21.3069;-157.8583" />
+    <meta name="ICBM" content="21.3069, -157.8583" />
+
     <!-- Open Graph -->
-    <meta property="og:title" content="dean dang — honolulu web developer & designer" />
-    <meta property="og:description" content="freelance web developer in honolulu building custom websites for small businesses, restaurants, and creators." />
+    <meta property="og:site_name" content="ddanghnl" />
+    <meta property="og:title" content="honolulu web designer &amp; developer — custom websites, nationwide" />
+    <meta property="og:description" content="freelance web designer &amp; developer based in honolulu — fast, custom websites for small businesses across hawaii and the u.s." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://ddanghnl.com/" />
     <meta property="og:image" content="https://ddanghnl.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="dean dang — honolulu web developer" />
+    <meta property="og:image:alt" content="ddanghnl — honolulu web designer &amp; developer" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="dean dang — honolulu web developer & designer" />
-    <meta name="twitter:description" content="freelance web developer in honolulu building custom websites for small businesses, restaurants, and creators." />
+    <meta name="twitter:title" content="honolulu web designer &amp; developer — custom websites, nationwide" />
+    <meta name="twitter:description" content="freelance web designer &amp; developer based in honolulu — fast, custom websites for small businesses across hawaii and the u.s." />
     <meta name="twitter:image" content="https://ddanghnl.com/og-image.png" />
 
-    <!-- Structured data: ProfessionalService schema -->
+    <!-- Structured data: local business + services -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
       "@id": "https://ddanghnl.com/#business",
-      "name": "dean dang",
-      "alternateName": "ddanghnl",
-      "description": "freelance web developer in honolulu — designing and building custom websites for small businesses, restaurants, and creators.",
+      "name": "ddanghnl",
+      "legalName": "dean dang",
+      "alternateName": "dean dang — ddanghnl",
+      "description": "freelance web designer and developer based in honolulu, hawaii — building fast, custom websites, google business profiles, and analytics for small businesses across hawaii and the united states.",
+      "slogan": "got a website? let's build one.",
       "url": "https://ddanghnl.com",
       "image": "https://ddanghnl.com/og-image.png",
       "logo": "https://ddanghnl.com/og-image.png",
@@ -47,29 +58,35 @@
         "addressCountry": "US"
       },
       "areaServed": [
-        { "@type": "City", "name": "Honolulu" },
+        { "@type": "Country", "name": "United States" },
         { "@type": "State", "name": "Hawaii" },
-        { "@type": "Country", "name": "United States" }
+        { "@type": "City", "name": "Honolulu" }
       ],
       "serviceType": [
         "Web Design",
         "Web Development",
         "Small Business Websites",
         "Landing Page Design",
-        "Portfolio Websites",
+        "Google Business Profile Setup",
+        "Website Analytics",
         "Custom Web Applications"
       ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "web services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Design & Development", "description": "fast, custom-built websites made for phones first." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Business Profile Setup", "description": "set up so locals and customers actually find you." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Analytics", "description": "see what's working, explained in plain english." } }
+        ]
+      },
       "knowsAbout": [
-        "React",
-        "JavaScript",
-        "UI/UX Design",
-        "Responsive Design",
-        "Interactive Web Experiences"
+        "React", "JavaScript", "UI/UX Design", "Responsive Design", "Local SEO", "Interactive Web Experiences"
       ],
       "founder": {
         "@type": "Person",
         "name": "Dean Dang",
-        "jobTitle": "Web Developer & Designer",
+        "jobTitle": "Web Designer & Developer",
         "url": "https://ddanghnl.com",
         "sameAs": [
           "https://github.com/ddangdev",
@@ -98,8 +115,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
-    <!-- Favicon (simple emoji for now) -->
+    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌅</text></svg>" />
+
+    <!-- Static crawlable content + graceful pre-load state (React replaces #root on mount) -->
+    <style>
+      body{margin:0}
+      #root .seo-fallback{font-family:'Nunito',system-ui,sans-serif;background:#E9E9E8;color:#1c1b19;min-height:100vh;max-width:660px;margin:0 auto;padding:16vh 24px;text-align:center}
+      #root .seo-fallback h1{font-size:clamp(28px,6vw,40px);font-weight:900;letter-spacing:-.02em;margin:0 0 18px}
+      #root .seo-fallback p{font-size:17px;font-weight:600;color:#4a463f;line-height:1.55;margin:0 0 14px}
+      #root .seo-fallback ul{list-style:none;padding:0;margin:18px 0;font-weight:800;color:#1c1b19}
+      #root .seo-fallback ul li{margin:5px 0}
+      #root .seo-fallback strong{color:#EB0000}
+    </style>
 
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N61CCQH4KY"></script>
@@ -111,7 +139,19 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="seo-fallback">
+        <h1>honolulu web designer &amp; developer</h1>
+        <p>i'm dean dang (ddanghnl) — a freelance web designer and developer based in honolulu, hawaii. i build fast, custom, mobile-first websites, set up google business profiles, and wire up analytics for small businesses across hawaii and the united states.</p>
+        <ul>
+          <li>website design &amp; development</li>
+          <li>google business profile setup</li>
+          <li>website analytics</li>
+        </ul>
+        <p><strong>got a website? let's build one.</strong></p>
+        <p>honolulu, hawaii · serving clients nationwide</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

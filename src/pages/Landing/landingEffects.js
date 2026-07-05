@@ -190,7 +190,7 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
     fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(gatherPayload())})
       .then(function(r){return r.json();}).catch(function(){return {ok:false};})
       .then(function(res){ return wait.then(function(){return res;}); })
-      .then(function(res){ if(res&&res.ok){ showStep(4); } else { failSend(res); } });
+      .then(function(res){ if(res&&res.ok){ if(window.gtag){try{gtag('event','generate_lead',{form:'intake'});}catch(e){}} showStep(4); } else { failSend(res); } });
   });
   // navigation: logo (and the confirmation link) = home — exit any step, unlock scroll, glide back to the start
   // 'see my work' blob -> list modal
