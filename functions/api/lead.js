@@ -38,7 +38,7 @@ const esc = (s) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">":
 export function onRequestGet(context) {
     const hasKey = !!(context.env && context.env.RESEND_API_KEY);
     const hasTo = !!(context.env && context.env.LEAD_TO);
-    return new Response(JSON.stringify({ ok: true, endpoint: "lead", v: 3, resendKey: hasKey, leadTo: hasTo }), {
+    return new Response(JSON.stringify({ ok: true, endpoint: "lead", v: 4, resendKey: hasKey, leadTo: hasTo }), {
         headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
     });
 }
@@ -71,7 +71,7 @@ export async function onRequestPost(context) {
     const message = defang(block(data.message));
 
     if (!env.RESEND_API_KEY || !env.LEAD_TO) {
-        return json({ ok: false, error: "email not configured yet" }, 503);
+        return json({ ok: false, error: "email not configured yet" }, 200);
     }
 
     const subject = `new lead — ${name}${services.length ? " · " + services.join(" + ") : ""}`.slice(0, 180);
@@ -127,16 +127,16 @@ export async function onRequestPost(context) {
         });
         clearTimeout(timer);
     } catch (e) {
-        return json({ ok: false, error: "mail fetch failed: " + ((e && e.message) || String(e)) }, 502);
+        return json({ ok: false, error: "mail fetch failed: " + ((e && e.message) || String(e)) }, 200);
     }
     if (!res.ok) {
         let detail = "";
         try { detail = (await res.text()).slice(0, 300); } catch {}
-        return json({ ok: false, error: "resend " + res.status + (detail ? ": " + detail : "") }, 502);
+        return json({ ok: false, error: "resend " + res.status + (detail ? ": " + detail : "") }, 200);
     }
 
     return json({ ok: true });
   } catch (err) {
-    return json({ ok: false, error: "server error: " + ((err && err.message) || String(err)) }, 500);
+    return json({ ok: false, error: "server error: " + ((err && err.message) || String(err)) }, 200);
   }
 }

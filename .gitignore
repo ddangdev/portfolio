@@ -32,3 +32,4 @@ screenshots/
 # Environment
 .env
 .env.*
+.dev.vars
