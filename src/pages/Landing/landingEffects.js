@@ -1,6 +1,7 @@
 export function initLanding(){
   var _listeners=[], _stopped=false, _mainRaf=0;
   function on(t,ev,fn,opts){ t.addEventListener(ev,fn,opts); _listeners.push([t,ev,fn,opts]); }
+  function track(name,params){ if(window.gtag){ try{ gtag('event',name,params||{}); }catch(e){} } }   // fire a named GA4 event on key button presses
   // idempotent: clear DOM-built children so a re-mount (StrictMode/HMR) doesn't duplicate
   document.getElementById('assembly').innerHTML='';
   document.getElementById('filler').innerHTML='';
@@ -113,17 +114,19 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
   interestOpts.forEach(function(o){
     o.addEventListener('click',function(){
       var k=o.getAttribute('data-key');
-      if(o.classList.toggle('sel'))selected[k]=true; else delete selected[k];
+      if(o.classList.toggle('sel')){selected[k]=true; track('service_select',{service:k});} else delete selected[k];
       unsure=false;                                       // picking a service means they're not on the "not sure" path
       navNext.classList.toggle('ready', Object.keys(selected).length>0);
     });
   });
   if(essGo)essGo.addEventListener('click',function(){
     if(essGo.classList.contains('filling'))return;   // fill sweeps across, then advances when full
+    track('cta_lets_do_it');
     essGo.classList.add('filling');
     setTimeout(function(){showStep(1);}, 640);
   });
   document.getElementById('iUnsure').addEventListener('click',function(){
+    track('form_unsure');
     unsure=true;                                          // distinct path — clear any service picks, ask a diagnostic instead
     Object.keys(selected).forEach(function(k){delete selected[k];});
     interestOpts.forEach(function(o){o.classList.remove('sel');});
@@ -195,13 +198,14 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
   // navigation: logo (and the confirmation link) = home — exit any step, unlock scroll, glide back to the start
   // 'see my work' blob -> list modal
   var workBlob=document.getElementById('workBlob'), workModal=document.getElementById('workModal');
-  function openWork(){ workModal.classList.add('open'); }
+  function openWork(){ workModal.classList.add('open'); track('cta_my_work'); }
   function closeWork(){ workModal.classList.remove('open'); }
   if(workBlob){
     workBlob.addEventListener('click',openWork);
     workBlob.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openWork(); } });
   }
   document.getElementById('wmClose').addEventListener('click',closeWork);
+  [].forEach.call(document.querySelectorAll('.wmItem[href]'),function(a){ a.addEventListener('click',function(){ track('work_visit_click',{url:a.href}); }); });
   workModal.addEventListener('click',function(e){ if(e.target===workModal) closeWork(); });
   on(window,'keydown',function(e){ if(e.key==='Escape') closeWork(); });
   function goHome(){ showStep(0); window.scrollTo({top:0,behavior:'smooth'}); }
@@ -354,6 +358,7 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
   ['wheel','touchstart','keydown'].forEach(function(ev){on(window,ev,function(){userMoved=true;if(scrollRAF){cancelAnimationFrame(scrollRAF);scrollRAF=null;}},{passive:true});});
   // jump straight into the intake form (skip the scroll journey) — used by the hero CTA + the always-on top button
   function jumpToForm(){
+    track('cta_start_project');
     userMoved=true;
     if(scrollRAF){cancelAnimationFrame(scrollRAF);scrollRAF=null;}
     window.scrollTo(0, Math.max(window.scrollY, innerHeight*1.5));   // land past the trigger so state stays consistent
