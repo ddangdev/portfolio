@@ -140,6 +140,9 @@ export default function Landing() {
               <div className="fField" id="fldContact"><label>email or phone</label><input className="fInput" id="cContact" type="text" placeholder="jane@shop.com  ·  808-555-0123" /></div>
               <div className="fField"><label>anything else? <span style={{ opacity: .55 }}>(optional)</span></label><textarea className="fArea" id="cMsg" placeholder="a link, a deadline, what you're dreaming up…"></textarea></div>
             </div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
+              <div id="turnstileBox"></div>
+            </div>
             <input className="hp" id="hp" type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" />
             <p className="sendErr" id="sendErr" role="alert"></p>
           </div>
