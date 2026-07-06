@@ -30,7 +30,9 @@ const stripCtrl = (s) => {
 const line = (s, max = 200) => stripCtrl(s).replace(/\s+/g, " ").trim().slice(0, max);   // single line
 const block = (s, max = 2000) => stripCtrl(s).replace(/\r/g, "").trim().slice(0, max);    // keep newlines
 // defang links so a phishing URL isn't one-click in your inbox (http -> hxxp)
-const defang = (s) => s.replace(/\bhttps?:\/\//gi, (m) => (m[0] === "h" ? "hxxp" : "HXXP") + m.slice(4));
+const defang = (s) => s
+    .replace(/\bhttps?:\/\//gi, (m) => (m[0] === "h" ? "hxxp" : "HXXP") + m.slice(4))
+    .replace(/\bwww\./gi, "www[.]");
 const isEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 const esc = (s) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
@@ -60,8 +62,8 @@ export async function onRequestPost(context) {
     // honeypot: a hidden field only a bot would fill — silently accept + drop
     if (line(data.company)) return json({ ok: true });
 
-    const name = line(data.name);
-    const contact = line(data.contact);
+    const name = defang(line(data.name));
+    const contact = defang(line(data.contact));
     if (!name || !contact) return json({ ok: false, error: "name and contact are required" }, 422);
 
     // ---- Turnstile (bot protection) — enforced only when a secret is configured ----
@@ -85,9 +87,9 @@ export async function onRequestPost(context) {
         }
     }
 
-    const services = Array.isArray(data.services) ? data.services.map((s) => line(s)).filter(Boolean).slice(0, 10) : [];
+    const services = Array.isArray(data.services) ? data.services.map((s) => defang(line(s))).filter(Boolean).slice(0, 10) : [];
     const situation = Array.isArray(data.situation)
-        ? data.situation.map((q) => ({ q: line(q && q.q), a: line(q && q.a) })).filter((q) => q.q && q.a).slice(0, 12)
+        ? data.situation.map((q) => ({ q: defang(line(q && q.q)), a: defang(line(q && q.a)) })).filter((q) => q.q && q.a).slice(0, 12)
         : [];
     const message = defang(block(data.message));
 
@@ -110,7 +112,7 @@ export async function onRequestPost(context) {
     if (message) {
         lines.push("", "message", "  " + message.replace(/\n/g, "\n  "));
     }
-    lines.push("", "--", "sent from the ddanghnl intake form" + (data.page ? " · " + line(data.page, 300) : ""));
+    lines.push("", "--", "sent from the ddanghnl intake form" + (data.page ? " · " + defang(line(data.page, 300)) : ""));
     if (isEmail(contact)) lines.push("reply to this email to reach them directly");
     const text = lines.join("\n");
 
