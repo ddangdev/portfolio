@@ -2,10 +2,20 @@ export function initLanding(){
   var _listeners=[], _stopped=false, _mainRaf=0;
   function on(t,ev,fn,opts){ t.addEventListener(ev,fn,opts); _listeners.push([t,ev,fn,opts]); }
   function track(name,params){ if(window.gtag){ try{ gtag('event',name,params||{}); }catch(e){} } }   // fire a named GA4 event on key button presses
+  // Turnstile: explicit render (auto-render misses React-inserted widgets)
+  var _tsId=null;
+  function mountTurnstile(){
+    if(_tsId!==null) return;
+    if(!(window.turnstile&&window.turnstile.render)){ setTimeout(mountTurnstile,300); return; }   // wait for the async script
+    var box=document.getElementById('turnstileBox'); if(!box) return;
+    try{ _tsId=window.turnstile.render(box,{sitekey:'0x4AAAAAADwv0OfinxrncT6S',theme:'dark'}); }catch(e){}
+  }
   // idempotent: clear DOM-built children so a re-mount (StrictMode/HMR) doesn't duplicate
   document.getElementById('assembly').innerHTML='';
   document.getElementById('filler').innerHTML='';
   document.getElementById('getBg').innerHTML='';
+  var _tb=document.getElementById('turnstileBox'); if(_tb)_tb.innerHTML='';
+  mountTurnstile();
 if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't let Chrome restore scroll (it cancels the auto-drop)
   window.scrollTo(0,0);
   var WORD="let's build one";
@@ -172,10 +182,12 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
     });
     return { name:cName.value, contact:cContact.value, message:cMsg.value,
              services:services, situation:situation, unsure:unsure,
+             turnstileToken:(window.turnstile&&_tsId!==null)?(window.turnstile.getResponse(_tsId)||''):'',
              company:document.getElementById('hp').value, page:location.href };
   }
   function failSend(res){
     navSend.classList.add('noAnim'); navSend.classList.remove('filling');
+    if(window.turnstile&&_tsId!==null){try{window.turnstile.reset(_tsId);}catch(e){}}   // fresh token for a retry
     requestAnimationFrame(function(){requestAnimationFrame(function(){navSend.classList.remove('noAnim');});});
     var e=document.getElementById('sendErr');
     e.textContent = (res&&res.error) ? ("couldn't send — "+res.error) : "couldn't send — check your connection and try again.";
@@ -389,6 +401,7 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
     cancelAnimationFrame(_mainRaf);
     if(scrollRAF) cancelAnimationFrame(scrollRAF);
     _listeners.forEach(function(l){ l[0].removeEventListener(l[1],l[2],l[3]); });
+    if(window.turnstile&&_tsId!==null){try{window.turnstile.remove(_tsId);}catch(e){}}
     document.body.style.overflow='';
   };
 }

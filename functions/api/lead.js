@@ -64,6 +64,27 @@ export async function onRequestPost(context) {
     const contact = line(data.contact);
     if (!name || !contact) return json({ ok: false, error: "name and contact are required" }, 422);
 
+    // ---- Turnstile (bot protection) — enforced only when a secret is configured ----
+    if (env.TURNSTILE_SECRET) {
+        const token = line(data.turnstileToken);
+        if (!token) return json({ ok: false, error: "please complete the anti-spam check and try again." }, 200);
+        try {
+            const tv = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    secret: env.TURNSTILE_SECRET,
+                    response: token,
+                    remoteip: request.headers.get("CF-Connecting-IP") || "",
+                }),
+            });
+            const tj = await tv.json();
+            if (!tj.success) return json({ ok: false, error: "anti-spam check failed — please refresh and try again." }, 200);
+        } catch {
+            return json({ ok: false, error: "anti-spam check unavailable — please try again in a moment." }, 200);
+        }
+    }
+
     const services = Array.isArray(data.services) ? data.services.map((s) => line(s)).filter(Boolean).slice(0, 10) : [];
     const situation = Array.isArray(data.situation)
         ? data.situation.map((q) => ({ q: line(q && q.q), a: line(q && q.a) })).filter((q) => q.q && q.a).slice(0, 12)
