@@ -68,7 +68,8 @@ export async function onRequestPost(context) {
 
     // ---- Turnstile (bot protection) — enforced only when a secret is configured ----
     if (env.TURNSTILE_SECRET) {
-        const token = line(data.turnstileToken);
+        // NOTE: do NOT run through line() — it caps at 200 chars and truncates the (long) Turnstile token.
+        const token = stripCtrl(String(data.turnstileToken || "")).trim().slice(0, 4096);
         if (!token) return json({ ok: false, error: "please complete the anti-spam check and try again." }, 200);
         try {
             const tv = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
@@ -81,7 +82,7 @@ export async function onRequestPost(context) {
                 }),
             });
             const tj = await tv.json();
-            if (!tj.success) return json({ ok: false, error: "anti-spam check failed — please refresh and try again." }, 200);
+            if (!tj.success) return json({ ok: false, error: "anti-spam check failed (" + ((tj["error-codes"] || []).join(", ") || "unknown") + ") — please refresh and try again." }, 200);
         } catch {
             return json({ ok: false, error: "anti-spam check unavailable — please try again in a moment." }, 200);
         }
