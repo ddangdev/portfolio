@@ -40,7 +40,8 @@ const esc = (s) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">":
 export function onRequestGet(context) {
     const hasKey = !!(context.env && context.env.RESEND_API_KEY);
     const hasTo = !!(context.env && context.env.LEAD_TO);
-    return new Response(JSON.stringify({ ok: true, endpoint: "lead", v: 4, resendKey: hasKey, leadTo: hasTo }), {
+    const hasTs = !!(context.env && context.env.TURNSTILE_SECRET);
+    return new Response(JSON.stringify({ ok: true, endpoint: "lead", v: 5, resendKey: hasKey, leadTo: hasTo, turnstile: hasTs }), {
         headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
     });
 }
@@ -76,7 +77,7 @@ export async function onRequestPost(context) {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({
-                    secret: env.TURNSTILE_SECRET,
+                    secret: (env.TURNSTILE_SECRET || "").trim(),
                     response: token,
                     remoteip: request.headers.get("CF-Connecting-IP") || "",
                 }),
