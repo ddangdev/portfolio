@@ -37,30 +37,11 @@ const isEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 const esc = (s) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
 // health/version check (authed GET) — confirms which code is actually live
-export async function onRequestGet(context) {
-    const url = new URL(context.request.url);
-    // ?probe=turnstile — tests if the stored secret is VALID without revealing it:
-    // a valid secret + dummy token -> "invalid-input-response"; a wrong secret -> "invalid-input-secret".
-    if (url.searchParams.get("probe") === "turnstile") {
-        const secret = ((context.env && context.env.TURNSTILE_SECRET) || "").trim();
-        if (!secret) return json({ ok: false, probe: "turnstile", note: "TURNSTILE_SECRET not set" });
-        try {
-            const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({ secret, response: "dummy-diagnostic-token" }),
-            });
-            const j = await r.json();
-            const codes = j["error-codes"] || [];
-            return json({ ok: true, probe: "turnstile", secretValid: !codes.includes("invalid-input-secret"), errorCodes: codes });
-        } catch (e) {
-            return json({ ok: false, probe: "turnstile", error: String((e && e.message) || e) });
-        }
-    }
+export function onRequestGet(context) {
     const hasKey = !!(context.env && context.env.RESEND_API_KEY);
     const hasTo = !!(context.env && context.env.LEAD_TO);
     const hasTs = !!(context.env && context.env.TURNSTILE_SECRET);
-    return json({ ok: true, endpoint: "lead", v: 7, resendKey: hasKey, leadTo: hasTo, turnstile: hasTs });
+    return json({ ok: true, endpoint: "lead", v: 8, resendKey: hasKey, leadTo: hasTo, turnstile: hasTs });
 }
 
 export async function onRequestPost(context) {
@@ -100,7 +81,7 @@ export async function onRequestPost(context) {
                 }),
             });
             const tj = await tv.json();
-            if (!tj.success) return json({ ok: false, error: "anti-spam check failed (" + ((tj["error-codes"] || []).join(", ") || "unknown") + ") — please refresh and try again." }, 200);
+            if (!tj.success) return json({ ok: false, error: "anti-spam check failed — please refresh and try again." }, 200);
         } catch {
             return json({ ok: false, error: "anti-spam check unavailable — please try again in a moment." }, 200);
         }
