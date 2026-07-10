@@ -60,7 +60,7 @@ export async function onRequestGet(context) {
     const hasKey = !!(context.env && context.env.RESEND_API_KEY);
     const hasTo = !!(context.env && context.env.LEAD_TO);
     const hasTs = !!(context.env && context.env.TURNSTILE_SECRET);
-    return json({ ok: true, endpoint: "lead", v: 6, resendKey: hasKey, leadTo: hasTo, turnstile: hasTs });
+    return json({ ok: true, endpoint: "lead", v: 7, resendKey: hasKey, leadTo: hasTo, turnstile: hasTs });
 }
 
 export async function onRequestPost(context) {
