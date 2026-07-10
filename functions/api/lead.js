@@ -45,9 +45,7 @@ export function onRequestGet(context) {
 }
 
 export async function onRequestPost(context) {
-  const stage = new URL(context.request.url).searchParams.get("probe");
   try {
-    if (stage === "dispatch") return json({ ok: true, stage: "dispatch" });   // POST reached the function
     const { request, env } = context;
 
     let data;
@@ -56,7 +54,6 @@ export async function onRequestPost(context) {
     } catch {
         return json({ ok: false, error: "bad request" }, 400);
     }
-    if (stage === "body") return json({ ok: true, stage: "body", gotName: !!(data && data.name) });   // body read OK
 
     // honeypot: a hidden field only a bot would fill — silently accept + drop
     if (line(data.company)) return json({ ok: true });
@@ -86,6 +83,10 @@ export async function onRequestPost(context) {
             });
             const tj = await tv.json();
             if (!tj.success) return json({ ok: false, error: "anti-spam check failed — please refresh and try again." }, 200);
+            // the token must have been solved on our own site (defends against token replay from elsewhere)
+            if (tj.hostname && tj.hostname !== "ddanghnl.com" && tj.hostname !== "localhost") {
+                return json({ ok: false, error: "anti-spam check failed — please refresh and try again." }, 200);
+            }
         } catch {
             return json({ ok: false, error: "anti-spam check unavailable — please try again in a moment." }, 200);
         }
@@ -154,16 +155,19 @@ export async function onRequestPost(context) {
         });
         clearTimeout(timer);
     } catch (e) {
-        return json({ ok: false, error: "mail fetch failed: " + ((e && e.message) || String(e)) }, 200);
+        console.error("lead: mail fetch failed:", (e && e.message) || e);   // detail stays server-side
+        return json({ ok: false, error: "couldn't send right now — please try again in a moment." }, 200);
     }
     if (!res.ok) {
         let detail = "";
         try { detail = (await res.text()).slice(0, 300); } catch {}
-        return json({ ok: false, error: "resend " + res.status + (detail ? ": " + detail : "") }, 200);
+        console.error("lead: resend " + res.status + (detail ? ": " + detail : ""));   // detail stays server-side
+        return json({ ok: false, error: "couldn't send right now — please try again in a moment." }, 200);
     }
 
     return json({ ok: true });
   } catch (err) {
-    return json({ ok: false, error: "server error: " + ((err && err.message) || String(err)) }, 200);
+    console.error("lead: server error:", (err && err.message) || err);   // detail stays server-side
+    return json({ ok: false, error: "something went wrong — please try again." }, 200);
   }
 }
