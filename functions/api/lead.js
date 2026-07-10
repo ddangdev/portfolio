@@ -65,6 +65,10 @@ export async function onRequestPost(context) {
     const contact = defang(line(data.contact));
     if (!name || !contact) return json({ ok: false, error: "name and contact are required" }, 422);
 
+    // lenient: accept an email-ish value OR something with enough digits to be a phone (don't reject real leads)
+    const contactOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact) || (contact.match(/\d/g) || []).length >= 7;
+    if (!contactOk) return json({ ok: false, error: "please enter a valid email or phone number." }, 422);
+
     // ---- Turnstile (bot protection) — enforced only when a secret is configured ----
     if (env.TURNSTILE_SECRET) {
         // NOTE: do NOT run through line() — it caps at 200 chars and truncates the (long) Turnstile token.
