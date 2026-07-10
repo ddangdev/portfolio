@@ -195,10 +195,17 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
   }
   navSend.addEventListener('click',function(){
     if(navSend.classList.contains('filling'))return;
-    var okName=cName.value.trim().length>0, okContact=cContact.value.trim().length>0;
+    var okName=cName.value.trim().length>0;
+    var c=cContact.value.trim();
+    var okContact = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c) || (c.match(/\d/g)||[]).length>=7;   // email-ish OR enough digits to be a phone
     document.getElementById('fldName').classList.toggle('invalid',!okName);
     document.getElementById('fldContact').classList.toggle('invalid',!okContact);
-    if(!okName||!okContact){ (okName?cContact:cName).focus(); return; }
+    if(!okName||!okContact){
+      var se=document.getElementById('sendErr');
+      if(okName && !okContact){ se.textContent='please enter a valid email or phone number.'; se.classList.add('show'); }
+      else { se.classList.remove('show'); }
+      (okName?cContact:cName).focus(); return;
+    }
     document.getElementById('sendErr').classList.remove('show');
     navSend.classList.add('filling');
     var wait=new Promise(function(r){setTimeout(r,640);});   // let the fill sweep complete visually
