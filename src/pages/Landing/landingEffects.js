@@ -241,21 +241,8 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
   // subtle mouse-reactive push
   var mx=0,my=0,tmx=0,tmy=0;
   on(window,'mousemove',function(e){tmx=e.clientX/innerWidth-0.5;tmy=e.clientY/innerHeight-0.5;},{passive:true});
-  // phone tilt (gyroscope) feeds the SAME parallax as the mouse
-  var baseBeta=null;
-  function onTilt(e){
-    if(e.gamma==null&&e.beta==null)return;
-    if(baseBeta==null)baseBeta=e.beta||0;                              // first reading = neutral hold angle
-    tmx=Math.max(-1,Math.min(1,(e.gamma||0)/38))*0.5;                  // left-right tilt
-    tmy=Math.max(-1,Math.min(1,((e.beta||0)-baseBeta)/38))*0.5;        // forward-back tilt
-  }
-  if(window.DeviceOrientationEvent){
-    if(typeof DeviceOrientationEvent.requestPermission==='function'){  // iOS 13+ needs a tap to grant
-      var ask=function(){DeviceOrientationEvent.requestPermission().then(function(s){if(s==='granted')on(window,'deviceorientation',onTilt);}).catch(function(){});
-        removeEventListener('touchend',ask);removeEventListener('click',ask);};
-      on(window,'touchend',ask);on(window,'click',ask);
-    } else { on(window,'deviceorientation',onTilt); }
-  }
+  // (phone-tilt/gyroscope parallax removed — on iOS it triggered a motion-permission
+  //  prompt on visit, which broke the "quick, seamless" feel. desktop mouse-parallax stays.)
 
   function setup(){
     letters=[].map.call(assembly.querySelectorAll('.tl'),function(el){
