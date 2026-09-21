@@ -46,6 +46,16 @@ export default function Landing() {
           <p className="wmSub">a few honolulu spots i've helped get online.</p>
           <ul className="wmList">
             <li>
+              <a className="wmItem" href="https://noribarhawaii.com" target="_blank" rel="noopener">
+                <span className="wmDot" style={{ background: '#C6A44E' }}></span>
+                <span className="wmMeta">
+                  <span className="wmName">nori bar hawaii</span>
+                  <span className="wmType">hand roll bar · ward + waikiki</span>
+                </span>
+                <span className="wmGo">visit →</span>
+              </a>
+            </li>
+            <li>
               <a className="wmItem" href="https://manipedihnl.com" target="_blank" rel="noopener">
                 <span className="wmDot" style={{ background: '#EB0000' }}></span>
                 <span className="wmMeta">
