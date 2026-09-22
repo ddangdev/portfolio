@@ -47,7 +47,7 @@ export default function Landing() {
           <ul className="wmList">
             <li>
               <a className="wmItem" href="https://noribarhawaii.com" target="_blank" rel="noopener">
-                <span className="wmDot" style={{ background: '#3E61A4' }}></span>
+                <span className="wmDot live"></span>
                 <span className="wmMeta">
                   <span className="wmName">nori bar hawaii</span>
                   <span className="wmType">hand roll bar · ward + waikiki</span>
@@ -57,7 +57,7 @@ export default function Landing() {
             </li>
             <li>
               <a className="wmItem" href="https://manipedihnl.com" target="_blank" rel="noopener">
-                <span className="wmDot" style={{ background: '#EB0000' }}></span>
+                <span className="wmDot live"></span>
                 <span className="wmMeta">
                   <span className="wmName">mani pedi spa</span>
                   <span className="wmType">nail salon · honolulu</span>
