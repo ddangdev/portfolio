@@ -25,6 +25,7 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
   var progressEl=document.getElementById('progress'), pfill=document.getElementById('pfill');
   var get=document.getElementById('get');
   var getGlow=document.getElementById('getGlow');
+  var bloom=document.getElementById('bloom');
   var getKick=get.querySelector('.getKick'),getH=get.querySelector('.getH'),getCards=[].slice.call(get.querySelectorAll('.getCard'));
   var rnd=function(a,b){return a+Math.random()*(b-a);};
   var orbLife=getCards.map(function(){return {ax:rnd(3.5,6),ay:rnd(3.5,6),sp:rnd(0.5,0.85),ph:rnd(0,6.28),depth:rnd(10,18)};});
@@ -278,6 +279,10 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';   // don't
       F.el.style.transform='translate('+ix.toFixed(1)+'px,'+((e*innerHeight*F.fall)+iy).toFixed(1)+'px) rotate('+(F.rot+ir).toFixed(1)+'deg)';
       F.el.style.opacity=((1-e)*0.9).toFixed(2);
     });
+    // sunset bloom — brightens as the filler letters fade, so the CTA beat gains light instead of going flat
+    var bl=0.55+0.45*e;
+    bloom.style.opacity=(bl*(0.93+0.07*Math.sin(t*0.45))).toFixed(3);
+    bloom.style.transform='translate('+(mx*-18).toFixed(1)+'px,'+(my*-12).toFixed(1)+'px) scale('+(1+0.06*e+0.02*Math.sin(t*0.33)).toFixed(3)+')';
     // floating past-work blobs — drift + parallax through hero/assembly, fade out before the whip
     var bf=Math.max(0,Math.min(1,1-(scrollY-innerHeight*1.0)/(innerHeight*0.42)));
     blobEls.forEach(function(B){

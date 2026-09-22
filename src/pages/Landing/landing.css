@@ -1,4 +1,4 @@
-:root{--w:#E9E9E8;--ink:#23232A;--dim:#83848A;--round:'Nunito',system-ui,sans-serif;--dot-live:#2C4EFF;}
+:root{--w:#EEEAE4;--ink:#23232A;--dim:#83848A;--round:'Nunito',system-ui,sans-serif;--dot-live:#2C4EFF;}
   *{box-sizing:border-box;margin:0;padding:0}
   .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:normal;border:0}
   html,body{overflow-x:clip}
@@ -20,9 +20,16 @@
   .progress.onDark{background:rgba(240,240,238,.16)}
   .progress.onDark .fill{background:#F0F0EE}
 
+  /* sunset field — warms the whole page, blooms where the letters fall away */
+  .sky{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:linear-gradient(168deg,#F7F0E5 0%,#F2ECE5 32%,#ECE9E6 60%,#E8E8E7 100%)}
+  .sky .horizon{position:absolute;left:0;right:0;top:46%;height:34%;
+    background:linear-gradient(180deg,rgba(255,206,158,0) 0%,rgba(255,199,152,.11) 38%,rgba(252,186,150,.05) 64%,rgba(250,184,152,0) 100%)}
+  .sky .bloom{position:absolute;inset:0;opacity:.55;will-change:opacity,transform;
+    background:radial-gradient(46% 38% at 50% 44%,rgba(255,172,112,.22),rgba(255,178,126,.075) 46%,rgba(255,180,130,0) 72%)}
   /* scattered filler letters (background) */
   .filler{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
-  .filler span{position:absolute;font-weight:800;color:#D8D8D7;will-change:transform,opacity}
+  .filler span{position:absolute;font-weight:800;color:rgba(35,35,42,.086);will-change:transform,opacity}
 
   /* the letters that ASSEMBLE into the section heading */
   .assembly{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1;white-space:nowrap;pointer-events:none}
@@ -222,4 +229,5 @@
     .getCard p{font-size:13.5px;max-width:270px;line-height:1.42}
   }
   @media(prefers-reduced-motion:reduce){.filler span{display:none}
+    .sky .bloom{opacity:.8!important;transform:none!important}
     .getKick,.getH,.getCard .num,.getCard h3,.getCard p{opacity:1!important;transform:none!important;filter:none!important}}

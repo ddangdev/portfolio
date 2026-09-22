@@ -27,6 +27,7 @@ export default function Landing() {
       </div>
 
       {/* scattered background letters + the assembling heading */}
+      <div className="sky" aria-hidden="true"><div className="horizon"></div><div className="bloom" id="bloom"></div></div>
       <div className="filler" id="filler" aria-hidden="true"></div>
       <div className="assembly" id="assembly"></div>
       <div className="subcta" id="subcta"><span className="go">start a project →</span></div>
