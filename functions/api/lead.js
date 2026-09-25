@@ -66,7 +66,18 @@ export async function onRequestPost(context) {
     const contactOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact) || (contact.match(/\d/g) || []).length >= 7;
     if (!contactOk) return json({ ok: false, error: "please enter a valid email or phone number." }, 422);
 
-    // ---- Turnstile (bot protection) — enforced only when a secret is configured ----
+    // ---- Turnstile (bot protection) ----
+    // Skipped ONLY on localhost. Any other host with no secret refuses rather
+    // than accepting unverified: Pages preview deployments get their own
+    // variable scope and public URLs, so "no secret" is a real production state.
+    if (!env.TURNSTILE_SECRET) {
+        let h = "";
+        try { h = new URL(request.url).hostname; } catch { h = ""; }
+        if (!["localhost", "127.0.0.1", "[::1]"].includes(h)) {
+            console.error(`[lead] TURNSTILE_SECRET unset on ${h || "unknown host"} -- refusing`);
+            return json({ ok: false, error: "not accepting messages right now." }, 503);
+        }
+    }
     if (env.TURNSTILE_SECRET) {
         // NOTE: do NOT run through line() — it caps at 200 chars and truncates the (long) Turnstile token.
         const token = stripCtrl(String(data.turnstileToken || "")).trim().slice(0, 4096);
@@ -83,8 +94,14 @@ export async function onRequestPost(context) {
             });
             const tj = await tv.json();
             if (!tj.success) return json({ ok: false, error: "anti-spam check failed — please refresh and try again." }, 200);
-            // the token must have been solved on our own site (defends against token replay from elsewhere)
-            if (tj.hostname && tj.hostname !== "ddanghnl.com" && tj.hostname !== "localhost") {
+            // The token must have been solved on our own site (defends against
+            // replay from elsewhere). www MUST be listed: it serves the same
+            // SPA with HTTP 200 and no redirect to the apex, so a visitor on
+            // www solves a token stamped "www.ddanghnl.com". While it was
+            // missing, every lead submitted from www was rejected as a failed
+            // anti-spam check -- a silent lead loss on our own site.
+            const ALLOWED_TOKEN_HOSTS = ["ddanghnl.com", "www.ddanghnl.com", "localhost", "127.0.0.1"];
+            if (tj.hostname && !ALLOWED_TOKEN_HOSTS.includes(tj.hostname)) {
                 return json({ ok: false, error: "anti-spam check failed — please refresh and try again." }, 200);
             }
         } catch {
