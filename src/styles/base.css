@@ -7,7 +7,7 @@
      1  reset + base          8  stage, frames, view pill, cursor
      2  type primitives       9  project cards + thumbs + status
      3  layout primitives    10  service rows
-     4  header + nav         11  the lead form (all states)
+     4  header               11  the lead form (all states)
      5  buttons (magnetic)   12  footer
      6  links                13  motion hooks (words, reveals, ticker)
      7  facts + work meta    14  reduced motion
@@ -84,10 +84,15 @@ h1, h2, h3, h4, p, figure, dl, dd, blockquote { margin: 0; }
 /* ---------- 3. layout primitives ---------- */
 .wrap { width: 100%; max-width: calc(var(--max) + var(--gut) * 2); margin-inline: auto; padding-inline: var(--gut); }
 
-/* ---------- 4. header + nav ---------- */
-.top {                          /* a size container: at large text sizes the nav drops to its own line */
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  min-height: var(--header-h); container-type: inline-size;
+/* ---------- 4. header ----------
+   The studio mark and the "start a project" pill. At large text sizes the pill wraps to its own line
+   (plain flex-wrap: the pill never shrinks below its label first). Below 900px the bar is sticky. */
+.top {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px;
+  min-height: var(--header-h); padding-block: 8px;     /* the padding only shows once the pill wraps */
+}
+.top-sentinel {                 /* the page's real top: #top points here, and useScrolledPast watches it */
+  position: absolute; left: 0; top: 0; width: 1px; height: 1px; pointer-events: none;
 }
 .mark {
   display: inline-flex; align-items: center; gap: .35em;
@@ -95,30 +100,32 @@ h1, h2, h3, h4, p, figure, dl, dd, blockquote { margin: 0; }
   min-height: var(--tap);
 }
 .mark span { font-weight: var(--fw-regular); color: var(--muted); }
-.nav { display: flex; flex: 1 1 0%; min-width: 0; justify-content: flex-end; align-items: center; gap: 4px; font-size: var(--fs-sm); }
-@container (max-width: 17rem) {   /* 17rem: the narrowest bar that holds the mark and the squeezed pill on one line */
-  .nav { flex-basis: 100%; flex-wrap: wrap; justify-content: flex-start; }
-}
-.nav a {
+.top-start {                    /* "start a project" pill: every width */
   display: inline-flex; align-items: center; gap: 8px;
-  min-height: var(--tap); padding: 0 10px; color: var(--ink-2);
-  border-radius: var(--r-pill);
-  transition: color var(--t-1) var(--ease), background-color var(--t-1) var(--ease);
+  min-height: var(--tap); padding: 0 14px; border-radius: var(--r-pill);
+  border: 1px solid var(--line-2); color: var(--ink); font-size: var(--fs-sm);
+  transition: border-color var(--t-1) var(--ease), background-color var(--t-1) var(--ease);
 }
-.nav-wide { display: none !important; }          /* shown from lg */
-.nav .nav-start {                                 /* "start a project" pill: every width */
-  margin-left: 4px; padding: 0 14px;
-  border: 1px solid var(--line-2); color: var(--ink);
-}
-@media (max-width: 379px) { .nav .nav-start .dot { display: none; } }
-@media (min-width: 900px) {
-  .nav-wide { display: inline-flex !important; }
-  .nav { gap: 8px; }
-  .nav .nav-start { margin-left: 12px; padding: 0 16px; }
-}
-@media (hover: hover) {
-  .nav a:hover { color: var(--ink); background: var(--ink-wash); }
-  .nav .nav-start:hover { border-color: var(--ink); background: var(--surface); }
+@media (max-width: 379px) { .top-start .dot { display: none; } }
+@media (min-width: 900px) { .top-start { padding: 0 16px; } }
+@media (hover: hover) { .top-start:hover { border-color: var(--ink); background: var(--surface); } }
+
+/* phones and tablets: the bar stays on screen the whole way down, on an opaque page-coloured ground, above
+   the tiles (the touch view pill is 3) and below the skip link (50). The hairline shows once the page has
+   scrolled (.is-scrolled, from useScrolledPast); reduced motion drops its fade (section 14).
+   scroll-padding keeps anchor jumps and keyboard focus clear of the bar: --top-h is the bar's measured
+   height (useHeaderOffset), so it holds when the pill wraps at large text; --header-h covers the first paint. */
+@media (max-width: 899px) {
+  html { scroll-padding-top: calc(var(--top-h, calc(var(--header-h) + env(safe-area-inset-top, 0px))) + 12px); }
+  .top {
+    position: sticky; top: 0; z-index: 30;
+    min-height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+    padding-top: calc(8px + env(safe-area-inset-top, 0px));
+    background: var(--bg);
+    box-shadow: 0 1px 0 transparent;
+    transition: box-shadow var(--t-2) var(--ease);
+  }
+  .top.is-scrolled { box-shadow: 0 1px 0 var(--line); }
 }
 
 /* ---------- 5. buttons (magnetic on a mouse via data-magnetic) ---------- */

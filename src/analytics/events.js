@@ -12,10 +12,10 @@ export const EVENTS = {
   leadError: 'lead_error',
 };
 
-/** location: 'nav' | 'hero' */
+/** location: 'nav' (the header pill; the name is kept so reports stay continuous) | 'hero' */
 export const trackStartProject = (location) => track(EVENTS.startProject, { location });
 
-/** location: 'nav' | 'mail_tile' | 'send_error' */
+/** location: 'mail_tile' | 'send_error' */
 export const trackEmail = (location) => track(EVENTS.email, { location });
 
 export const trackWorkVisit = (url) => track(EVENTS.workVisit, { url });

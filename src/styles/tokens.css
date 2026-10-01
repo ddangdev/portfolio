@@ -7,9 +7,9 @@
 
    BREAKPOINTS (CSS cannot read custom properties inside @media, so they are fixed numbers.
    Use exactly these four everywhere; --bp-* below mirror them for JS and docs only.)
-     sm  380px  (max-width: 379px)  tiny phones: the nav pill drops its dot
+     sm  380px  (max-width: 379px)  tiny phones: the header pill drops its dot
      md  700px  (min-width: 700px)  large phones and tablets: bigger frames, roomier form
-     lg  900px  (min-width: 900px)  desktop layout: 12-column bento, wide nav
+     lg  900px  (min-width: 900px)  desktop layout: 12-column bento; below it the header is sticky
      xl 1100px  (min-width: 1100px) wide desktop: widest gutter, tighter display leading
 
    TILE TOKENS: inside each tile (bento.css) the page tokens are re-pointed at that tile's family, so every
@@ -25,8 +25,8 @@
      pass  17.36:1  need 3    phone bezel (--bezel) vs --panel
      pass  19.80:1  need 7    --on-ink on --ink (page buttons, the mouse view pill, the skip link)
      pass  21.00:1  need 7    --on-ink on --ink-hover
-     pass   4.35:1  need 3    --accent vs --bg / --surface (non-text marks: nav dot, focus ring, form line)
-     pass   3.45:1  need 3    --line-2 vs --bg (the nav "start a project" outline)
+     pass   4.35:1  need 3    --accent vs --bg / --surface (non-text marks: pill dot, focus ring, form line)
+     pass   3.45:1  need 3    --line-2 vs --bg (the header "start a project" outline)
      pass   4.67:1  need 4.5  hero: ink, ink-2 and muted on the tile
      pass   4.67:1  need 3    hero: accent vs tile (focus ring)
      pass   3.76:1  need 3    hero: line-2 vs tile (eyebrow separator)
@@ -64,7 +64,7 @@
   --accent: #E03C1C;        /* tomato: non-text marks ONLY (live dots, pill dot, focus, form line) */
   --accent-halo: rgba(224, 60, 28, .14);      /* ring around a live dot */
   --accent-halo-2: rgba(224, 60, 28, .28);    /* ring around the pill dot */
-  --ink-wash: rgba(10, 10, 10, .05);          /* nav hover fill, stage inner edge */
+  --ink-wash: rgba(10, 10, 10, .05);          /* stage inner edge */
   --tag-bg: rgba(255, 255, 255, .92);
 
   /* browser frame chrome */
@@ -143,7 +143,7 @@
   --fs-lead: 1.125rem;       /* lede on desktop */
   --fs-body: 1.0625rem;      /* body, inputs, big buttons */
   --fs-md: 1rem;             /* buttons */
-  --fs-sm: .9375rem;         /* nav, notes, chips */
+  --fs-sm: .9375rem;         /* header pill, notes, chips */
   --fs-xs: .875rem;          /* facts, pill, errors */
   --fs-meta: .8125rem;       /* eyebrow, category line */
   --fs-label: .75rem;        /* mono labels */
@@ -185,7 +185,7 @@
   --s-14: 96px;
   --s-15: 120px;
   --tap: 44px;               /* minimum touch target */
-  --header-h: 72px;
+  --header-h: 72px;          /* header bar, before the safe-area inset (the sticky bar adds it below 900px) */
 
   /* ---------- radii ---------- */
   --r-lg: 20px;              /* stage, tiles, form card */
