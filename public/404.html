@@ -1,0 +1,110 @@
+<!doctype html>
+<!-- Cloudflare Pages serves this automatically for any path that does not match
+     a file. Before it existed, an unknown URL returned HTTP 200 with the full
+     single-page site: a visitor who mistyped was told they were in the right
+     place, and Google was told every typo was a real page.
+
+     Deliberately noindex, and deliberately absent from sitemap.xml.
+
+     Standalone on purpose. It cannot import src/styles/tokens.css, because Vite
+     emits that bundled under a hashed filename and this file is copied verbatim
+     out of public/. The token VALUES below are therefore duplicated from
+     tokens.css — if the palette changes there, change it here too.
+
+     Palette rule carried over from tokens.css: --accent (tomato) is for
+     NON-TEXT MARKS ONLY. It is the dot, never the words. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Page not found · ddanghnl studio</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF; --ink:#0A0A0A; --ink-2:#2A2A2A; --muted:#5E5E5E;
+    --line:#E2E2E2; --line-2:#8A8A8A; --on-ink:#FFFFFF; --ink-hover:#000000;
+    --accent:#E03C1C; --accent-halo:rgba(224,60,28,.14);
+    --sans:"Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono:"Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink-2);
+    font-family:var(--sans); font-size:17px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center;
+    padding:48px max(16px, env(safe-area-inset-left)) 64px;
+  }
+  main{max-width:520px; width:100%}
+
+  .eyebrow{
+    font-family:var(--mono); font-size:13px; letter-spacing:.04em;
+    color:var(--muted); display:flex; align-items:center; gap:9px; margin-bottom:18px;
+  }
+  /* the one place tomato is allowed: a mark, not text */
+  .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--accent);
+    box-shadow:0 0 0 4px var(--accent-halo); flex:0 0 auto;
+  }
+
+  h1{
+    font-family:var(--sans); font-weight:400;
+    font-size:clamp(32px, 8vw, 48px); letter-spacing:-.035em; line-height:1.05;
+    color:var(--ink); margin:0 0 16px;
+  }
+  p{margin:0 0 28px; color:var(--ink-2)}
+
+  .actions{display:flex; flex-wrap:wrap; gap:10px}
+  a.btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 18px; border-radius:999px; text-decoration:none;
+    font-size:15px; font-weight:500; transition:background .18s ease, color .18s ease, border-color .18s ease;
+  }
+  a.primary{background:var(--ink); color:var(--on-ink); border:1px solid var(--ink)}
+  a.primary:hover{background:var(--ink-hover); border-color:var(--ink-hover)}
+  a.ghost{background:transparent; color:var(--ink); border:1px solid var(--line-2)}
+  a.ghost:hover{background:rgba(10,10,10,.05)}
+  a.btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+  .arr{font-family:var(--mono); font-size:.85em; display:inline-block; transition:transform .18s ease}
+  a.btn:hover .arr{transform:translateX(2px)}
+
+  .path{
+    margin-top:34px; padding-top:18px; border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:13px; color:var(--muted);
+    word-break:break-all;
+  }
+  .path b{font-weight:500; color:var(--ink-2)}
+</style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow"><span class="dot" aria-hidden="true"></span>404 · page not found</div>
+
+    <h1>that page isn&rsquo;t here.</h1>
+
+    <p>
+      the link might be out of date, or there could be a typo in the address.
+      everything lives on one page &mdash; head back and you&rsquo;ll find it.
+    </p>
+
+    <div class="actions">
+      <a class="btn primary" href="/">back to the studio <span class="arr" aria-hidden="true">&rarr;</span></a>
+      <a class="btn ghost" href="mailto:ddanghnlstudio@gmail.com">get in touch</a>
+    </div>
+
+    <div class="path">you asked for <b id="p"></b></div>
+  </main>
+
+  <script>
+    // Shows the path that missed, so a mistyped URL is obvious at a glance.
+    // textContent, never innerHTML — the path is attacker-controlled.
+    document.getElementById('p').textContent = location.pathname + location.search;
+  </script>
+</body>
+</html>
