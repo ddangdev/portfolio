@@ -16,7 +16,7 @@ export default function SiteHeader() {
 
   return (
     <>
-      <div ref={sentinelRef} className="top-sentinel" id={ANCHORS.top} aria-hidden="true"></div>
+      <div ref={sentinelRef} className="top-sentinel" id={ANCHORS.top}></div>
       <header ref={headerRef} className={cx('top wrap', isScrolled && 'is-scrolled')}>
         <a className="mark" href={`#${ANCHORS.top}`} aria-label={`${STUDIO.name}, back to top`}>
           {STUDIO.mark}<span>{STUDIO.markSuffix}</span>

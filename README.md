@@ -25,7 +25,7 @@ src/
   data/        copy and records: services, client work, own projects, studio facts, contact, Turnstile site key
   styles/      tokens.css (every colour, size and timing), base.css (kit components), bento.css (tile shell + grid)
                index.css is the only stylesheet entry and fixes the cascade order
-  motion/      one hook per behaviour: word reveal, scroll reveal, magnetic buttons, view pill, ticker
+  motion/      one hook per behaviour: word reveal, scroll reveal, magnetic buttons, view pill, ticker, scrolled-past (the header hairline)
                all honour prefers-reduced-motion
   components/  shared pieces: Card, MagneticButton, DeviceStage, Ticker, Facts...
   features/    one folder per tile (hero, work, services, lead-form, studio, own-projects, mail) + header, footer
