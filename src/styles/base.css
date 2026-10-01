@@ -405,7 +405,7 @@ html:not(.js) .pill { opacity: 1; transform: translate3d(-50%, 0, 0); }   /* no 
 /* ---------- 12. footer ---------- */
 .foot {
   display: grid; gap: 6px;
-  padding-top: 20px; padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  padding-top: 20px; padding-bottom: calc(28px + env(safe-area-inset-bottom));
   background: linear-gradient(var(--line), var(--line)) var(--gut) 0 / calc(100% - var(--gut) * 2) 1px no-repeat;
   font-family: var(--mono); font-size: var(--fs-label); color: var(--muted);
 }
