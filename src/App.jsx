@@ -1,6 +1,5 @@
-/* The page shell: skip link, header, the bento, footer, the phone dock and the mouse view pill. */
+/* The page shell: skip link, header, the bento, footer and the mouse view pill. */
 import Bento from './features/bento/Bento';
-import Dock from './features/dock/Dock';
 import SiteFooter from './features/footer/SiteFooter';
 import SiteHeader from './features/header/SiteHeader';
 import ViewPillCursor from './components/ViewPillCursor';
@@ -15,7 +14,6 @@ export default function App() {
       <SiteHeader />
       <Bento />
       <SiteFooter />
-      <Dock />
       <ViewPillCursor />
     </>
   );

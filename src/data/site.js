@@ -11,13 +11,12 @@ export const STUDIO = {
 
 export const MAILTO = `mailto:${STUDIO.email}`;
 
-/* element ids other parts of the page point at (skip link, nav, dock observers) */
+/* element ids other parts of the page point at (skip link, nav) */
 export const ANCHORS = {
   top: 'top',
   work: 'work',
   services: 'services',
   start: 'start',
-  heroCta: 'hero-cta',
 };
 
 /* header nav; SiteHeader renders the "start a project" pill after these */
