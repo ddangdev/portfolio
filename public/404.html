@@ -95,7 +95,13 @@
 
     <div class="actions">
       <a class="btn primary" href="/">back to the studio <span class="arr" aria-hidden="true">&rarr;</span></a>
-      <a class="btn ghost" href="mailto:ddanghnlstudio@gmail.com">get in touch</a>
+      <!-- email_off: Cloudflare Email Address Obfuscation is ON for this zone and
+           rewrites any bare mailto into /cdn-cgi/l/email-protection, which only
+           resolves once its JavaScript runs. That is a poor trade anywhere, and a
+           bad one HERE: this is the page someone reaches after something already
+           went wrong, so the way to reach a human must not depend on JS.
+           Cloudflare consumes these markers, so they never reach the browser. -->
+      <!--email_off--><a class="btn ghost" href="mailto:ddanghnlstudio@gmail.com">get in touch</a><!--/email_off-->
     </div>
 
     <div class="path">you asked for <b id="p"></b></div>
