@@ -9,7 +9,7 @@
    Use exactly these four everywhere; --bp-* below mirror them for JS and docs only.)
      sm  380px  (max-width: 379px)  tiny phones: the nav pill drops its dot
      md  700px  (min-width: 700px)  large phones and tablets: bigger frames, roomier form
-     lg  900px  (min-width: 900px)  desktop layout: 12-column bento, wide nav, no dock
+     lg  900px  (min-width: 900px)  desktop layout: 12-column bento, wide nav
      xl 1100px  (min-width: 1100px) wide desktop: widest gutter, tighter display leading
 
    TILE TOKENS: inside each tile (bento.css) the page tokens are re-pointed at that tile's family, so every
@@ -27,11 +27,9 @@
      pass  21.00:1  need 7    --on-ink on --ink-hover
      pass   4.35:1  need 3    --accent vs --bg / --surface (non-text marks: nav dot, focus ring, form line)
      pass   3.45:1  need 3    --line-2 vs --bg (the nav "start a project" outline)
-     pass  17.63:1  need 7    dock text (--on-ink on --dock-bg over --bg)
-     pass  19.80:1  need 7    dock first link (--ink on --white)
      pass   4.67:1  need 4.5  hero: ink, ink-2 and muted on the tile
      pass   4.67:1  need 3    hero: accent vs tile (focus ring)
-     pass   3.76:1  need 3    hero: line-2 vs tile (outline buttons)
+     pass   3.76:1  need 3    hero: line-2 vs tile (eyebrow separator)
      pass  19.80:1  need 4.5  hero: on-ink on ink (button labels)
      pass  16.28:1  need 4.5  hero: on-ink on ink-hover (button hover)
      pass  19.80:1  need 4.5  work/svc/studio/own/mail: ink on tile
@@ -67,7 +65,6 @@
   --accent-halo: rgba(224, 60, 28, .14);      /* ring around a live dot */
   --accent-halo-2: rgba(224, 60, 28, .28);    /* ring around the pill dot */
   --ink-wash: rgba(10, 10, 10, .05);          /* nav hover fill, stage inner edge */
-  --dock-bg: rgba(10, 10, 10, .94);
   --tag-bg: rgba(255, 255, 255, .92);
 
   /* browser frame chrome */
@@ -81,7 +78,6 @@
   --sh-phone: 0 30px 50px -26px rgba(10, 10, 10, .44);
   --sh-pill: 0 10px 24px -10px rgba(10, 10, 10, .4);
   --sh-card: 0 1px 1px rgba(10, 10, 10, .06), 0 10px 18px -12px rgba(10, 10, 10, .32);
-  --sh-dock: 0 14px 30px -12px rgba(10, 10, 10, .44);
 
   /* ---------- tile colour families ---------- */
   /* hero: a solid tomato block with white type */

@@ -12,10 +12,10 @@ export const EVENTS = {
   leadError: 'lead_error',
 };
 
-/** location: 'nav' | 'hero' | 'dock' */
+/** location: 'nav' | 'hero' */
 export const trackStartProject = (location) => track(EVENTS.startProject, { location });
 
-/** location: 'nav' | 'hero' | 'mail_tile' | 'dock' | 'send_error' */
+/** location: 'nav' | 'mail_tile' | 'send_error' */
 export const trackEmail = (location) => track(EVENTS.email, { location });
 
 export const trackWorkVisit = (url) => track(EVENTS.workVisit, { url });

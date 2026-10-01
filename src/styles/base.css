@@ -9,9 +9,8 @@
      3  layout primitives    10  service rows
      4  header + nav         11  the lead form (all states)
      5  buttons (magnetic)   12  footer
-     6  links                13  phone dock
-     7  facts + work meta    14  motion hooks (words, reveals, ticker)
-                             15  reduced motion
+     6  links                13  motion hooks (words, reveals, ticker)
+     7  facts + work meta    14  reduced motion
 */
 
 /* ---------- 1. reset + base ---------- */
@@ -417,30 +416,7 @@ html:not(.js) .pill { opacity: 1; transform: translate3d(-50%, 0, 0); }   /* no 
   .foot a { justify-self: end; }
 }
 
-/* ---------- 13. phone dock ---------- */
-.dock {
-  position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 30;
-  display: none; gap: 4px; padding: 4px;
-  background: var(--dock-bg); border-radius: var(--r-pill);
-  box-shadow: var(--sh-dock);
-  transform: translate3d(-50%, 90px, 0);
-  transition: transform var(--t-3) var(--ease);
-}
-.dock a {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 88px; min-height: 46px; padding: 0 18px; border-radius: var(--r-pill);
-  color: var(--on-ink); font-weight: var(--fw-medium); font-size: var(--fs-sm);
-  white-space: nowrap;
-}
-.dock a:first-child { background: var(--white); color: var(--ink); padding: 0 20px; }
-.dock a:active { transform: scale(var(--press)); }
-.js .dock { display: flex; }
-.dock.is-on { transform: translate3d(-50%, 0, 0); }
-@media (min-width: 900px) { .js .dock { display: none; } }
-/* below 900px the dock covers the bottom 68px: keep focused elements scrolled clear of it (68 + 12px gap) */
-@media (max-width: 899px) { html.js { scroll-padding-bottom: calc(80px + env(safe-area-inset-bottom)); } }
-
-/* ---------- 14. motion hooks (see src/motion/; all optional, all degrade to still) ---------- */
+/* ---------- 13. motion hooks (see src/motion/; all optional, all degrade to still) ---------- */
 /* words: WordReveal renders masked .w > span; "load" (default) runs with the page, "scroll" on view */
 .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
 .w > span { display: inline-block; }
@@ -470,7 +446,7 @@ html:not(.js) .pill { opacity: 1; transform: translate3d(-50%, 0, 0); }   /* no 
 .tick-strip { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; width: 100%; text-align: center; }
 .tick-strip.is-rolling { transition: transform var(--t-4) var(--ease); }
 
-/* ---------- 15. reduced motion: a complete still state ---------- */
+/* ---------- 14. reduced motion: a complete still state ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0ms !important; transition-delay: 0ms !important; animation: none !important; }

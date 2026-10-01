@@ -25,10 +25,10 @@ src/
   data/        copy and records: services, client work, own projects, studio facts, contact, Turnstile site key
   styles/      tokens.css (every colour, size and timing), base.css (kit components), bento.css (tile shell + grid)
                index.css is the only stylesheet entry and fixes the cascade order
-  motion/      one hook per behaviour: word reveal, scroll reveal, magnetic buttons, view pill, ticker, dock
+  motion/      one hook per behaviour: word reveal, scroll reveal, magnetic buttons, view pill, ticker
                all honour prefers-reduced-motion
   components/  shared pieces: Card, MagneticButton, DeviceStage, Ticker, Facts...
-  features/    one folder per tile (hero, work, services, lead-form, studio, own-projects, mail) + header, footer, dock
+  features/    one folder per tile (hero, work, services, lead-form, studio, own-projects, mail) + header, footer
   analytics/   GA4 events through a safe gtag wrapper
 functions/api/lead.js   the lead endpoint (Cloudflare Pages Function)
 tests/contract/         the form-to-endpoint contract test
