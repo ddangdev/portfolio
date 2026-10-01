@@ -1,0 +1,41 @@
+/* Every string the lead form shows, in one place. Lowercase, first person singular, never "we". */
+export const FORM_COPY = {
+  introKicker: 'got a website?',
+  introTitle: "let's build one.",
+  introLede: "tell me a little about your business and what you need. i'll take a look and get back to you personally, usually within a day or two.",
+  formTitle: 'start a project',
+  formCount: '4 quick things',
+
+  nameLabel: 'name',
+  contactLabel: 'email',
+  contactHint: "a phone number works too, if you'd rather.",
+  servicesLegend: 'what do you need?',
+  servicesTag: 'pick any',
+  messageLabel: 'message',
+  messageHint: "your business, a link, a date you're working toward. anything helps.",
+  required: 'required',
+  optional: 'optional',
+  honeypotLabel: 'company (leave empty)',
+
+  send: 'send it',
+  sending: 'sending',
+
+  sentPill: 'sent · on its way',
+  sentThanks: 'thanks',
+  sentBody: "your note came straight to me. i'll take a look and get back to you personally, usually within a day or two.",
+  sentStatus: 'sent. your note is on its way.',
+  sendAnother: 'send another note',
+  factReplyTo: 'reply to',
+  factNeeds: 'needs',
+  factMessage: 'message',
+  notPicked: 'not picked',
+  noMessage: 'none',
+
+  failServer: (error) => `couldn't send. ${error}${/[.!?]$/.test(error) ? '' : '.'}`,
+  failServerGeneric: "couldn't send. something went wrong on my end.",
+  failNetwork: "couldn't send. check your connection and try again.",
+  spamPending: 'the spam check is still loading. give it a second, then send again.',
+  spamError: "the spam check couldn't load.",
+  emailFallbackBefore: ' you can also email ',
+  emailFallbackAfter: '.',
+};

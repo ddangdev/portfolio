@@ -1,0 +1,33 @@
+/* the form tile (.start from the kit): intro, form, thank-you, status line */
+.form-intro { margin-bottom: var(--s-8); }
+.form-intro .title { margin-top: var(--s-1); }
+.form-intro .lede { margin-top: var(--s-4); }
+.start.is-sent .form-intro { display: none; }
+/* .form-end is a size container: the spam-check slot reserves the compact widget's height from its width */
+.form-end { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--s-6); margin-top: var(--s-7); container-type: inline-size; }
+.form-end .ts-slot, .form-end .form-foot { margin-top: 0; }
+.form-end .form-foot { flex: 1 1 100%; }
+@media (min-width: 700px) {
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-6); }
+  /* side by side: the widget keeps its full 300px (so it never drops to compact) and the button gives way,
+     200px wide where there is room, down to 160px when the form tile is narrow (1050-1159px windows).
+     Too narrow even for that, the button wraps to its own line, left, as in the prototype. */
+  .form-end .ts-slot { flex: 0 0 300px; }
+  .form-end .form-foot { flex: 1 1 160px; min-width: 0; max-width: 200px; }
+  .form-end .form-foot .btn { width: 100%; min-width: 0; }
+}
+@media (min-width: 900px) { .b-form { padding: var(--s-9) var(--s-9) var(--s-9); } }
+
+/* the live Turnstile mount: reserves the widget's box so nothing shifts when it renders.
+   Cloudflare's sizes: normal 300x65, compact 150x140. line-height 0 drops the text strut under the widget's
+   inline iframe, which would otherwise make it 72 / 147 tall. useTurnstile picks compact when the slot is
+   under 300px wide; below 700px the slot spans .form-end, so the container query here uses the same line. */
+.ts-slot { flex: 1 1 260px; min-height: 65px; display: flex; align-items: center; line-height: 0; }
+.ts-slot iframe { max-width: 100%; }
+@container (max-width: 299.98px) { .ts-slot { min-height: 140px; } }
+/* a form-level error (send failure, spam check): same look as a field error, shown without .field.is-bad */
+.err.is-shown { display: flex; }
+.send-err { flex: 1 1 100%; margin-top: 0; }
+.send-err a { text-decoration: underline; text-underline-offset: 2px; }
+/* sending: the button stays focusable, only looks busy */
+.btn[aria-disabled="true"] { cursor: progress; opacity: .72; }

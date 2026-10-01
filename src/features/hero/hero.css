@@ -1,0 +1,12 @@
+/* hero tile: eyebrow, headline, then the lede and the two buttons pinned to the bottom */
+.b-hero { display: flex; flex-direction: column; }
+.b-hero .headline { font-size: min(clamp(2.6rem, 1.2rem + 3.6vw, 4.75rem), 15vw); max-width: 12em; }   /* the vw cap only bites at large text sizes on phones */
+.hero-foot { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--s-6); margin-top: var(--s-6); }
+@media (min-width: 900px) {
+  .b-hero { padding: var(--s-7) var(--s-9) var(--s-8); }
+  .hero-foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; margin-top: auto; padding-top: var(--s-6); }
+  .hero-foot .lede { max-width: 30ch; }
+}
+@media (min-width: 900px) and (max-width: 1099px) {
+  .hero-foot { grid-template-columns: minmax(0, 1fr); }
+}

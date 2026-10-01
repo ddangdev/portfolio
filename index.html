@@ -1,160 +1,114 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ddanghnl studio · web design &amp; development, Honolulu</title>
+<meta name="description" content="Custom websites, hosting, Google Business Profile setup and analytics for small businesses. A web studio in Honolulu.">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://ddanghnl.com/">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="geo.region" content="US-HI">
+<meta name="geo.placename" content="Honolulu">
+<meta name="geo.position" content="21.3069;-157.8583">
+<meta name="ICBM" content="21.3069, -157.8583">
 
-    <!-- SEO -->
-    <title>honolulu web designer &amp; developer — custom websites, nationwide</title>
-    <meta name="description" content="freelance web designer &amp; developer based in honolulu, hawaii — building fast, custom websites for small businesses across the islands and the u.s. clear pricing, personal service, quick turnaround." />
-    <meta name="author" content="dean dang" />
-    <meta name="keywords" content="honolulu web designer, web developer honolulu, hawaii web design, freelance web designer, small business website, custom website, oahu web design, website developer" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
-    <link rel="canonical" href="https://ddanghnl.com/" />
+<meta property="og:site_name" content="ddanghnl studio">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://ddanghnl.com/">
+<meta property="og:title" content="ddanghnl studio · websites people enjoy using.">
+<meta property="og:description" content="A web studio in Honolulu for small businesses: custom websites with hosting, Google Business Profile setup, and analytics in plain english.">
+<meta property="og:image" content="https://ddanghnl.com/og-image.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ddanghnl studio: websites people enjoy using. A web studio in Honolulu.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ddanghnl studio · websites people enjoy using.">
+<meta name="twitter:description" content="A web studio in Honolulu for small businesses: custom websites with hosting, Google Business Profile setup, and analytics in plain english.">
+<meta name="twitter:image" content="https://ddanghnl.com/og-image.png?v=2">
 
-    <!-- Geo (honolulu emphasis, serving nationwide) -->
-    <meta name="geo.region" content="US-HI" />
-    <meta name="geo.placename" content="Honolulu" />
-    <meta name="geo.position" content="21.3069;-157.8583" />
-    <meta name="ICBM" content="21.3069, -157.8583" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="ddanghnl" />
-    <meta property="og:title" content="honolulu web designer &amp; developer — custom websites, nationwide" />
-    <meta property="og:description" content="freelance web designer &amp; developer based in honolulu — fast, custom websites for small businesses across hawaii and the u.s." />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:url" content="https://ddanghnl.com/" />
-    <meta property="og:image" content="https://ddanghnl.com/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ddanghnl — honolulu web designer &amp; developer" />
+<!-- kit contract: `js` before any paint (load animations wait on it), a 1600 ms `is-ready` failsafe, and if the
+     app never mounts (main.jsx adds `app`), drop `js` after 4 s so the readable fallback below shows. -->
+<script>(function(d){d.classList.add('js');setTimeout(function(){d.classList.add('is-ready')},1600);setTimeout(function(){if(!d.classList.contains('app'))d.classList.remove('js')},4000)})(document.documentElement)</script>
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="honolulu web designer &amp; developer — custom websites, nationwide" />
-    <meta name="twitter:description" content="freelance web designer &amp; developer based in honolulu — fast, custom websites for small businesses across hawaii and the u.s." />
-    <meta name="twitter:image" content="https://ddanghnl.com/og-image.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <!-- Structured data: local business + services -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "@id": "https://ddanghnl.com/#business",
-      "name": "ddanghnl",
-      "legalName": "dean dang",
-      "alternateName": "dean dang — ddanghnl",
-      "description": "freelance web designer and developer based in honolulu, hawaii — building fast, custom websites, google business profiles, and analytics for small businesses across hawaii and the united states.",
-      "slogan": "got a website? let's build one.",
-      "url": "https://ddanghnl.com",
-      "image": "https://ddanghnl.com/og-image.png",
-      "logo": "https://ddanghnl.com/og-image.png",
-      "priceRange": "$$",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Honolulu",
-        "addressRegion": "HI",
-        "addressCountry": "US"
-      },
-      "areaServed": [
-        { "@type": "Country", "name": "United States" },
-        { "@type": "State", "name": "Hawaii" },
-        { "@type": "City", "name": "Honolulu" }
-      ],
-      "serviceType": [
-        "Web Design",
-        "Web Development",
-        "Small Business Websites",
-        "Landing Page Design",
-        "Google Business Profile Setup",
-        "Website Analytics",
-        "Custom Web Applications"
-      ],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "web services",
-        "itemListElement": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Design & Development", "description": "fast, custom-built websites made for phones first." } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Business Profile Setup", "description": "set up so locals and customers actually find you." } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Analytics", "description": "see what's working, explained in plain english." } }
-        ]
-      },
-      "knowsAbout": [
-        "React", "JavaScript", "UI/UX Design", "Responsive Design", "Local SEO", "Interactive Web Experiences"
-      ],
-      "founder": {
-        "@type": "Person",
-        "name": "Dean Dang",
-        "jobTitle": "Web Designer & Developer",
-        "url": "https://ddanghnl.com",
-        "sameAs": [
-          "https://github.com/ddangdev",
-          "https://www.linkedin.com/in/duong-dang-68802a201/"
-        ]
-      },
-      "sameAs": [
-        "https://github.com/ddangdev",
-        "https://www.linkedin.com/in/duong-dang-68802a201/"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer service",
-        "url": "https://ddanghnl.com/#contact",
-        "availableLanguage": "English"
-      },
-      "inLanguage": "en-US"
-    }
-    </script>
+<!-- readable page for crawlers and visitors without JS; hidden whenever JS runs -->
+<style>
+  #root .seo-fallback{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:#FFFFFF;color:#0A0A0A;max-width:640px;margin:0 auto;padding:48px max(16px,env(safe-area-inset-left)) 64px;line-height:1.55;font-size:17px}
+  #root .seo-fallback h1{font-size:clamp(32px,8vw,48px);font-weight:400;letter-spacing:-.035em;line-height:1;margin:12px 0 18px}
+  #root .seo-fallback h2{font-size:20px;font-weight:500;margin:32px 0 8px}
+  #root .seo-fallback p{margin:0 0 12px;color:#2A2A2A}
+  #root .seo-fallback ul{margin:0;padding-left:20px}
+  #root .seo-fallback li{margin:6px 0}
+  #root .seo-fallback a{color:#0A0A0A;text-decoration:underline;text-underline-offset:2px}
+  html.js .seo-fallback{display:none}
+</style>
 
-    <!-- Theme color for mobile browsers -->
-    <meta name="theme-color" content="#E9E9E8" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": "https://ddanghnl.com/#studio",
+  "name": "ddanghnl studio",
+  "legalName": "DDANGHNL STUDIO LLC",
+  "description": "A web studio in Honolulu for small businesses: custom websites with hosting, Google Business Profile setup, and analytics in plain english.",
+  "slogan": "websites people enjoy using.",
+  "url": "https://ddanghnl.com/",
+  "image": "https://ddanghnl.com/og-image.png",
+  "email": "ddanghnlstudio@gmail.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "Honolulu", "addressRegion": "HI", "addressCountry": "US" },
+  "areaServed": [ { "@type": "City", "name": "Honolulu" }, { "@type": "State", "name": "Hawaii" } ],
+  "serviceType": [ "Web Design", "Web Development", "Website Hosting", "Google Business Profile Setup", "Website Analytics" ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "services",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "website + hosting", "description": "fast, custom-built, made for phones first, and hosted for you." } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "google business profile", "description": "set up so locals & tourists actually find you." } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "analytics", "description": "monthly traffic reports, in plain english." } }
+    ]
+  },
+  "contactPoint": { "@type": "ContactPoint", "contactType": "new projects", "email": "ddanghnlstudio@gmail.com", "url": "https://ddanghnl.com/#start", "availableLanguage": "English" },
+  "inLanguage": "en-US"
+}
+</script>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌅</text></svg>" />
-
-    <!-- Static crawlable content + graceful pre-load state (React replaces #root on mount) -->
-    <style>
-      body{margin:0}
-      #root .seo-fallback{font-family:'Nunito',system-ui,sans-serif;background:#E9E9E8;color:#1c1b19;min-height:100vh;max-width:660px;margin:0 auto;padding:16vh 24px;text-align:center}
-      #root .seo-fallback h1{font-size:clamp(28px,6vw,40px);font-weight:900;letter-spacing:-.02em;margin:0 0 18px}
-      #root .seo-fallback p{font-size:17px;font-weight:600;color:#4a463f;line-height:1.55;margin:0 0 14px}
-      #root .seo-fallback ul{list-style:none;padding:0;margin:18px 0;font-weight:800;color:#1c1b19}
-      #root .seo-fallback ul li{margin:5px 0}
-      #root .seo-fallback strong{color:#EB0000}
-    </style>
-
-    <!-- Cloudflare Turnstile (bot protection for the contact form) -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-
-    <!-- Google Analytics (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N61CCQH4KY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-N61CCQH4KY');
-    </script>
-  </head>
-  <body>
-    <div id="root">
-      <div class="seo-fallback">
-        <h1>honolulu web designer &amp; developer</h1>
-        <p>i'm dean dang (ddanghnl) — a freelance web designer and developer based in honolulu, hawaii. i build fast, custom, mobile-first websites, set up google business profiles, and wire up analytics for small businesses across hawaii and the united states.</p>
-        <ul>
-          <li>website design &amp; development</li>
-          <li>google business profile setup</li>
-          <li>website analytics</li>
-        </ul>
-        <p><strong>got a website? let's build one.</strong></p>
-        <p>honolulu, hawaii · serving clients nationwide</p>
-      </div>
-    </div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N61CCQH4KY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-N61CCQH4KY');
+</script>
+</head>
+<body>
+<div id="root">
+  <div class="seo-fallback">
+    <p>ddanghnl studio · web design &amp; development, Honolulu</p>
+    <h1>websites people enjoy using.</h1>
+    <p>a web studio for small businesses. custom sites, designed and built from scratch, then made easy to find.</p>
+    <h2>what i do</h2>
+    <ul>
+      <li><strong>website + hosting</strong>: fast, custom-built, made for phones first, and hosted for you.</li>
+      <li><strong>google business profile</strong>: set up so locals &amp; tourists actually find you.</li>
+      <li><strong>analytics</strong>: monthly traffic reports, in plain english.</li>
+    </ul>
+    <h2>live work</h2>
+    <ul>
+      <li><a href="https://noribarhawaii.com">Nori Bar Hawaii</a>, sushi hand roll bar · Ward and Waikiki</li>
+      <li><a href="https://manipedihnl.com">Mani Pedi Spa</a>, nail salon · Ala Moana Center</li>
+    </ul>
+    <p>start a project: <a href="mailto:ddanghnlstudio@gmail.com">ddanghnlstudio@gmail.com</a></p>
+    <p>DDANGHNL STUDIO LLC · Honolulu</p>
+  </div>
+</div>
+<script type="module" src="/src/main.jsx"></script>
+</body>
 </html>

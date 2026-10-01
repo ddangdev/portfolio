@@ -1,0 +1,12 @@
+/* the only stylesheet entry (imported once by main.jsx). The @import order IS the cascade order:
+   tokens, then the kit base, then the bento shell, then one sheet per tile. Components never import CSS. */
+@import './tokens.css';
+@import './base.css';
+@import './bento.css';
+@import '../features/hero/hero.css';
+@import '../features/work/work.css';
+@import '../features/services/services.css';
+@import '../features/studio/studio.css';
+@import '../features/own-projects/own-projects.css';
+@import '../features/mail/mail.css';
+@import '../features/lead-form/lead-form.css';

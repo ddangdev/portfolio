@@ -1,7 +1,22 @@
-import Landing from './pages/Landing/Landing';
+/* The page shell: skip link, header, the bento, footer, the phone dock and the mouse view pill. */
+import Bento from './features/bento/Bento';
+import Dock from './features/dock/Dock';
+import SiteFooter from './features/footer/SiteFooter';
+import SiteHeader from './features/header/SiteHeader';
+import ViewPillCursor from './components/ViewPillCursor';
+import { ANCHORS } from './data/site';
+import { usePageReady } from './motion/usePageReady';
 
-function App() {
-  return <Landing />;
+export default function App() {
+  usePageReady();
+  return (
+    <>
+      <a className="skip" href={`#${ANCHORS.work}`}>skip to the work</a>
+      <SiteHeader />
+      <Bento />
+      <SiteFooter />
+      <Dock />
+      <ViewPillCursor />
+    </>
+  );
 }
-
-export default App;
