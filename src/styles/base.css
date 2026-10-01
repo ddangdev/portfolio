@@ -169,9 +169,9 @@ h1, h2, h3, h4, p, figure, dl, dd, blockquote { margin: 0; }
 
 /* ---------- 7. facts + work meta ---------- */
 .facts { margin-top: 18px; border-top: 1px solid var(--line); }
-.facts > div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: var(--fs-xs); }
+.facts > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: var(--fs-xs); }
 .facts dt { font-family: var(--mono); font-size: var(--fs-label); color: var(--muted); padding-top: 2px; }
-.facts dd { color: var(--ink-2); }
+.facts dd { color: var(--ink-2); overflow-wrap: break-word; }   /* minmax + break-word: a long word wraps at large text instead of widening the page */
 
 .cat { font-family: var(--mono); font-size: var(--fs-meta); color: var(--muted); margin-top: 6px; }
 .url { display: inline-flex; align-items: center; gap: 8px; min-height: var(--tap); margin-top: 8px; font-size: var(--fs-sm); }

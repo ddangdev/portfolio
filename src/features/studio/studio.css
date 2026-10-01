@@ -2,5 +2,5 @@
 .b-studio { display: flex; flex-direction: column; }
 .studio-n { margin-top: var(--s-3); margin-bottom: var(--s-6); max-width: 30ch; }
 .b-studio .facts { margin-top: auto; padding-top: 0; }
-.b-studio .facts > div { grid-template-columns: 4.5rem 1fr; }
+.b-studio .facts > div { grid-template-columns: 4.5rem minmax(0, 1fr); }
 .b-studio .facts > div:last-child { border-bottom: 0; padding-bottom: 0; }
