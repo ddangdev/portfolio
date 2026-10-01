@@ -1,0 +1,9 @@
+/* services tile: the rows stay stacked (name over line) inside a narrow tile */
+.b-svc .svc { margin-top: var(--s-5); }
+@media (min-width: 900px) { .b-svc .svc { margin-top: var(--s-4); } }
+@media (min-width: 900px) {
+  .b-svc .card-t { max-width: 16ch; }
+  .b-svc .svc-rows li { grid-template-columns: 2.25rem 1fr; align-items: start; padding: var(--s-2) 0; }
+  .b-svc .svc-rows li::before { grid-row: span 2; padding-top: 5px; }
+  .b-svc .svc-rows li:last-child { border-bottom: 0; padding-bottom: 0; }
+}

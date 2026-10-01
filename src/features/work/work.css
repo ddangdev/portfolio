@@ -1,0 +1,19 @@
+/* client work tiles: head, stage, foot */
+.card-work { display: flex; flex-direction: column; padding: var(--s-2); }
+.work-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--s-3); padding: var(--s-3) var(--s-3) var(--s-4); }
+.work-head > div { flex: 1 1 13rem; }
+.work-head .status-chip { margin-top: 2px; }
+.card-work .stage { border-radius: var(--r-md); }
+.work-foot { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0 var(--s-5); padding: var(--s-3) var(--s-3) var(--s-1); margin-top: auto; }
+.work-d { flex: 1 1 16rem; max-width: 40ch; color: var(--ink-2); font-size: var(--fs-sm); }
+.work-foot .url { margin-top: var(--s-1); }
+@media (min-width: 900px) {
+  /* a wider, shorter stage so two rows of tiles fit the first screen. The stage keeps a FIXED 5:2 shape,
+     so both client stages are the same height and the phone always shows whole, at the same spot in both
+     tiles. The browser bleeds off the bottom edge. Extra tile height goes above the foot instead. */
+  .card-work .stage { flex: 0 0 auto; --stage-ratio: 5 / 2; --desk-l: 6%; --desk-t: 13%; --desk-w: 70%; --phone-r: 6%; --phone-t: 7%; --phone-w: 16%; }
+  .work-head { padding: var(--s-3) var(--s-3) var(--s-3); }
+  .card-work .work-foot { padding-top: var(--s-2); }
+  .work-foot { margin-top: auto; flex-wrap: nowrap; align-items: center; }
+  .work-d { font-size: var(--fs-xs); }
+}

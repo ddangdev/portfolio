@@ -1,0 +1,235 @@
+/* ddanghnl motion-craft kit: tokens.css
+   Every value the style is made of, defined once. base.css, bento.css and every feature sheet read these;
+   nothing else hard-codes a colour, size, radius, duration or easing.
+   The "tomato signal" palette is built in: the colour and shadow values below are its values, and the
+   seven tile token families (hero, work, svc, studio, own, mail, form) live in the same :root.
+   There is no palette loader; to change the palette, change the values here.
+
+   BREAKPOINTS (CSS cannot read custom properties inside @media, so they are fixed numbers.
+   Use exactly these four everywhere; --bp-* below mirror them for JS and docs only.)
+     sm  380px  (max-width: 379px)  tiny phones: the nav pill drops its dot
+     md  700px  (min-width: 700px)  large phones and tablets: bigger frames, roomier form
+     lg  900px  (min-width: 900px)  desktop layout: 12-column bento, wide nav, no dock
+     xl 1100px  (min-width: 1100px) wide desktop: widest gutter, tighter display leading
+
+   TILE TOKENS: inside each tile (bento.css) the page tokens are re-pointed at that tile's family, so every
+   component in the tile follows without knowing about tiles. Family members:
+     --<p>-bg, -ink, -ink-2, -muted, -line, -line-2, -on-ink, -ink-hover, -accent
+   Extras: --work-halo, --work-halo-2, --own-tag-bg, --form-hover (fill behind an unchecked chip on hover).
+   Never re-pointed, so screenshots are never tinted: --panel, --white, --frame-*, --bezel, --ink-wash, --sh-*.
+
+   Computed contrast of tomato signal (WCAG 2.x):
+     pass  19.80:1  need 7    --ink on --bg / --surface
+     pass  14.35:1  need 7    --ink-2 on --bg / --surface
+     pass   6.48:1  need 4.5  --muted on --bg / --surface
+     pass  17.36:1  need 3    phone bezel (--bezel) vs --panel
+     pass  19.80:1  need 7    --on-ink on --ink (page buttons, the mouse view pill, the skip link)
+     pass  21.00:1  need 7    --on-ink on --ink-hover
+     pass   4.35:1  need 3    --accent vs --bg / --surface (non-text marks: nav dot, focus ring, form line)
+     pass   3.45:1  need 3    --line-2 vs --bg (the nav "start a project" outline)
+     pass  17.63:1  need 7    dock text (--on-ink on --dock-bg over --bg)
+     pass  19.80:1  need 7    dock first link (--ink on --white)
+     pass   4.67:1  need 4.5  hero: ink, ink-2 and muted on the tile
+     pass   4.67:1  need 3    hero: accent vs tile (focus ring)
+     pass   3.76:1  need 3    hero: line-2 vs tile (outline buttons)
+     pass  19.80:1  need 4.5  hero: on-ink on ink (button labels)
+     pass  16.28:1  need 4.5  hero: on-ink on ink-hover (button hover)
+     pass  19.80:1  need 4.5  work/svc/studio/own/mail: ink on tile
+     pass  14.35:1  need 4.5  work/svc/studio/own/mail: ink-2 on tile
+     pass   6.48:1  need 4.5  work/svc/studio/own/mail: muted on tile
+     pass   4.35:1  need 3    work/svc/studio/own/mail: accent vs tile
+     pass  14.35:1  need 4.5  own: tag text (ink-2) on the tag plate over the white thumb
+     pass  19.80:1  need 4.5  form: ink on tile
+     pass  14.53:1  need 4.5  form: ink-2 on tile
+     pass   9.71:1  need 4.5  form: muted on tile
+     pass   6.38:1  need 3    form: accent vs tile (focus ring, marks)
+     pass   5.69:1  need 3    form: line-2 vs tile (outline buttons, chips)
+     pass  15.81:1  need 4.5  form: ink on the unchecked-chip hover fill
+     pass  19.80:1  need 4.5  form: on-ink on ink (button labels, checked chips)
+     pass  16.16:1  need 4.5  form: on-ink on ink-hover (button hover)
+*/
+
+:root {
+  /* ---------- colour: pure white and true black on hairlines, one tomato accent ---------- */
+  --bg: #FFFFFF;            /* page */
+  --surface: #FFFFFF;       /* raised cards: form, text plates, hover fills */
+  --panel: #F0F0EF;         /* recessed stage behind device frames and thumbs */
+  --line: #E2E2E2;          /* hairlines */
+  --line-2: #8A8A8A;        /* outlines on buttons and chips */
+  --ink: #0A0A0A;           /* text, dark buttons, the pill */
+  --ink-2: #2A2A2A;         /* body copy */
+  --ink-hover: #000000;     /* dark button hover */
+  --muted: #5E5E5E;         /* labels, notes */
+  --on-ink: #FFFFFF;        /* text on ink */
+  --white: #FFFFFF;         /* frame and thumb backs */
+  --bezel: var(--ink);      /* phone frame border */
+  --accent: #E03C1C;        /* tomato: non-text marks ONLY (live dots, pill dot, focus, form line) */
+  --accent-halo: rgba(224, 60, 28, .14);      /* ring around a live dot */
+  --accent-halo-2: rgba(224, 60, 28, .28);    /* ring around the pill dot */
+  --ink-wash: rgba(10, 10, 10, .05);          /* nav hover fill, stage inner edge */
+  --dock-bg: rgba(10, 10, 10, .94);
+  --tag-bg: rgba(255, 255, 255, .92);
+
+  /* browser frame chrome */
+  --frame-bar: #F6F6F6;
+  --frame-bar-line: #E6E6E6;
+  --frame-dot: #CFCFCF;
+  --frame-url: #5A5A5A;
+
+  /* shadows */
+  --sh-frame: 0 1px 1px rgba(10, 10, 10, .05), 0 18px 40px -22px rgba(10, 10, 10, .28);
+  --sh-phone: 0 30px 50px -26px rgba(10, 10, 10, .44);
+  --sh-pill: 0 10px 24px -10px rgba(10, 10, 10, .4);
+  --sh-card: 0 1px 1px rgba(10, 10, 10, .06), 0 10px 18px -12px rgba(10, 10, 10, .32);
+  --sh-dock: 0 14px 30px -12px rgba(10, 10, 10, .44);
+
+  /* ---------- tile colour families ---------- */
+  /* hero: a solid tomato block with white type */
+  --hero-bg: #D7391D;
+  --hero-ink: #FFFFFF;
+  --hero-ink-2: #FFFFFF;
+  --hero-muted: #FFFFFF;
+  --hero-line: rgba(255, 255, 255, 0.28);
+  --hero-line-2: rgba(255, 255, 255, 0.85);
+  --hero-on-ink: #0A0A0A;
+  --hero-ink-hover: #FFE3DC;
+  --hero-accent: #FFFFFF;
+
+  /* client work */
+  --work-bg: var(--surface);   --work-ink: var(--ink);   --work-ink-2: var(--ink-2);   --work-muted: var(--muted);
+  --work-line: var(--line);    --work-line-2: var(--line-2);   --work-on-ink: var(--on-ink);   --work-ink-hover: var(--ink-hover);
+  --work-accent: var(--accent);   --work-halo: var(--accent-halo);   --work-halo-2: var(--accent-halo-2);
+
+  /* services */
+  --svc-bg: var(--surface);    --svc-ink: var(--ink);    --svc-ink-2: var(--ink-2);    --svc-muted: var(--muted);
+  --svc-line: var(--line);     --svc-line-2: var(--line-2);    --svc-on-ink: var(--on-ink);    --svc-ink-hover: var(--ink-hover);
+  --svc-accent: var(--accent);
+
+  /* studio */
+  --studio-bg: var(--surface); --studio-ink: var(--ink); --studio-ink-2: var(--ink-2); --studio-muted: var(--muted);
+  --studio-line: var(--line);  --studio-line-2: var(--line-2); --studio-on-ink: var(--on-ink); --studio-ink-hover: var(--ink-hover);
+  --studio-accent: var(--accent);
+
+  /* own projects */
+  --own-bg: var(--surface);    --own-ink: var(--ink);    --own-ink-2: var(--ink-2);    --own-muted: var(--muted);
+  --own-line: var(--line);     --own-line-2: var(--line-2);    --own-on-ink: var(--on-ink);    --own-ink-hover: var(--ink-hover);
+  --own-accent: var(--accent);   --own-tag-bg: var(--tag-bg);
+
+  /* email */
+  --mail-bg: var(--surface);   --mail-ink: var(--ink);   --mail-ink-2: var(--ink-2);   --mail-muted: var(--muted);
+  --mail-line: var(--line);    --mail-line-2: var(--line-2);   --mail-on-ink: var(--on-ink);   --mail-ink-hover: var(--ink-hover);
+  --mail-accent: var(--accent);
+
+  /* form: a solid black slab */
+  --form-bg: #0A0A0A;
+  --form-ink: #FFFFFF;
+  --form-ink-2: rgba(255, 255, 255, 0.86);
+  --form-muted: rgba(255, 255, 255, 0.7);
+  --form-line: rgba(255, 255, 255, 0.18);
+  --form-line-2: rgba(255, 255, 255, 0.52);
+  --form-on-ink: #0A0A0A;
+  --form-ink-hover: #E8E8E8;
+  --form-accent: #FF5A36;
+  --form-hover: rgba(255, 255, 255, .1);
+
+  /* ---------- type ---------- */
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --fs-display: clamp(2.6rem, 1.1rem + 6.2vw, 7.4rem);    /* hero headline */
+  --fs-display-2: clamp(3.25rem, 1.1rem + 6.2vw, 7.4rem); /* closing headline */
+  --fs-title: clamp(2.5rem, 1.6rem + 3vw, 4rem);          /* thank-you, big card titles */
+  --fs-h2: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);         /* section titles */
+  --fs-h3-lg: 2rem;          /* case title on desktop */
+  --fs-h3: 1.625rem;         /* tile title */
+  --fs-h4: 1.25rem;          /* project card title */
+  --fs-h5: 1.1875rem;        /* service name */
+  --fs-lead: 1.125rem;       /* lede on desktop */
+  --fs-body: 1.0625rem;      /* body, inputs, big buttons */
+  --fs-md: 1rem;             /* buttons */
+  --fs-sm: .9375rem;         /* nav, notes, chips */
+  --fs-xs: .875rem;          /* facts, pill, errors */
+  --fs-meta: .8125rem;       /* eyebrow, category line */
+  --fs-label: .75rem;        /* mono labels */
+  --fs-micro: .6875rem;      /* tags, required marks */
+  --fs-frame-url: 8px;       /* url in the browser bar (11px from md) */
+
+  --lh-display: 1;
+  --lh-display-xl: .96;
+  --lh-tight: 1.1;
+  --lh-body: 1.55;
+
+  --tr-display: -.035em;
+  --tr-h: -.03em;
+  --tr-tight: -.02em;
+  --tr-snug: -.01em;
+  --tr-mono: .02em;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 600;
+
+  /* ---------- space ---------- */
+  --gut: 20px;               /* page gutter: 20 / 32 from md / 56 from xl */
+  --max: 1320px;             /* content width inside the gutters */
+  --col-gap: 24px;           /* 12-column grid gap from lg */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-7: 28px;
+  --s-8: 32px;
+  --s-9: 40px;
+  --s-10: 48px;
+  --s-11: 56px;
+  --s-12: 64px;
+  --s-13: 72px;
+  --s-14: 96px;
+  --s-15: 120px;
+  --tap: 44px;               /* minimum touch target */
+  --header-h: 72px;
+
+  /* ---------- radii ---------- */
+  --r-lg: 20px;              /* stage, tiles, form card */
+  --r-md: 12px;              /* thumbs */
+  --r-sm: 8px;               /* browser frame (10px from md) */
+  --r-xs: 4px;
+  --r-phone: 14px;           /* phone frame outer (22px from md) */
+  --r-phone-in: 12px;        /* phone screen (19px from md): outer radius minus the bezel */
+  --phone-bezel: 2px;        /* phone frame border thickness (3px from md) */
+  --r-pill: 999px;
+
+  /* ---------- motion: fast, ease-out, no bounce ---------- */
+  --ease: cubic-bezier(.2, .7, .15, 1);      /* fast out, soft landing, no overshoot */
+  --ease-io: cubic-bezier(.65, 0, .35, 1);   /* symmetric, for things that travel */
+  --t-1: 150ms;              /* presses, hover colour */
+  --t-2: 240ms;              /* underlines, fades, chips */
+  --t-3: 380ms;              /* slides, pill scale, magnetic settle */
+  --t-4: 400ms;              /* image zoom, ticker digit roll ceiling */
+  --stagger-word: 45ms;      /* between headline words */
+  --stagger-reveal: 60ms;    /* between revealed blocks */
+  --reveal-delay: 260ms;     /* load reveals wait for the headline to start */
+  --reveal-shift: 10px;      /* how far a revealed block rises */
+  --press: .97;              /* scale on :active */
+  --pill-from: .6;           /* the view pill scales in from this */
+
+  /* mirrors of the breakpoints (docs and JS only) */
+  --bp-sm: 380px;
+  --bp-md: 700px;
+  --bp-lg: 900px;
+  --bp-xl: 1100px;
+}
+
+@media (min-width: 700px) {
+  :root {
+    --gut: 32px;
+    --r-sm: 10px;
+    --r-phone: 22px;
+    --r-phone-in: 19px;
+    --phone-bezel: 3px;
+    --fs-frame-url: 11px;
+  }
+}
+@media (min-width: 1100px) { :root { --gut: 56px; } }

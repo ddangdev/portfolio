@@ -1,0 +1,4 @@
+/* email tile: the secondary way in */
+.b-mail { display: flex; flex-direction: column; }
+.mail-body { margin-top: auto; padding-top: var(--s-4); display: grid; gap: var(--s-1); }
+.b-mail .mail-link { font-size: var(--fs-h4); }

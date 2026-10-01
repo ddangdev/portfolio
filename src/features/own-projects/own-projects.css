@@ -1,0 +1,28 @@
+/* own projects tile: a sideways scroller on phones, a list of rows from lg */
+.own-note { margin-top: var(--s-1); }
+.own-scroll {
+  margin: var(--s-5) calc(var(--s-5) * -1) 0; padding: 0 var(--s-5) var(--s-2);
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--s-5); scrollbar-width: none;
+}
+.own-scroll::-webkit-scrollbar { display: none; }
+.own-scroll:focus-visible { outline-offset: -2px; border-radius: var(--r-md); }
+.own-list { display: grid; grid-auto-flow: column; grid-auto-columns: min(78%, 300px); gap: var(--s-3); }
+/* a single project has nothing to scroll to, so it takes the full width instead of peeking */
+.own-list:has(> .proj:only-child) { grid-auto-columns: 100%; }
+.own-list .proj { scroll-snap-align: start; }
+.own-list .proj-meta p:not(.status) { max-width: 34ch; }
+@media (min-width: 700px) {
+  .own-scroll { margin-inline: calc(var(--s-8) * -1); padding-inline: var(--s-8); scroll-padding-inline: var(--s-8); }
+}
+@media (min-width: 900px) {
+  .own-scroll { margin: var(--s-6) 0 0; padding: 0; overflow: visible; scroll-snap-type: none; }
+  .own-list { grid-auto-flow: row; grid-auto-columns: auto; gap: var(--s-4); }
+  .own-list .proj { display: grid; grid-template-columns: 13rem minmax(0, 1fr); gap: var(--s-5); align-items: start; padding-top: var(--s-4); border-top: 1px solid var(--line); }
+  .own-list .proj-meta { padding-top: 0; }
+  .own-list .proj-meta .status { margin-top: var(--s-2); }
+}
+@media (min-width: 900px) and (max-width: 1099px) {
+  .own-list .proj { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .own-list .proj-meta { padding-top: var(--s-4); }
+}
