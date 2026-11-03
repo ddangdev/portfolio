@@ -21,6 +21,13 @@ cp -r "$here/src" "$here/public" "$here/email" "$here/scripts" "$live/"
 cp "$here/index.html" "$here/vite.config.js" "$here/package.json" "$here/package-lock.json" "$here/README.md" "$here/.env.production" "$here/.env.example" "$live/"
 # the live repo's ignores: this site's, plus wrangler's local files
 { cat "$here/.gitignore"; printf '\n# wrangler, local\n.dev.vars\n.wrangler/\n'; } > "$live/.gitignore"
+printf '
+# qa screenshots, local
+qa-*.png
+.screenshots/
+screenshots/
+_revamp/
+' >> "$live/.gitignore"
 
 cd "$live"
 npm install --no-audit --no-fund --silent
