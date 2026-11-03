@@ -1,0 +1,132 @@
+/* aina-moana: the frame around the scene - black, the canvas, the title and the credit. */
+
+:root {
+  --mint: #0bfdb0;   /* the island's electric mint - must match DOT_COLOR in main.js */
+  --ink: rgb(255 255 255 / 0.82);
+  --ink-soft: rgb(255 255 255 / 0.55);   /* 7.6:1 on black */
+  --ink-faint: rgb(255 255 255 / 0.48);  /* 4.6:1 on black: as quiet as small text can go and stay legible */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+body {
+  color: var(--ink);
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: #fff; color: #000; }
+
+/* The board (owner's call, 2026-10-30): the composition as one fixed artboard, the shape of the
+   screenshot it was approved from (998 x 1514), as large as the window allows and centred. Every
+   position and size inside is a share of the board's width (cqw), measured off that screenshot, so
+   the whole thing scales together and nothing shifts relative to anything else. */
+.board {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: min(100vw, calc(100vh * 998 / 1514));
+  width: min(100vw, calc(100dvh * 998 / 1514));
+  aspect-ratio: 998 / 1514;
+  transform: translate(-50%, -50%);
+  container-type: size;
+
+  /* The corner tag: the title and, under it, the QR code, exactly as wide as the two-line title
+     (two lines of 0.82 line-height = 1.64 font-sizes). */
+  --tag-width: 16.1cqw;
+  --tag-font: calc(var(--tag-width) / 1.64);
+  /* Spacing on the golden ratio (owner's call, 2026-10-30): each step is phi times the last.
+       place line to QR code      1.6cqw
+       title to place line        1.6 x phi   = 2.59cqw
+       margins, left and bottom   1.6 x phi^2 = 4.19cqw */
+  --phi: 1.618;
+  --space-1: 1.6cqw;
+  --space-2: calc(var(--space-1) * var(--phi));
+  --space-3: calc(var(--space-2) * var(--phi));
+  --tag-gap: var(--space-2);
+  --place-font: 1.85cqw;     /* the HONOLULU HAWAII line between the title and the QR code */
+  --place-gap: var(--space-1);
+  --edge-left: var(--space-3);
+  --edge-bottom: var(--space-3);
+}
+
+/* The canvas sits above the title and is transparent where nothing is drawn, so the title shows
+   behind the island and through the gaps between its dots. */
+.stage { position: absolute; inset: 0; z-index: 1; }   /* fixed: no drag, pan or zoom */
+.stage canvas { display: block; width: 100%; height: 100%; }
+
+/* The title sits small in the bottom-left corner like a barcode label: vertical writing, turned half
+   a circle so it reads upward, on two lines - MAGIC, then ISLAND beside it. Behind the canvas, so
+   the island laps over it if the two ever meet on a narrow screen. */
+.title {
+  position: absolute;
+  left: var(--edge-left);
+  bottom: calc(var(--edge-bottom) + var(--tag-width) + var(--place-gap) + var(--place-font) + var(--tag-gap));   /* sits on the place line */
+  margin: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: "Archivo", "Arial Narrow", sans-serif;
+  font-weight: 300;
+  font-stretch: 62%;
+  font-size: var(--tag-font);
+  line-height: 0.82;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--mint);   /* the same mint as the island (owner's call, 2026-10-30) */
+  pointer-events: none;
+  z-index: 0;   /* behind the canvas */
+}
+
+/* The QR code under the title: to the Wikipedia article on Magic Island. Black modules on a mint tile
+   with a slim margin (built by scripts/build_qr.py). Above the canvas, so it can be clicked as well as scanned. */
+.qr {
+  position: absolute;
+  left: var(--edge-left);
+  bottom: var(--edge-bottom);
+  width: var(--tag-width);
+  height: var(--tag-width);
+  z-index: 2;
+}
+/* HONOLULU HAWAII between the title and the QR code: the same face at its thinnest weight, a little
+   wider and tracked out so the II of HAWAII has room, and justified to the code's exact width - one
+   word flush left, the other flush right - like the fine print on a spec label. The width carries
+   one letter-space extra, because tracking also adds space after the last I. */
+.place {
+  position: absolute;
+  left: var(--edge-left);
+  bottom: calc(var(--edge-bottom) + var(--tag-width) + var(--place-gap));
+  width: calc(var(--tag-width) + 0.1em);
+  margin: 0;
+  font-family: "Archivo", "Arial Narrow", sans-serif;
+  font-weight: 100;
+  font-stretch: 75%;
+  font-size: var(--place-font);
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: justify;
+  text-align-last: justify;
+  white-space: nowrap;
+  color: var(--mint);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.qr img { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.qr:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* The OpenStreetMap credit. The data's licence requires it wherever the dots are shown, so it stays,
+   but as quietly as it can while still being readable: small, and dimmed to the 4.5:1 floor. */
+.credit {
+  position: absolute;
+  right: 2.8cqw;
+  bottom: 1.7cqw;
+  margin: 0;
+  font-size: max(9px, 1.6cqw);   /* scales with the board, but never below legible */
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  color: var(--ink-faint);
+  z-index: 2;   /* above the canvas, so the link can still be clicked */
+}
+.credit a { color: inherit; text-decoration-color: rgb(255 255 255 / 0.25); text-underline-offset: 2px; }
+.credit a:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }

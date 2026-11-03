@@ -1,19 +1,68 @@
-/* client work tiles: head, stage, foot */
-.card-work { display: flex; flex-direction: column; padding: var(--s-2); }
-.work-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--s-3); padding: var(--s-3) var(--s-3) var(--s-4); }
-.work-head > div { flex: 1 1 13rem; }
-.work-head .status-chip { margin-top: 2px; }
-.card-work .stage { border-radius: var(--r-md); }
-.work-foot { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0 var(--s-5); padding: var(--s-3) var(--s-3) var(--s-1); margin-top: auto; }
-.work-d { flex: 1 1 16rem; max-width: 40ch; color: var(--ink-2); font-size: var(--fs-sm); }
-.work-foot .url { margin-top: var(--s-1); }
-@media (min-width: 900px) {
-  /* a wider, shorter stage so two rows of tiles fit the first screen. The stage keeps a FIXED 5:2 shape,
-     so both client stages are the same height and the phone always shows whole, at the same spot in both
-     tiles. The browser bleeds off the bottom edge. Extra tile height goes above the foot instead. */
-  .card-work .stage { flex: 0 0 auto; --stage-ratio: 5 / 2; --desk-l: 6%; --desk-t: 13%; --desk-w: 70%; --phone-r: 6%; --phone-t: 7%; --phone-w: 16%; }
-  .work-head { padding: var(--s-3) var(--s-3) var(--s-3); }
-  .card-work .work-foot { padding-top: var(--s-2); }
-  .work-foot { margin-top: auto; flex-wrap: nowrap; align-items: center; }
-  .work-d { font-size: var(--fs-xs); }
+/* ddanghnl-site: work's projects as dots floating in a box of columns. See WorkField.jsx. The page is light. */
+
+.wrk { --dot: 14px; }
+@media (max-width: 600px) { .wrk { --dot: 12px; } }
+
+/* the box: ruled above and below like the services' field */
+/* nothing in it can be selected or long-press-menued: a finger holding a dot was highlighting the box
+   instead (owner's report, 2026-11-02) */
+.wrk-field {
+  position: relative; height: clamp(240px, 46svh, 420px); overflow: hidden;
+  border-top: 1px solid rgb(0 0 0 / 0.1); border-bottom: 1px solid rgb(0 0 0 / 0.1);
+  touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+}
+.wrk-field * { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+@media (max-width: 600px) { .wrk-field { height: clamp(220px, 60vw, 300px); } }
+
+/* the columns: one a kind of work, its name at the top in its colour, dashed lines between them */
+.wrk-cols { position: absolute; inset: 0; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; pointer-events: none; }
+/* a column on the faintest wash of its colour, and a dashed line down its left - dashes long enough to
+   read as dashes (owner's call, 2026-11-02) */
+.wrk-col { position: relative; min-width: 0; padding: 10px 6px 0; text-align: center; background: color-mix(in srgb, var(--kind) 7%, transparent); }
+.wrk-col::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: repeating-linear-gradient(to bottom, rgb(0 0 0 / 0.32) 0 14px, transparent 14px 22px); }
+.wrk-col:first-child::before { display: none; }
+.wrk-col-name { display: block; font: 500 clamp(10px, 1.6vw, 11.5px)/1.15 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--kind); }
+/* a narrow column (a phone; the script says): its name runs down its left edge, reading downward */
+.wrk-field.is-narrow .wrk-col { padding: 0; }
+.wrk-field.is-narrow .wrk-col-name { position: absolute; left: 5px; top: 10px; writing-mode: vertical-rl; font-size: 9.5px; letter-spacing: 0.1em; white-space: nowrap; }
+
+/* a dot: a project, in its kind's colour, full and a touch bigger when pointed at */
+.wrk-dot {
+  position: absolute; left: 0; top: 0; width: var(--dot); height: var(--dot); display: block;
+  border-radius: 50%; background: var(--kind, #000); cursor: pointer; opacity: 0.82;
+  transition: opacity 160ms var(--ease), box-shadow 160ms var(--ease);
+  will-change: transform; touch-action: none;   /* a finger on a dot drags the dot, not the page */
+}
+.wrk-dot:hover, .wrk-dot:focus-visible, .wrk-dot.is-held { opacity: 1; }
+/* picked up (pressed and held): lifted a little off the page, its name shown as when pointed at */
+.wrk-dot.is-held { box-shadow: 0 6px 14px rgb(0 0 0 / 0.28); cursor: grabbing; }
+.wrk-dot:focus-visible { outline: 2px solid var(--kind, var(--accent)); outline-offset: 3px; }
+/* its name, written on the page beside the dot when it is pointed at: a line draws out from the dot,
+   then the words type on, a letter at a time. A dot on the right half writes to its left */
+.wrk-tip {
+  position: absolute; left: calc(100% + 7px); top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; gap: 9px; pointer-events: none; opacity: 0; transition: opacity 120ms var(--ease);
+}
+.wrk-tip-line { width: 0; height: 1px; background: var(--kind, #000); transition: width 70ms var(--ease); }
+.wrk-tip-text {
+  font: 500 clamp(0.95rem, 1.5vw, 1.05rem)/1 var(--sans); letter-spacing: -0.015em; color: #000; white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
+  /* a white halo, so the words stay clear where they cross a dashed line */
+  text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 3px #fff, 0 0 5px #fff;
+}
+.wrk-dot:hover .wrk-tip, .wrk-dot:focus-visible .wrk-tip, .wrk-dot.is-held .wrk-tip { opacity: 1; transition: none; }
+.wrk-dot:hover .wrk-tip-line, .wrk-dot:focus-visible .wrk-tip-line, .wrk-dot.is-held .wrk-tip-line { width: 30px; }
+/* quick: the line in 70ms, the letters at 8ms each right behind it - the whole name out in under a
+   quarter second (owner's call, 2026-11-02: faster, twice) */
+.wrk-dot:hover .wrk-tip-text, .wrk-dot:focus-visible .wrk-tip-text, .wrk-dot.is-held .wrk-tip-text { animation: wrk-type calc(var(--n) * 8ms) steps(var(--n)) 50ms forwards; }
+@keyframes wrk-type { to { clip-path: inset(0 0 0 0); } }
+.wrk-dot.is-flipped .wrk-tip { left: auto; right: calc(100% + 7px); flex-direction: row-reverse; }
+.wrk-dot.is-flipped .wrk-tip-text { clip-path: inset(0 0 0 100%); }
+
+/* a line under the box, for anyone wondering what the dots are */
+.wrk-hint { margin: 12px 0 0; font-size: clamp(0.9rem, 1.5vw, 1rem); color: rgb(0 0 0 / 0.45); }
+
+@media (prefers-reduced-motion: reduce) {
+  .wrk-dot, .wrk-tip-line, .wrk-tip-text { transition: none; animation: none; }
+  .wrk-dot:hover .wrk-tip-text, .wrk-dot:focus-visible .wrk-tip-text, .wrk-dot.is-held .wrk-tip-text { clip-path: inset(0 0 0 0); animation: none; }
 }

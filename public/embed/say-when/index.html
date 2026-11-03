@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Say When</title>
+<meta name="description" content="Say When: a pitcher pours letters into a cup that never gets told to stop - drawn live.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- the statement's face, Shippori Mincho B1 ExtraBold (the owner's pick), only the passage's characters fetched -->
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@800&text=%E3%80%81%E3%80%82%E3%81%84%E3%81%86%E3%81%8B%E3%81%8C%E3%81%8D%E3%81%93%E3%81%97%E3%81%99%E3%81%9B%E3%81%9D%E3%81%A4%E3%81%A6%E3%81%A7%E3%81%A8%E3%81%AA%E3%81%AB%E3%81%AE%E3%81%AF%E3%81%BE%E3%81%BF%E3%82%89%E3%82%8A%E3%82%8B%E3%82%8C%E3%82%93%E4%B8%80%E4%BC%B4%E4%BD%93%E5%9C%A8%E5%AD%98%E7%89%A9%E8%87%AA%E8%8B%A6%E8%B4%88%E9%80%83&display=block" rel="stylesheet">
+<link rel="stylesheet" href="./src/style.css">
+<!-- the subject: the coffee cup by default; ?subject=bean for the bean, ?subject=book for the book -->
+<script type="module">
+  const pick = new URLSearchParams(location.search).get('subject');
+  const subject = ['book', 'bean'].includes(pick) ? pick : 'cup';
+  document.documentElement.dataset.subject = subject;
+  import({ book: './src/main.js', bean: './src/bean.js', cup: './src/cup.js' }[subject]);
+</script>
+</head>
+<body>
+  <!-- The statement (owner's call, 2026-11-01): a passage the owner chose, set small in vertical columns read
+       right to left, a phrase to a column (the two long ones broken where a reader would pause), filling the space under the cup. It replaced the cycling lines
+       (src/statement.js, no longer loaded). -->
+  <h1 class="statement" lang="ja">存在するということ自体が、<br>一つの贈り物なのです。<br>そして、<br>存在することには<br>苦しみが伴います。<br>そこから<br>逃れることはできません。</h1>
+  <main class="stage">
+    <canvas id="book" role="img" aria-label="A brown coffee cup, letters rising out of it like steam."></canvas>
+  </main>
+  <div class="grain" aria-hidden="true"></div>
+</body>
+</html>

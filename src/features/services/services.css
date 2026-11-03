@@ -1,9 +1,55 @@
-/* services tile: the rows stay stacked (name over line) inside a narrow tile */
-.b-svc .svc { margin-top: var(--s-5); }
-@media (min-width: 900px) { .b-svc .svc { margin-top: var(--s-4); } }
-@media (min-width: 900px) {
-  .b-svc .card-t { max-width: 16ch; }
-  .b-svc .svc-rows li { grid-template-columns: 2.25rem 1fr; align-items: start; padding: var(--s-2) 0; }
-  .b-svc .svc-rows li::before { grid-row: span 2; padding-top: 5px; }
-  .b-svc .svc-rows li:last-child { border-bottom: 0; padding-bottom: 0; }
+/* ddanghnl-site: the services as an orbit of discs. See ServiceField.jsx. */
+
+.svc { --disc: 66px; }
+@media (max-width: 600px) { .svc { --disc: 58px; } }
+
+/* the orbit with the chosen service's words in a column at its right on a tablet or desktop; under it on
+   a phone (owner's call, 2026-11-02) */
+@media (min-width: 601px) {
+  .svc { display: grid; grid-template-columns: minmax(0, 1fr) clamp(200px, 26%, 280px); column-gap: 28px; align-items: center; }
+  .svc-line { margin: 0; align-self: center; }
+  .svc-line b { font-size: clamp(1.35rem, 2.4vw, 1.8rem); }
 }
+
+/* the field: tall enough on a big screen for a ring a service, but never taller than it is wide, since
+   the orbit is round (the script trims it - a tablet's column is narrow); on a phone, about as tall as
+   it is wide. --edge is the room the outer discs leave to its edge (read by the script) */
+.svc { border-top: 1px solid rgb(0 0 0 / 0.1); border-bottom: 1px solid rgb(0 0 0 / 0.1); }
+.svc-field {
+  position: relative; --edge: 10px; --tall: clamp(280px, 66svh, 620px); height: var(--tall); overflow: hidden;
+  /* the wheel spins under a finger or a drag (owner's call, 2026-11-02): a swipe on it turns it, not the page */
+  touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+}
+.svc-field.is-spinning { cursor: grabbing; }
+.svc-field.is-spinning .svc-disc { cursor: grabbing; }
+@media (max-width: 600px) { .svc-field { --edge: 6px; --tall: clamp(260px, 82vw, 340px); } }
+
+/* a disc: a service's name in a see-through round - a line and the faintest wash, so the rings show
+   through (owner's call, 2026-11-02: not opaque); red-lined when chosen */
+.svc-disc {
+  position: absolute; left: 0; top: 0; width: var(--disc); height: var(--disc);
+  display: grid; place-items: center; padding: 0 4px;
+  border: 1px solid rgb(0 0 0 / 0.32); border-radius: 50%; background: rgb(255 255 255 / 0.55); color: #000; cursor: pointer;
+  font: 500 clamp(12px, 1.05vw, 13.5px)/1.02 var(--sans); letter-spacing: -0.02em; text-align: center; overflow-wrap: anywhere;
+  transition: background-color 160ms var(--ease), color 160ms var(--ease), border-color 160ms var(--ease), box-shadow 160ms var(--ease);
+  will-change: transform;
+}
+.svc-disc:hover { border-color: #000; }
+.svc-disc.is-chosen { border-color: var(--accent); background: rgb(232 78 58 / 0.12); color: var(--accent); box-shadow: 0 10px 24px rgb(232 78 58 / 0.18); }
+.svc-disc:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* a faint ring for each path (the script sizes the rings, with the orbit) */
+.svc-ring { position: absolute; left: 50%; top: 50%; border-radius: 50%; border: 1px solid rgb(0 0 0 / 0.09); transform: translate(-50%, -50%); }
+
+/* the chosen service's line, then its packages as small tags (beside the field, or under it on a phone) */
+.svc-line { margin: 16px 0 0; min-height: 2.7em; font-size: clamp(0.95rem, 1.6vw, 1.1rem); line-height: 1.35; color: rgb(0 0 0 / 0.45); transition: color 160ms var(--ease); }
+.svc-line.is-on { color: rgb(0 0 0 / 0.72); }
+.svc-line-p { margin: 0; }
+/* the service's name as a heading over its line, at every size (no dash between them: owner's call,
+   2026-11-02) */
+.svc-line b { display: block; margin-bottom: 0.35em; font-weight: 500; font-size: 1.25em; line-height: 1.1; letter-spacing: -0.03em; color: #000; }
+.svc-price { white-space: nowrap; color: rgb(0 0 0 / 0.5); }
+.svc-packs { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.svc-packs li { padding: 5px 10px; border: 1px solid rgb(0 0 0 / 0.18); border-radius: 999px; font-size: 0.82em; color: #000; }
+
+@media (prefers-reduced-motion: reduce) { .svc-disc { transition: none; } }

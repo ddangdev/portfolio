@@ -3,112 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ddanghnl studio · web design &amp; development, Honolulu</title>
-<meta name="description" content="Custom websites, hosting, Google Business Profile setup and analytics for small businesses. A web studio in Honolulu.">
+<title>ddanghnl studio &middot; websites, brands and things you like, honolulu</title>
+<meta name="description" content="a small studio in honolulu making you look good with modern digital solutions: websites, branding, social media, local visibility, custom video and ai tools.">
+<!-- the live site, ddanghnl.com, from 2026-11-02 (noindex while the old site was live) -->
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <link rel="canonical" href="https://ddanghnl.com/">
-<meta name="theme-color" content="#FFFFFF">
 <meta name="geo.region" content="US-HI">
 <meta name="geo.placename" content="Honolulu">
-<meta name="geo.position" content="21.3069;-157.8583">
-<meta name="ICBM" content="21.3069, -157.8583">
-
 <meta property="og:site_name" content="ddanghnl studio">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:url" content="https://ddanghnl.com/">
-<meta property="og:title" content="ddanghnl studio · websites people enjoy using.">
-<meta property="og:description" content="A web studio in Honolulu for small businesses: custom websites with hosting, Google Business Profile setup, and analytics in plain english.">
-<meta property="og:image" content="https://ddanghnl.com/og-image.png?v=2">
+<meta property="og:title" content="ddanghnl studio &middot; i make things you like">
+<meta property="og:description" content="a small studio in honolulu making you look good with modern digital solutions.">
+<meta property="og:image" content="https://ddanghnl.com/og-image.png?v=3">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="ddanghnl studio: websites people enjoy using. A web studio in Honolulu.">
+<meta property="og:image:alt" content="ddanghnl studio: i make things you like">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ddanghnl studio · websites people enjoy using.">
-<meta name="twitter:description" content="A web studio in Honolulu for small businesses: custom websites with hosting, Google Business Profile setup, and analytics in plain english.">
-<meta name="twitter:image" content="https://ddanghnl.com/og-image.png?v=2">
-
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-
-<!-- kit contract: `js` before any paint (load animations wait on it), a 1600 ms `is-ready` failsafe, and if the
-     app never mounts (main.jsx adds `app`), drop `js` after 4 s so the readable fallback below shows. -->
-<script>(function(d){d.classList.add('js');setTimeout(function(){d.classList.add('is-ready')},1600);setTimeout(function(){if(!d.classList.contains('app'))d.classList.remove('js')},4000)})(document.documentElement)</script>
-
+<!-- color-scheme and theme-color keep the parts the page does not draw - overscroll, the mobile
+     browser bar - black too. -->
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-<!-- readable page for crawlers and visitors without JS; hidden whenever JS runs -->
-<style>
-  #root .seo-fallback{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:#FFFFFF;color:#0A0A0A;max-width:640px;margin:0 auto;padding:48px max(16px,env(safe-area-inset-left)) 64px;line-height:1.55;font-size:17px}
-  #root .seo-fallback h1{font-size:clamp(32px,8vw,48px);font-weight:400;letter-spacing:-.035em;line-height:1;margin:12px 0 18px}
-  #root .seo-fallback h2{font-size:20px;font-weight:500;margin:32px 0 8px}
-  #root .seo-fallback p{margin:0 0 12px;color:#2A2A2A}
-  #root .seo-fallback ul{margin:0;padding-left:20px}
-  #root .seo-fallback li{margin:6px 0}
-  #root .seo-fallback a{color:#0A0A0A;text-decoration:underline;text-underline-offset:2px}
-  html.js .seo-fallback{display:none}
-</style>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "@id": "https://ddanghnl.com/#studio",
-  "name": "ddanghnl studio",
-  "legalName": "DDANGHNL STUDIO LLC",
-  "description": "A web studio in Honolulu for small businesses: custom websites with hosting, Google Business Profile setup, and analytics in plain english.",
-  "slogan": "websites people enjoy using.",
-  "url": "https://ddanghnl.com/",
-  "image": "https://ddanghnl.com/og-image.png",
-  "email": "ddanghnlstudio@gmail.com",
-  "address": { "@type": "PostalAddress", "addressLocality": "Honolulu", "addressRegion": "HI", "addressCountry": "US" },
-  "areaServed": [ { "@type": "City", "name": "Honolulu" }, { "@type": "State", "name": "Hawaii" } ],
-  "serviceType": [ "Web Design", "Web Development", "Website Hosting", "Google Business Profile Setup", "Website Analytics" ],
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "services",
-    "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "website + hosting", "description": "fast, custom-built, made for phones first, and hosted for you." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "google business profile", "description": "set up so locals & tourists actually find you." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "analytics", "description": "monthly traffic reports, in plain english." } }
-    ]
-  },
-  "contactPoint": { "@type": "ContactPoint", "contactType": "new projects", "email": "ddanghnlstudio@gmail.com", "url": "https://ddanghnl.com/#start", "availableLanguage": "English" },
-  "inLanguage": "en-US"
-}
-</script>
-
-<!-- Google Analytics (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N61CCQH4KY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-N61CCQH4KY');
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500&family=Doto:wght@900&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="root">
-  <div class="seo-fallback">
-    <p>ddanghnl studio · web design &amp; development, Honolulu</p>
-    <h1>websites people enjoy using.</h1>
-    <p>a web studio for small businesses. custom sites, designed and built from scratch, then made easy to find.</p>
-    <h2>what i do</h2>
-    <ul>
-      <li><strong>website + hosting</strong>: fast, custom-built, made for phones first, and hosted for you.</li>
-      <li><strong>google business profile</strong>: set up so locals &amp; tourists actually find you.</li>
-      <li><strong>analytics</strong>: monthly traffic reports, in plain english.</li>
-    </ul>
-    <h2>live work</h2>
-    <ul>
-      <li><a href="https://noribarhawaii.com">Nori Bar Hawaii</a>, sushi hand roll bar · Ward and Waikiki</li>
-      <li><a href="https://manipedihnl.com">Mani Pedi Spa</a>, nail salon · Ala Moana Center</li>
-    </ul>
-    <p>start a project: <!--email_off--><a href="mailto:ddanghnlstudio@gmail.com">ddanghnlstudio@gmail.com</a><!--/email_off--></p>
-    <p>DDANGHNL STUDIO LLC · Honolulu</p>
-  </div>
+  <!-- Without JavaScript, the opening's last line, plainly. React replaces this on mount. -->
+  <h1 style="font-family:Archivo,Arial,sans-serif;font-weight:500;color:#f2f2ef;background:#000;margin:0;min-height:100svh;display:grid;place-items:center;font-size:clamp(1.35rem,5.6vw,5.25rem);letter-spacing:-0.03em">i make things you like</h1>
 </div>
-<script type="module" src="/src/main.jsx"></script>
+<script type="module" src="./src/main.jsx"></script>
 </body>
 </html>

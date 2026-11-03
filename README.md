@@ -1,50 +1,28 @@
-# ddanghnl.com
+# ddanghnl-site
 
-the one-page site for **ddanghnl studio**, a web studio in Honolulu: websites people enjoy using.
+The studio site, rebuilt. React 19 + Vite. It starts from the opening line: on black, "i make" holds
+while the last word rolls - websites, brands, things people enjoy using - inside a white label that
+resizes to each word, then the label wipes away and leaves the line in white. After the CLOU
+Architects intro; first built as a plain page at `mockups.ddanghnl.com/portfolio-brand/`.
 
-**live at [ddanghnl.com](https://ddanghnl.com)**
+The live site, ddanghnl.com, since 2026-11-02. It deploys from the `portfolio` repo (Cloudflare
+Pages, custom domain and secrets hang off it): `scripts/release.sh` copies this source there and
+builds; commit and push there, and Pages deploys main. Edit here, release there. GA4's measurement
+ID is in `.env.production`; the events are listed in `src/features/analytics/analytics.js`.
 
-## stack
+## Run it
 
-react 19 · vite 8 · plain css (a token system, no css-in-js) · cloudflare pages + pages functions
-
-## scripts
-
-```bash
+```
 npm install
-npm run dev       # localhost:5173
-npm run build     # production build into dist/
-npm run lint      # eslint
-npm test          # node --test: the lead form contract against functions/api/lead.js
+npm run dev
 ```
 
-## how it is organised
+The dev server listens on port 8814, on localhost and the tailnet.
 
-```
-src/
-  data/        copy and records: services, client work, own projects, studio facts, contact, Turnstile site key
-  styles/      tokens.css (every colour, size and timing), base.css (kit components), bento.css (tile shell + grid)
-               index.css is the only stylesheet entry and fixes the cascade order
-  motion/      one hook per behaviour: word reveal, scroll reveal, magnetic buttons, view pill, ticker, scrolled-past (the header hairline)
-               all honour prefers-reduced-motion
-  components/  shared pieces: Card, MagneticButton, DeviceStage, Ticker, Facts...
-  features/    one folder per tile (hero, work, services, lead-form, studio, own-projects, mail) + header, footer
-  analytics/   GA4 events through a safe gtag wrapper
-functions/api/lead.js   the lead endpoint (Cloudflare Pages Function)
-tests/contract/         the form-to-endpoint contract test
-```
-
-## the lead form
-
-`src/features/lead-form/` validates in the browser (`validation.js`), builds the JSON body (`buildLeadPayload.js`) and
-posts it to `/api/lead` (`sendLead.js`) with a Cloudflare Turnstile token. Turnstile loads only when the form comes near
-the screen. `functions/api/lead.js` re-validates, checks the token, drops honeypot hits and emails the lead through
-Resend. The endpoint can answer HTTP 200 with `{ ok: false }`, so the page counts a send as done only on `ok: true`;
-every failure shows the email address as a fallback.
-
-Secrets (`TURNSTILE_SECRET`, `RESEND_API_KEY`, `LEAD_TO`) live in the Pages project settings, never in the repo.
-Turnstile tokens only validate on ddanghnl.com, www.ddanghnl.com, localhost and 127.0.0.1.
-
-## license
-
-[MIT](./LICENSE)
+| file | what it does |
+| --- | --- |
+| `src/App.jsx` | the page |
+| `src/features/opening/` | the opening line: the sequence (`Opening.jsx`) and its styles |
+| `src/features/wheel/` | the wheel that grows in after the line clears: drag, scroll or arrow keys to turn it, 24 stops (`Wheel.jsx`, `wheel.css`) |
+| `src/styles/base.css` | tokens and base |
+| `index.html` | head, fonts, and a no-JS fallback showing the last line |

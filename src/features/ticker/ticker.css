@@ -1,0 +1,28 @@
+/* ddanghnl-site: the world clock strip. See Ticker.jsx. */
+
+.ticker {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 5;
+  height: 26px; overflow: hidden;
+  background: #fff; color: #000;
+  /* a station's LED platform board (owner's pick, 2026-10-30): dot-matrix capitals */
+  font-family: Doto, var(--sans); font-weight: 900; font-size: 15px; letter-spacing: 0.06em; line-height: 26px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0; transition: opacity 1000ms var(--ease);
+  pointer-events: none;
+}
+.ticker.is-shown { opacity: 1; }
+
+/* two copies side by side; sliding left by one copy's width brings the second exactly where the
+   first began, so it loops seamlessly */
+.ticker-track { display: flex; width: max-content; animation: ticker-slide 140s linear infinite; }
+.ticker-list { display: flex; margin: 0; padding: 0; list-style: none; }
+.ticker-item { padding: 0 22px; }
+.ticker-item::after { content: ""; display: inline-block; width: 4px; height: 4px; margin-left: 44px; border-radius: 50%; background: var(--accent); vertical-align: middle; transform: translateY(-1px); }
+.ticker-city { color: rgb(0 0 0 / 0.55); margin-right: 4px; }
+
+@keyframes ticker-slide { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+}

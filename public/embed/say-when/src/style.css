@@ -1,0 +1,37 @@
+/* hanging-book: the page around the drawing - paper, the canvas filling it, a print grain over all.
+   Black and white only (inkwell): a cool off-white paper and a heavier, neutral grain. */
+
+:root {
+  --paper: #efefec;
+  --ink: #0b0b0b;
+}
+* { box-sizing: border-box; }
+/* the coffee bean sits on a warm paper; the book keeps the cool inkwell one */
+:root[data-subject="bean"], :root[data-subject="cup"] { --paper: #f2ece3; }
+html, body { margin: 0; height: 100%; background: var(--paper); overflow: hidden; }
+
+.stage { position: fixed; inset: 0; }
+/* the ink's hand-drawn wobble is drawn by main.js itself: as an SVG filter on the canvas it ran over
+   every pixel every frame and froze the page */
+#book { display: block; width: 100%; height: 100%; }
+
+/* The statement (owner's call, 2026-11-01): the owner's passage, set small and vertical in the traditional
+   way - columns top to bottom, read right to left - centred under the cup (--table-y, set by cup.js) in the
+   space the bigger lines held. A column holds fourteen characters, and no phrase is longer, so none wraps. */
+.statement {
+  --h: clamp(186px, 30vh, 274px);
+  position: fixed; left: 50%; top: calc(var(--table-y, 70vh) - clamp(14px, 3vh, 28px)); margin: 0; z-index: 2;
+  transform: translateX(-50%);
+  writing-mode: vertical-rl; height: var(--h);
+  font-family: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif; font-weight: 800;
+  font-size: calc(var(--h) / 14); line-height: 1.75; letter-spacing: 0.04em;
+  color: var(--stop, #2a170c); user-select: none;
+}
+:root:not([data-subject="cup"]) .statement { display: none; }
+
+/* print grain: fine noise multiplied over the page */
+.grain {
+  /* a plain overlay, not a multiply blend: blending it over the animation every frame was the costly part */
+  position: fixed; inset: 0; pointer-events: none; opacity: var(--grain, 0.13);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.12 0 0 0 0 0.12 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
+}

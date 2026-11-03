@@ -1,0 +1,21 @@
+/* ddanghnl-site: the nav. See Nav.jsx. */
+
+.nav {
+  position: fixed; top: 34px; left: 0; z-index: 11;   /* under the clock strip, a breath below it (owner, 2026-11-01); above an open pop-up */
+  height: 26px;   /* the words alone: no box or border behind them (owner's call) */
+  opacity: 0; transition: opacity 1000ms var(--ease);
+  pointer-events: none;
+}
+.nav.is-shown { opacity: 1; pointer-events: auto; }
+
+.nav-list { display: flex; height: 100%; margin: 0; padding: 0 6px; list-style: none; }
+.nav-item {
+  display: flex; align-items: center; height: 100%; padding: 0 10px;
+  /* capitals, tracked out, a nod to the clock's board above without its dots (owner's call, 2026-11-01) */
+  font-size: 11.5px; font-weight: 500; letter-spacing: 0.09em; line-height: 1; text-transform: uppercase;
+  color: rgb(242 242 239 / 0.62); text-decoration: none;
+  transition: color 160ms var(--ease);
+}
+.nav-item:hover { color: var(--ink); }
+.nav-item[aria-current='page'] { color: var(--accent); }
+.nav-item:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }

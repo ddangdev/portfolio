@@ -1,0 +1,41 @@
+/* ddanghnl-site: the questions that come up most, folded (see Faq.jsx). A rule between one and the
+   next; the question is the whole row, a button, with a small plus at its right that turns to a
+   cross when open; the answer unfolds under it - a grid row growing from nothing to its own height,
+   the one way a height animates without measuring it - in the paragraphs' colour. */
+
+.faq { margin: 0 0 clamp(12px, 3vw, 28px); max-width: 58ch; }
+.faq-head { margin: 0 0 0.6em; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(0 0 0 / 0.5); }
+.page-dialog:not(.is-light) .faq-head { color: rgb(242 242 239 / 0.55); }
+.faq-item { border-top: 1px solid rgb(0 0 0 / 0.12); }
+.faq-item:last-child { border-bottom: 1px solid rgb(0 0 0 / 0.12); }
+.page-dialog:not(.is-light) .faq-item { border-color: rgb(242 242 239 / 0.14); }
+
+.faq-q { margin: 0; font-size: inherit; font-weight: inherit; }
+.faq-btn {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; width: 100%;
+  padding: 0.9em 0; border: 0; background: none; color: inherit; cursor: pointer; text-align: left;
+  font: inherit; font-weight: 500; font-size: clamp(1.1rem, 2.4vw, 1.5rem); line-height: 1.25; letter-spacing: -0.02em;
+  -webkit-tap-highlight-color: transparent;
+}
+.faq-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.faq-btn:active .faq-q-text { opacity: 0.6; }
+.faq-q-text { transition: opacity 120ms var(--ease); }
+/* the plus: two short lines, the whole turning an eighth round to a cross */
+.faq-mark { position: relative; flex: none; width: 14px; height: 14px; margin-top: 0.3em; transition: transform 220ms var(--ease-out, var(--ease)); }
+.faq-mark::before, .faq-mark::after { content: ''; position: absolute; left: 0; top: 6px; width: 14px; height: 1.5px; background: currentColor; border-radius: 1px; }
+.faq-mark::after { transform: rotate(90deg); }
+.faq-item.is-open .faq-mark { transform: rotate(45deg); }
+
+.faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 240ms var(--ease-out, var(--ease)); }
+.faq-item.is-open .faq-a { grid-template-rows: 1fr; }
+.faq-a-in { min-height: 0; overflow: hidden; visibility: hidden; transition: visibility 0s 240ms; }
+.faq-item.is-open .faq-a-in { visibility: visible; transition-delay: 0s; }
+.faq-a-p {
+  margin: 0; padding: 0 44px 1.1em 0;
+  font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.4; letter-spacing: -0.01em; color: rgb(242 242 239 / 0.78);
+}
+.page-dialog.is-light .faq-a-p { color: rgb(0 0 0 / 0.72); }
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-mark, .faq-a, .faq-a-in { transition: none; }
+}

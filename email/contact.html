@@ -1,0 +1,62 @@
+<!doctype html>
+<!-- ddanghnl-site: the email the contact form would send, once a form service sends it (today the
+     form opens the visitor's own mail app, which is plain text and takes no styling). The studio's
+     brand: black, off-white #f2f2ef, red #ea4e3d, Archivo where it is installed and Arial where it is
+     not (mail apps load no web fonts). Tables and inline styles, the only layout mail apps agree on.
+     Placeholders in double braces are what the form fills in. Sent as a test on 2026-11-02. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>{{subject}}</title>
+</head>
+<body style="margin:0;padding:0;background:#f2f2ef;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f2f2ef;">
+<tr><td align="center" style="padding:32px 16px;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;">
+    <!-- the head: the studio's mark, and what this is -->
+    <tr><td style="background:#000;padding:22px 28px;font-family:Archivo,Arial,Helvetica,sans-serif;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr>
+        <td style="font-family:Archivo,Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;letter-spacing:-0.02em;color:#f2f2ef;">dd<span style="color:#ea4e3d;">+</span>hnl</td>
+        <td align="right" style="font-family:Archivo,Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8e8e8a;">from the site</td>
+      </tr></table>
+    </td></tr>
+    <!-- a red rule -->
+    <tr><td style="background:#ea4e3d;height:3px;line-height:3px;font-size:3px;">&nbsp;</td></tr>
+    <!-- the card -->
+    <tr><td style="background:#ffffff;padding:30px 28px 10px;">
+      <p style="margin:0 0 6px;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8e8e8a;">new enquiry</p>
+      <h1 style="margin:0 0 22px;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:28px;line-height:1.1;letter-spacing:-0.03em;font-weight:500;color:#000;">{{name}}</h1>
+      <!-- the details, a row each -->
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-top:1px solid #e3e3df;">
+        <tr>
+          <td style="padding:12px 0;border-bottom:1px solid #e3e3df;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8e8e8a;width:120px;vertical-align:top;">interested in</td>
+          <td style="padding:12px 0;border-bottom:1px solid #e3e3df;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:16px;line-height:1.4;color:#000;">{{services}}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 0;border-bottom:1px solid #e3e3df;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8e8e8a;vertical-align:top;">phone</td>
+          <td style="padding:12px 0;border-bottom:1px solid #e3e3df;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:16px;line-height:1.4;color:#000;"><a href="tel:{{phone_digits}}" style="color:#000;text-decoration:none;">{{phone}}</a></td>
+        </tr>
+        <tr>
+          <td style="padding:12px 0;border-bottom:1px solid #e3e3df;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8e8e8a;vertical-align:top;">email</td>
+          <td style="padding:12px 0;border-bottom:1px solid #e3e3df;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:16px;line-height:1.4;color:#000;"><a href="mailto:{{email}}" style="color:#000;text-decoration:underline;">{{email}}</a></td>
+        </tr>
+      </table>
+      <!-- the few words -->
+      <p style="margin:22px 0 6px;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8e8e8a;">a few words</p>
+      <p style="margin:0 0 26px;padding:0 0 0 14px;border-left:3px solid #ea4e3d;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:17px;line-height:1.45;color:#1a1a1a;">{{note}}</p>
+      <!-- the one thing to do -->
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr>
+        <td style="background:#000;border-radius:999px;">
+          <a href="mailto:{{email}}?subject=re:%20{{subject_encoded}}" style="display:inline-block;padding:12px 22px;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;letter-spacing:-0.01em;color:#f2f2ef;text-decoration:none;">reply to {{first_name}} &rarr;</a>
+        </td>
+      </tr></table>
+      <p style="margin:26px 0 12px;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#8e8e8a;">sent from the form on ddanghnl.com, {{when}}.</p>
+    </td></tr>
+    <!-- the foot -->
+    <tr><td style="padding:18px 28px 0;font-family:Archivo,Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.04em;color:#8e8e8a;">ddanghnl studio &middot; honolulu</td></tr>
+  </table>
+</td></tr>
+</table>
+</body>
+</html>

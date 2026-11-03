@@ -1,0 +1,47 @@
+/* ddanghnl-site: the wheel. See Wheel.jsx. */
+
+.wheel { position: fixed; inset: 0; pointer-events: none; }
+.wheel.is-shown { pointer-events: auto; }
+/* the right edge fades out, so a name riding off it goes softly rather than sliced (owner's call) */
+.wheel-svg { -webkit-mask-image: linear-gradient(to left, transparent, #000 var(--edge-fade, 72px)); mask-image: linear-gradient(to left, transparent, #000 var(--edge-fade, 72px)); }
+@media (max-width: 600px) { .wheel-svg { --edge-fade: 8px; } }   /* a phone has names right up to the edge */
+.wheel-svg { display: block; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+.wheel-svg:active { cursor: grabbing; }
+/* No focus ring: the wheel fills the screen, so the browser's ring drew a white border round the whole
+   page after a click (owner's report). The selector and the red name already show where it is. */
+.wheel-svg:focus, .wheel-svg:focus-visible { outline: none; }
+.wheel-svg:focus-visible .wheel-major { stroke: #fff; }
+
+.wheel-band { fill: none; stroke: rgb(242 242 239 / 0.42); stroke-width: 1; vector-effect: non-scaling-stroke; }
+/* the accented white line under each page's post */
+.wheel-major { fill: none; stroke: var(--ink); stroke-width: 1.8; vector-effect: non-scaling-stroke; }
+/* a project's tick: one of the outer band's, lit the same white */
+.wheel-minor { fill: none; stroke: var(--ink); stroke-width: 1.8; vector-effect: non-scaling-stroke; }
+
+/* a category: a short upright post off the rim, its name above, right edge on the post */
+.wheel-tag { cursor: pointer; }
+.wheel-tag-stem { stroke: var(--ink); stroke-width: 1.5; transition: stroke 200ms var(--ease); }
+.wheel-tag-name { fill: var(--ink); font-family: var(--sans); font-weight: 500; letter-spacing: -0.02em; transition: fill 200ms var(--ease); }
+
+/* the selection, in the one accent: the fixed line across the bands, and the post resting on it */
+.wheel-selector { fill: none; stroke: var(--accent); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+.wheel-tag.is-chosen .wheel-tag-stem { stroke: var(--accent); stroke-width: 2; }
+.wheel-tag.is-chosen .wheel-tag-name { fill: var(--accent); }
+
+/* Fading in, the whole dial at once, once the opening line has gone (owner's call). */
+.wheel { opacity: 0; transition: opacity 1000ms var(--ease); }
+.wheel.is-shown { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel { transition: none; }
+}
+
+/* the walls; see Walls.jsx */
+.wheel-walls { pointer-events: none; }
+/* solid slabs, no outlines (owner's pick): the slab is the raised tick's side, opaque (the grey the
+   old translucent white made over the black), so nothing on the floor shows through it; the tick's
+   own line rides on top (owner's call, 2026-11-02) */
+.wheel-wall-face { fill: rgb(169 169 167); stroke: none; }
+.wheel-wall-face.is-selected { fill: var(--accent); }   /* the one on the selector, in its red */
+.wheel-wall-top { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: butt; }
+.wheel-wall-top.is-selected { stroke: var(--accent); }   /* red through, never white over the selector */

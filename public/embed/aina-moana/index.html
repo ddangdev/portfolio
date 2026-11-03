@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ʻĀina Moana</title>
+<meta name="description" content="ʻĀina Moana - Magic Island, Honolulu - drawn as a field of electric-mint dots on black, lit by lamps and crossed by walkers and runners.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+
+<!-- Pinned, so a library release can never change this page under us. -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<!-- Archivo: narrowest width at weight 300 for the title, set small and vertical in the bottom-left
+     corner like a barcode label; a little wider (75) at weight 100 for the place line above the QR
+     code, where the narrowest cut crushed the II of HAWAII. Chosen 2026-10-30 from rendered
+     weights; Archivo replaced Big Shoulders, whose pointed M and N the owner did not like. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62,300;75,100&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./src/style.css">
+<script type="module" src="./src/main.js"></script>
+</head>
+<body>
+<!-- The board: the whole composition at one fixed shape, scaled as a unit and centred, so stretching
+     the window only adds black around it. -->
+<main class="board">
+  <h1 class="title">Magic<br>Island</h1>
+  <a class="qr" href="https://en.wikipedia.org/wiki/Magic_Island_(Hawaii)" rel="noopener">
+    <img src="./assets/qr-wikipedia.svg" alt="QR code: Magic Island on Wikipedia" width="33" height="33">
+  </a>
+  <p class="place">Honolulu Hawaii</p>
+  <div id="stage" class="stage" aria-label="Magic Island, Honolulu, drawn in dots, seen from above." role="img"></div>
+  <!-- ODbL requires the attribution wherever the data is shown. -->
+  <p class="credit">map data &copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap contributors</a></p>
+</main>
+</body>
+</html>

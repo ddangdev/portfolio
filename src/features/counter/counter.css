@@ -1,0 +1,60 @@
+/* ddanghnl-site: the page counter. See Counter.jsx. */
+
+.counter {
+  position: fixed; top: 68px; left: 16px; z-index: 9;   /* as far under the nav as the nav is under the clock; under an open pop-up, dimmed with the page */
+  display: flex; align-items: flex-end; gap: 12px;
+  --dot: 8px; --gap: 2px;
+  opacity: 0; transition: opacity 1000ms var(--ease);
+  pointer-events: none;
+}
+.counter.is-shown { opacity: 1; }
+
+.counter-board {
+  display: grid; gap: var(--gap);
+  grid-template-columns: repeat(var(--cols), var(--dot));
+  grid-template-rows: repeat(var(--rows), var(--dot));
+}
+
+/* a dot: dark ones faintly there, lit ones the accent (colour, not opacity: the shimmer sits on top) */
+.counter-dot {
+  position: relative; background: color-mix(in srgb, var(--accent) 11%, transparent);
+  transition: background-color 120ms var(--ease);
+}
+.counter-dot.is-lit { background: var(--accent); }
+/* settling into a number: column by column, left to right */
+.counter-board.is-settling .counter-dot { transition-duration: 180ms; transition-delay: calc(var(--c) * 22ms); }
+
+/* the shimmer: a slow diagonal pass over the dark dots */
+.counter-dot::before {
+  content: ''; position: absolute; inset: 0; background: var(--accent); opacity: 0;
+  animation: counter-wave 5200ms var(--ease) infinite;
+  animation-delay: calc((var(--r) + var(--c)) * 70ms);
+}
+@keyframes counter-wave { 0%, 12%, 100% { opacity: 0; } 6% { opacity: 0.32; } }
+
+/* now and then a dot flickers: a lit one dips, a dark one glints */
+/* (a double blink, stepped, the way a board does it, not a fade) */
+.counter-dot.is-flicker { animation: counter-flicker 240ms step-end 1; }
+.counter-dot.is-flicker:not(.is-lit) { animation-name: counter-glint; }
+@keyframes counter-flicker { 0%, 60% { opacity: 0.35; } 40%, 100% { opacity: 1; } }
+@keyframes counter-glint {
+  0%, 60% { background: color-mix(in srgb, var(--accent) 55%, transparent); }
+  40%, 100% { background: color-mix(in srgb, var(--accent) 11%, transparent); }
+}
+
+.counter-label { display: flex; flex-direction: column; gap: 2px; padding-bottom: 2px;
+  font-size: 11.5px; font-weight: 500; letter-spacing: 0.09em; line-height: 1.35; text-transform: uppercase; }   /* as the nav */
+.counter-total { color: rgb(242 242 239 / 0.5); }
+.counter-name { color: var(--ink); animation: counter-name-in 260ms var(--ease) both; }
+/* on a project: the page above it steps back, the project under it with the way down marked */
+.counter-name.is-parent { color: rgb(242 242 239 / 0.5); transition: color 200ms var(--ease); }
+.counter-sub { color: var(--ink); white-space: nowrap; animation: counter-name-in 260ms var(--ease) both; }
+.counter-sub-mark { color: var(--accent); }
+@keyframes counter-name-in { from { opacity: 0; transform: translateY(3px); } }
+
+@media (max-width: 600px) { .counter { --dot: 6px; top: 64px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .counter-dot::before, .counter-dot.is-flicker, .counter-name, .counter-sub { animation: none; }
+  .counter-board.is-settling .counter-dot { transition: none; }
+}
