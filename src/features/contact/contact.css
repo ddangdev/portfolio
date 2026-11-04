@@ -23,10 +23,11 @@
 .ask-step.is-on .ask-count { width: 100%; }
 .ask-step.is-on .ask-input { flex-basis: 260px; }
 .ask-step.is-on .ask-note { min-height: 6em; }
-.ask-step.is-on .ask-given { width: min(100%, 520px); text-align: left; }
+.ask-step.is-on .ask-given { width: min(100%, 560px); text-align: left; }
 .ask-step.is-on .ask-p { margin: 0 auto 8px; }
 .ask-step.is-on .ask-captcha { margin: 0 auto; }
-.ask-step.is-on .ask-given:last-of-type { margin-bottom: 18px; }
+.ask-step.is-on .ask-row-note:has(.ask-captcha) { gap: 22px; padding-bottom: 20px; }   /* the last step: check, then button, then room below */
+.ask-step.is-on .ask-given:last-of-type { margin-bottom: 30px; }   /* room before the anti-spam check */
 @keyframes ask-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes ask-in { from { opacity: 0; } to { opacity: 1; } }
 .ask-q { margin: 0 0 16px; font: 500 clamp(1.5rem, 3.4vw, 2.2rem)/1.1 var(--sans); letter-spacing: -0.03em; color: #000; }
@@ -60,7 +61,7 @@
 .ask-go:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .ask-arrow { transition: transform 160ms var(--ease); }
 .ask-go:hover .ask-arrow { transform: translateX(4px); }
-.ask-send, .ask-start { padding: 14px 22px; font-size: clamp(1rem, 1.8vw, 1.15rem); }
+.ask-send, .ask-start { padding: 15px 26px; font-size: clamp(1rem, 1.8vw, 1.15rem); }
 .ask-start { justify-self: start; margin-top: 4px; transition: opacity 320ms var(--ease), background-color 140ms var(--ease), transform 140ms var(--ease); }
 .ask-start.is-out { opacity: 0; pointer-events: none; }
 
