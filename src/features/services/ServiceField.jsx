@@ -15,7 +15,7 @@
    Rendered by PageDialog.jsx. */
 
 import { useLayoutEffect, useRef, useState } from 'react';
-import { track } from '../analytics/analytics.js';
+import { track } from '../measure/measure.js';
 
 const TAU = Math.PI * 2;
 // a ring's lap, in seconds, by its place out from the core: the inner ones quicker

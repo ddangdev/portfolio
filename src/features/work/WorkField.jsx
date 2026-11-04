@@ -13,7 +13,7 @@
    (each with its `color`). */
 
 import { useLayoutEffect, useRef } from 'react';
-import { track } from '../analytics/analytics.js';
+import { track } from '../measure/measure.js';
 
 // a dot's pace, in px a second, and the share of it kept while pointed at: slow motion, not a stop
 const PACE = [10, 20];

@@ -6,7 +6,7 @@
    `faq` in its body. */
 
 import { useId, useState } from 'react';
-import { track } from '../analytics/analytics.js';
+import { track } from '../measure/measure.js';
 
 export default function Faq({ items, words, onGo, title }) {
   const id = useId();

@@ -1,4 +1,6 @@
-/* ddanghnl-site: analytics, through Google Analytics 4 (owner's call, 2026-11-02). The site is one
+/* ddanghnl-site: analytics, through Google Analytics 4 (owner's call, 2026-11-02). Named `measure`,
+   not `analytics`: a path ending in analytics.js is on every tracker-blocker list, and in development
+   (one file per module) Chrome with a blocker refused the module and the whole app fell over (2026-11-04). The site is one
    page whose address never changes - the pop-ups, the projects, the wheel are all state - so GA4 on
    its own would see one page view a visit and nothing else. Everything of interest is sent from here
    by hand instead:

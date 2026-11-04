@@ -1,0 +1,26 @@
+/* ddanghnl-site: the cursor, a square dot in a square frame. See Cursor.jsx. Only drawn for a real mouse; the native
+   cursor goes except in text fields. White on a difference blend, so it is black over the white pop-ups. */
+
+@media (pointer: fine) {
+  /* everything, with weight: the grab hand on the services, the pointer on the arrows and dots all set their own */
+  html.has-cursor, html.has-cursor * { cursor: none !important; }
+  html.has-cursor input, html.has-cursor textarea, html.has-cursor select { cursor: auto !important; }
+}
+
+.cursor-trail { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 999; pointer-events: none; mix-blend-mode: difference; }
+.cursor-dot, .cursor-ring {
+  position: fixed; left: 0; top: 0; z-index: 1000; pointer-events: none; border-radius: 0;   /* square (owner's call, 2026-11-04: it fits the site's sharp edges) */
+  background: #fff; mix-blend-mode: difference; opacity: 0; will-change: transform;
+}
+.cursor-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; transition: opacity 160ms var(--ease); }
+.cursor-ring {
+  width: 30px; height: 30px; margin: -15px 0 0 -15px; background: transparent; border: 1.5px solid #fff;
+  transition: opacity 160ms var(--ease), width 220ms var(--ease), height 220ms var(--ease), margin 220ms var(--ease), border-color 220ms var(--ease);
+}
+.cursor-dot.is-on, .cursor-ring.is-on { opacity: 1; }
+/* over a link or a button: the ring opens out and softens */
+.cursor-ring.is-hot { width: 48px; height: 48px; margin: -24px 0 0 -24px; border-color: rgb(255 255 255 / 0.7); }
+/* a press: the ring closes in on the dot */
+.cursor-ring.is-down { width: 18px; height: 18px; margin: -9px 0 0 -9px; transition-duration: 110ms; }
+
+@media (prefers-reduced-motion: reduce) { .cursor-ring { transition: opacity 160ms var(--ease); } }

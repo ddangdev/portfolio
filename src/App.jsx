@@ -4,6 +4,7 @@
 
 import Wheel from './features/wheel/Wheel.jsx';
 import Ticker from './features/ticker/Ticker.jsx';
+import Cursor from './features/cursor/Cursor.jsx';
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <h1 className="sr-only">ddanghnl: i make websites, brands and things you like</h1>
       <Wheel shown />
       <Ticker shown />
+      <Cursor />
     </main>
   );
 }

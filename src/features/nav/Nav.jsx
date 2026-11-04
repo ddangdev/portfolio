@@ -4,7 +4,7 @@
    wheel turns to it. The page on show is marked - work, for one of its projects. Placed by the wheel
    (see Wheel.jsx), which does the going. */
 
-import { track } from '../analytics/analytics.js';
+import { track } from '../measure/measure.js';
 
 export default function Nav({ items, current, onGo, shown }) {
   return (

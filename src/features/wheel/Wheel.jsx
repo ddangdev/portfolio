@@ -16,7 +16,7 @@ import PageDialog from '../page/PageDialog.jsx';
 import Nav from '../nav/Nav.jsx';
 import Counter from '../counter/Counter.jsx';
 import Walls from './Walls.jsx';
-import { track, view } from '../analytics/analytics.js';
+import { track, view } from '../measure/measure.js';
 
 // Every post round the wheel, in order of angle. The wheel only ever comes to rest with one of them
 // on the selector, however unevenly they are spaced.

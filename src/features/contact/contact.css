@@ -1,36 +1,89 @@
-/* ddanghnl-site: contact's form. See ContactForm.jsx. The page is light (black on white). */
+/* ddanghnl-site: contact's form, one question at a time. See ContactForm.jsx. The page is light (black on white). */
 
-.ask { display: grid; gap: 22px; max-width: 560px; }
-.ask-set { margin: 0; padding: 0; border: 0; min-width: 0; }
-.ask-label { display: block; margin-bottom: 10px; font: 500 11.5px/1 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: rgb(0 0 0 / 0.55); }
+.ask { display: grid; gap: 6px; max-width: 620px; }
+.ask:has(.ask-step.is-on) { max-width: none; }
 
-/* the services, as boxes to tick: a row of pills, each with a square that fills when ticked */
-.ask-boxes { display: flex; flex-wrap: wrap; gap: 8px; }
-.ask-box {
-  display: inline-flex; align-items: center; gap: 9px; padding: 9px 14px 9px 11px;
-  border: 1px solid rgb(0 0 0 / 0.2); border-radius: 999px; cursor: pointer; user-select: none;
-  font: 500 clamp(0.95rem, 1.6vw, 1.05rem)/1 var(--sans); letter-spacing: -0.01em; color: #000;
+/* an answer already given: the question small above, the answer in full, and `change` beside it */
+.ask-given { display: grid; grid-template-columns: 1fr auto; column-gap: 14px; align-items: baseline; padding: 10px 0 12px; border-bottom: 1px solid rgb(0 0 0 / 0.1); }
+.ask-given-q { grid-column: 1 / -1; font: 500 11.5px/1 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: rgb(0 0 0 / 0.5); }
+.ask-given-a { margin-top: 6px; font: 500 clamp(1.05rem, 2vw, 1.25rem)/1.3 var(--sans); letter-spacing: -0.015em; color: #000; overflow-wrap: anywhere; }
+.ask-change { padding: 0; border: 0; background: none; cursor: pointer; font: 500 12.5px/1 var(--sans); letter-spacing: 0.02em; color: rgb(0 0 0 / 0.5); text-decoration: underline; text-underline-offset: 0.2em; }
+.ask-change:hover { color: var(--accent); }
+.ask-change:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* the question being asked: big words, then the way to answer it */
+.ask-step { padding-top: 22px; animation: ask-rise 260ms var(--ease) both; }
+/* while asking: the question up top, the answers at the bottom, nothing else (owner's call, 2026-11-04) */
+.ask-step.is-on { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8px; min-height: clamp(250px, 44svh, 400px); animation: ask-in 360ms var(--ease) both; }
+.ask-step.is-on { justify-content: center; }   /* the question and its answers as one block, in the middle */
+.ask-step.is-on .ask-q { margin: 0 0 28px; }
+.ask-step.is-on .ask-row { justify-content: center; width: min(100%, 660px); }   /* the answers wrap inside a column in the middle, not across the whole card */
+.ask-step.is-on .ask-row-note { width: min(100%, 660px); justify-items: center; }
+.ask-step.is-on .ask-row-note > .ask-row, .ask-step.is-on .ask-row-note > .ask-note { width: 100%; }
+.ask-step.is-on .ask-count { width: 100%; }
+.ask-step.is-on .ask-input { flex-basis: 260px; }
+.ask-step.is-on .ask-note { min-height: 6em; }
+.ask-step.is-on .ask-given { width: min(100%, 520px); text-align: left; }
+.ask-step.is-on .ask-p { margin: 0 auto 8px; }
+.ask-step.is-on .ask-captcha { margin: 0 auto; }
+.ask-step.is-on .ask-given:last-of-type { margin-bottom: 18px; }
+@keyframes ask-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes ask-in { from { opacity: 0; } to { opacity: 1; } }
+.ask-q { margin: 0 0 16px; font: 500 clamp(1.5rem, 3.4vw, 2.2rem)/1.1 var(--sans); letter-spacing: -0.03em; color: #000; }
+.ask-p { margin: 0 0 4px; max-width: 42ch; font: 400 clamp(1rem, 1.8vw, 1.1rem)/1.4 var(--sans); color: rgb(0 0 0 / 0.65); }
+.ask-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ask-row-note { display: grid; gap: 10px; }
+
+/* an answer as a button: a pill, red when it is on; the services carry a square that fills */
+.ask-opt {
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 16px;
+  border: 1px solid rgb(0 0 0 / 0.2); border-radius: 999px; background: #fff; cursor: pointer; user-select: none;
+  font: 500 clamp(0.95rem, 1.6vw, 1.05rem)/1 var(--sans); letter-spacing: -0.01em; color: #000; text-align: left;
   transition: border-color 140ms var(--ease), background-color 140ms var(--ease), transform 140ms var(--ease);
 }
-.ask-box:hover { border-color: #000; }
-.ask-box:active { transform: scale(0.97); }
-.ask-box.is-on { border-color: var(--accent); background: rgb(232 78 58 / 0.08); }
-.ask-box input { position: absolute; width: 1px; height: 1px; margin: -1px; opacity: 0; pointer-events: none; }
-.ask-box:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
-.ask-box-mark { width: 12px; height: 12px; border: 1px solid rgb(0 0 0 / 0.4); border-radius: 3px; transition: background-color 140ms var(--ease), border-color 140ms var(--ease); }
-.ask-box.is-on .ask-box-mark { background: var(--accent); border-color: var(--accent); }
+.ask-opt:hover { border-color: #000; }
+.ask-opt:active { transform: scale(0.97); }
+.ask-opt.is-on { border-color: var(--accent); background: rgb(232 78 58 / 0.08); }
+.ask-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ask-opt-mark { width: 12px; height: 12px; border: 1px solid rgb(0 0 0 / 0.4); border-radius: 3px; transition: background-color 140ms var(--ease), border-color 140ms var(--ease); }
+.ask-opt.is-on .ask-opt-mark { background: var(--accent); border-color: var(--accent); }
 
-/* who they are: name and phone needed, email if they like - side by side where there is room */
-.ask-who { display: grid; gap: 14px; }
-@media (min-width: 601px) { .ask-who { grid-template-columns: 1fr 1fr; } .ask-who .ask-field:last-child { grid-column: 1 / -1; } }
-.ask-field { display: block; }
-.ask-label em { font-style: normal; text-transform: none; letter-spacing: 0; opacity: 0.7; margin-left: 6px; }
+/* the button that moves on: black, red on hover, its arrow nudging forward */
+.ask-go {
+  display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px;
+  border: 0; border-radius: 999px; background: #000; color: #fff; cursor: pointer;
+  font: 500 clamp(0.95rem, 1.6vw, 1.05rem)/1 var(--sans); letter-spacing: -0.01em;
+  transition: background-color 140ms var(--ease), transform 140ms var(--ease);
+}
+.ask-go:hover { background: var(--accent); }
+.ask-go:active { transform: scale(0.97); }
+.ask-go:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ask-arrow { transition: transform 160ms var(--ease); }
+.ask-go:hover .ask-arrow { transform: translateX(4px); }
+.ask-send, .ask-start { padding: 14px 22px; font-size: clamp(1rem, 1.8vw, 1.15rem); }
+.ask-start { justify-self: start; margin-top: 4px; transition: opacity 320ms var(--ease), background-color 140ms var(--ease), transform 140ms var(--ease); }
+.ask-start.is-out { opacity: 0; pointer-events: none; }
+
+/* a typed answer: one field, the arrow beside it */
 .ask-input {
-  display: block; width: 100%; padding: 11px 14px;
+  flex: 1 1 220px; min-width: 0; padding: 11px 16px;
   border: 1px solid rgb(0 0 0 / 0.2); border-radius: 999px; background: #fff; color: #000;
-  font: 400 clamp(1rem, 1.8vw, 1.1rem)/1.3 var(--sans);
+  font: 400 clamp(1rem, 1.8vw, 1.15rem)/1.3 var(--sans);
 }
 .ask-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: #000; }
+.ask-input.is-bad { border-color: var(--accent); }
+.ask-bad { margin: 8px 0 0; font: 500 13px/1.3 var(--sans); color: var(--accent); }
+
+/* a few words, with the room left shown as it runs low */
+.ask-note {
+  display: block; width: 100%; padding: 12px 16px; resize: vertical; min-height: 4.5em;
+  border: 1px solid rgb(0 0 0 / 0.2); border-radius: 14px; background: #fff; color: #000;
+  font: 400 clamp(1rem, 1.8vw, 1.15rem)/1.4 var(--sans);
+}
+.ask-note::placeholder { color: rgb(0 0 0 / 0.35); }
+.ask-note:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: #000; }
+.ask-count { display: block; margin-top: -4px; text-align: right; font: 500 11px/1 var(--sans); letter-spacing: 0.04em; color: rgb(0 0 0 / 0.45); opacity: 0; transition: opacity 160ms var(--ease); }
+.ask-count.is-on { opacity: 1; }
 
 /* where the captcha will sit: a dashed box the size of one, with a square where its tick would be */
 .ask-captcha {
@@ -40,27 +93,10 @@
 }
 .ask-captcha-box { flex: none; width: 22px; height: 22px; border: 1.5px solid rgb(0 0 0 / 0.3); border-radius: 4px; }
 
-/* a few words, then the button that opens the email */
-.ask-note {
-  display: block; width: 100%; padding: 12px 14px; resize: vertical; min-height: 4.5em;
-  border: 1px solid rgb(0 0 0 / 0.2); border-radius: 12px; background: #fff; color: #000;
-  font: 400 clamp(1rem, 1.8vw, 1.1rem)/1.4 var(--sans);
-}
-.ask-note::placeholder { color: rgb(0 0 0 / 0.35); }
-/* the room left in the few words, shown only as it runs low */
-.ask-count { display: block; margin-top: 6px; text-align: right; font: 500 11px/1 var(--sans); letter-spacing: 0.04em; color: rgb(0 0 0 / 0.45); opacity: 0; transition: opacity 160ms var(--ease); }
-.ask-count.is-on { opacity: 1; }
-.ask-note:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: #000; }
-.ask-send {
-  justify-self: start; display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px;
-  border: 0; border-radius: 999px; background: #000; color: #fff; cursor: pointer; text-decoration: none;
-  font: 500 clamp(1rem, 1.8vw, 1.1rem)/1 var(--sans); letter-spacing: -0.01em;
-  transition: background-color 140ms var(--ease), transform 140ms var(--ease);
-}
-.ask-send:hover { background: var(--accent); }
-.ask-send:active { transform: scale(0.97); }
-.ask-send:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.ask-send-arrow { transition: transform 160ms var(--ease); }
-.ask-send:hover .ask-send-arrow { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) { .ask-step, .ask-step.is-on { animation: none; } .ask-start { transition: none; } .ask-opt, .ask-go, .ask-arrow, .ask-opt-mark { transition: none; } }
 
-@media (prefers-reduced-motion: reduce) { .ask-box, .ask-send, .ask-send-arrow, .ask-box-mark { transition: none; } }
+/* the dots along the bottom: one a question, the current one filled, the ones behind it dimmer */
+.ask-dots { display: flex; justify-content: center; gap: 8px; padding: 18px 0 2px; }
+.ask-dot { width: 7px; height: 7px; border-radius: 50%; background: rgb(0 0 0 / 0.14); transition: background-color 200ms var(--ease), transform 200ms var(--ease); }
+.ask-dot.is-done { background: rgb(0 0 0 / 0.4); }
+.ask-dot.is-on { background: var(--accent); transform: scale(1.3); }

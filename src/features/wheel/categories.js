@@ -66,7 +66,7 @@ const PROJECTS = [
   { name: 'ʻāina moana', kind: 'interactive', at: 50.625, project: true, light: true, body: [{ p: "magic island, honolulu, drawn as a field of lit dots on black and seen from straight above. the lamps come on, walkers and runners cross it. named by its hawaiian name, the one hardly anyone uses." }], preview: { video: 'work/aina-moana.mp4', poster: 'work/aina-moana.jpg' }, embed: 'embed/aina-moana/index.html' },
   // filmed live: the pointer runs along the shelf and back, opens Jujutsu Kaisen 27, scrolls to its card
   { name: 'my personal shelf', kind: 'interactive', at: 54.375, project: true, light: true, body: [{ p: "one shelf in a dark room: the studio's work as books, beside a few real ones from my own shelf. pull one out and turn it over." }], preview: { video: 'work/my-personal-shelf.mp4', poster: 'work/my-personal-shelf.jpg' }, embed: 'embed/my-personal-shelf/index.html?embed' },
-  { name: 'hale build', kind: 'video', at: 58.125, project: true, light: true, body: [{ p: "a hawaiian plantation hale going up stage by stage, built as real geometry and circled by a drone that was never there. a clip made to pitch to construction companies." }], preview: HALE },
+  { name: 'hale build', kind: 'video', at: 58.125, project: true, light: true, body: [{ p: "a hawaiian plantation hale going up stage by stage, rendered in blender as real 3d geometry, with modern tech filling in the details." }], preview: HALE },
   // the shmeep "who's in?" poster in a bus shelter panel, composited at 3x so the poster stays sharp
   // when shown large (shmeep/design/_composite_hd.py)
   { name: 'shmeep', kind: 'graphics', at: 61.875, project: true, light: true, body: [{ p: "rsvp for small plans: make a plan, send a link, see who's in. this is its look, drawn out at a bus stop." }], preview: { image: 'work/shmeep-busstop-hd.jpg' } },
@@ -187,7 +187,7 @@ export const CATEGORIES = [
   // (owner's call, 2026-11-02, in place of a list of services)
   { name: 'contact', at: 67.5, light: true, body: [
     { lead: "let's make something" },
-    { p: 'tick what you are after, say a little, and an email opens with it filled in.' },
+    { p: 'a few quick questions, and an email opens with your answers filled in.' },
     { email: EMAIL, asks: SERVICES.map((s) => s.service) },
   ] },
   // notes, one stop on from contact (owner's call, 2026-11-02): short notes from the studio, and the

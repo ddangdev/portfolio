@@ -8,7 +8,7 @@ Architects intro; first built as a plain page at `mockups.ddanghnl.com/portfolio
 The live site, ddanghnl.com, since 2026-11-02. It deploys from the `portfolio` repo (Cloudflare
 Pages, custom domain and secrets hang off it): `scripts/release.sh` copies this source there and
 builds; commit and push there, and Pages deploys main. Edit here, release there. GA4's measurement
-ID is in `.env.production`; the events are listed in `src/features/analytics/analytics.js`.
+ID is in `.env.production`; the events are listed in `src/features/measure/measure.js` (named so no tracker-blocker list matches the path in development).
 
 ## Run it
 

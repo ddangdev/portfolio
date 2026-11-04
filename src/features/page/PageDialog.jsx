@@ -20,7 +20,7 @@ import ContactForm from '../contact/ContactForm.jsx';
 import WorkField from '../work/WorkField.jsx';
 import Faq from '../faq/Faq.jsx';
 import Note, { NoteList } from '../notes/Note.jsx';
-import { track } from '../analytics/analytics.js';
+import { track } from '../measure/measure.js';
 
 const asset = (path) => `${import.meta.env.BASE_URL}${path}`;
 const OUT_MS = 200;   // the closing fade, before it unmounts
@@ -57,10 +57,14 @@ export default function PageDialog({ page, onClose, onGo, onStep, around, return
   const fromHeight = useRef(0);   // the card's height before the new page went in, while it resizes
   // the pages left by a link, in order: the back arrow returns to the last
   const [trail, setTrail] = useState([]);
+  // contact: the copy above the form is fading ('out') or gone, once the questions have begun
+  const [asking, setAsking] = useState(null);
+  useEffect(() => { setAsking(null); }, [shown]);
   // (each sent to analytics, with the page it was done from: `how` is a link in the words, or a work dot)
   const go = (to, how = 'text') => { track('page_link', { from: page.name, to, how }); setTrail((t) => [...t, page.name]); onGo(to); };
   const back = () => { if (!trail.length) return; const to = trail[trail.length - 1]; track('page_back', { from: page.name, to }); setTrail(trail.slice(0, -1)); onGo(to); };
-  const step = (fwd, how = 'arrow') => { track('page_step', { from: page.name, dir: fwd ? 'next' : 'prev', how }); setTrail([]); onStep(fwd); };
+  // once the contact questions have begun, the card stays put: no arrows, no keys, no swipe (owner's call, 2026-11-04)
+  const step = (fwd, how = 'arrow') => { if (asking) return; track('page_step', { from: page.name, dir: fwd ? 'next' : 'prev', how }); setTrail([]); onStep(fwd); };
   // a swipe across the card, on a phone: where the finger went down, to measure the way it went
   const swipe = useRef(null);
   const swipeDown = (e) => {
@@ -138,7 +142,7 @@ export default function PageDialog({ page, onClose, onGo, onStep, around, return
     <div ref={backdrop} className={`page-backdrop${closing ? ' is-closing' : ''}`} onClick={close}>
       {/* the card, and the page before and after on its white, an arrow at either side (owner's call,
           2026-11-01: inside the card, the card wider) */}
-      <div className={`page-frame${light ? ' is-light' : ''}`}>
+      <div className={`page-frame${light ? ' is-light' : ''}${asking ? ' is-asking' : ''}`}>
       <button type="button" className="page-step is-prev" aria-label={`Previous: ${around[0]}`} title={around[0]}
               onClick={(e) => { e.stopPropagation(); step(false); }}><Chevron left /></button>
       <button type="button" className="page-step is-next" aria-label={`Next: ${around[1]}`} title={around[1]}
@@ -165,8 +169,8 @@ export default function PageDialog({ page, onClose, onGo, onStep, around, return
           </div>
         </header>
         <div className="page-body">
-          {body && (
-            <div className="page-copy">
+          {body && asking !== 'gone' && (
+            <div className={`page-copy${asking === 'out' ? ' is-out' : ''}`}>
               {body.filter((b) => !b.service && !b.email && !b.links && !b.faq && !b.notes).map((b, i) => (b.lead
                 ? <p key={i} className="page-lead">{b.lead}</p>
                 : <p key={i} className="page-p">{words(b.p, go)}</p>))}
@@ -186,8 +190,9 @@ export default function PageDialog({ page, onClose, onGo, onStep, around, return
             <WorkField key={i} projects={b.links} kinds={b.kinds} onGo={(to) => go(to, 'dot')} />
           ))}
           {body?.filter((b) => b.email).map((b) => (
-            // contact: the form - the services to tick, a few words, a button that opens the email
-            <ContactForm key={b.email} email={b.email} asks={b.asks} />
+            // contact: the form - a start button, then one question at a time (the copy above fades
+            // out as the questions begin: `asking` is 'out' while it fades, 'gone' after)
+            <ContactForm key={b.email} email={b.email} asks={b.asks} onAsk={setAsking} />
           ))}
           {article && (
             // a note, read here (see notes/Note.jsx)
