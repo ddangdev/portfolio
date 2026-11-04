@@ -309,6 +309,16 @@ export default function Wheel({ shown }) {
     settle(to);
   };
 
+  // The nav (owner's call, 2026-11-04): a name clicked opens that page as well as turning the dial to
+  // it. The pop-up shows the page at once; the wheel turns there under it.
+  const goOpen = (name) => {
+    const at = POSTS.findIndex((p) => p.name === name);
+    if (at < 0) return;
+    if (!openedRef.current) track('page_open', { page: name, how: 'nav' });
+    setShownJ(at); setOpened(true);
+    go(name);
+  };
+
   // Scroll turns it page by page (see SCROLL_PAGE): the scroll moves a position counted in pages, the
   // wheel eases after it, and when the scrolling stops it springs to the nearest page.
   useEffect(() => {
@@ -468,7 +478,7 @@ export default function Wheel({ shown }) {
           );
         })}
       </svg>
-      <Nav items={NAV} shown={shown} onGo={go} current={current} />
+      <Nav items={NAV} shown={shown} onGo={goOpen} current={current} />
       <Counter index={NAV.indexOf(current) + 1} total={NAV.length} name={current} sub={small(post) ? post.name : null} shown={shown} />
       <Preview page={POSTS[chosen]} box={box} onOpen={() => open('preview')} />
       {opened && (() => {
