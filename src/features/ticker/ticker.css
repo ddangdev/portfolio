@@ -8,10 +8,10 @@
   font-family: Doto, var(--sans); font-weight: 900; font-size: 15px; letter-spacing: 0.06em; line-height: 26px;
   text-transform: uppercase;
   white-space: nowrap;
-  opacity: 0; transition: opacity 1000ms var(--ease);
+  opacity: 0;
   pointer-events: none;
 }
-.ticker.is-shown { opacity: 1; }
+.ticker.is-shown { opacity: 1; animation: come-in var(--in) var(--ease) 1300ms both; }   /* last in, with the counter */
 
 /* two copies side by side; sliding left by one copy's width brings the second exactly where the
    first began, so it loops seamlessly */

@@ -3,10 +3,10 @@
    no rim, no numbers, no hub. It lies flat, seen in isometric (owner's call), and is set so far off
    the bottom-right that only an arc of those bands sweeps across the screen. The categories stand on
    the rim, past the tick ends, as posts with their names above (after the owner's sketch): the posts
-   ride round with the wheel, the names stay upright. It grows in after the opening line clears, and
+   ride round with the wheel, the names stay upright. It fades in first of all, and
    the visitor turns it to get around: drag it round, scroll, or use the arrow keys. It coasts after a
    flick and settles with a category on the selector - a fixed red line across the bands - and that
-   category's post turns red. It fades in once the opening line has gone. What each category opens is
+   category's post turns red. What each category opens is
    still to be decided. */
 
 import { useEffect, useMemo, useRef, useState } from 'react';

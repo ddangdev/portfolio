@@ -4,10 +4,10 @@
   position: fixed; top: 68px; left: 16px; z-index: 9;   /* as far under the nav as the nav is under the clock; under an open pop-up, dimmed with the page */
   display: flex; align-items: flex-end; gap: 12px;
   --dot: 8px; --gap: 2px;
-  opacity: 0; transition: opacity 1000ms var(--ease);
+  opacity: 0;
   pointer-events: none;
 }
-.counter.is-shown { opacity: 1; }
+.counter.is-shown { opacity: 1; animation: come-in var(--in) var(--ease) 1300ms both; }   /* last in, with the clock */
 
 .counter-board {
   display: grid; gap: var(--gap);

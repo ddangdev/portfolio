@@ -5,6 +5,7 @@
   --ink: #f2f2ef;                       /* 18.7:1 on black */
   --accent: #ea4e3d;                    /* the selection; 5.7:1 on black, the red of the owner's sketch */
   --ease: cubic-bezier(.2, .8, .2, 1);
+  --in: 700ms;   /* how long each piece of the page takes to fade in; see wheel.css for the order */
   --sans: Archivo, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -16,3 +17,7 @@ body { font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 .page { min-height: 100svh; display: grid; place-items: center; padding: 0 max(20px, 5vw); }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* the page coming in: each piece runs this once, from the first paint, on its own delay */
+@keyframes come-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .wheel-svg, .nav, .preview, .counter, .ticker { animation-duration: 1ms !important; animation-delay: 0ms !important; } }

@@ -28,9 +28,15 @@
 .wheel-tag.is-chosen .wheel-tag-stem { stroke: var(--accent); stroke-width: 2; }
 .wheel-tag.is-chosen .wheel-tag-name { fill: var(--accent); }
 
-/* Fading in, the whole dial at once, once the opening line has gone (owner's call). */
-.wheel { opacity: 0; transition: opacity 1000ms var(--ease); }
-.wheel.is-shown { opacity: 1; }
+/* The page comes in clean, in turns (owner's call, 2026-11-04): the wheel first, the nav second,
+   the preview third, then the counter and the clock. Each piece fades on its own; this container
+   does not, so the delays below are what order them. */
+.wheel.is-shown .wheel-svg { animation: come-in var(--in) var(--ease) both; }
+.wheel.is-shown .preview { animation: come-in var(--in) var(--ease) 900ms both, preview-float 3600ms ease-in-out 1600ms infinite; }
+/* once in, the preview floats a little - a few pixels up and back, slowly - so it reads as something to
+   pick up (owner's call, 2026-11-04). On `translate`, not `transform`, so the hover lift still works. */
+@keyframes preview-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+@media (prefers-reduced-motion: reduce) { .wheel.is-shown .preview { animation-name: come-in; } }
 
 @media (prefers-reduced-motion: reduce) {
   .wheel { transition: none; }

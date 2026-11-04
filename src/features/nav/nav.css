@@ -3,10 +3,10 @@
 .nav {
   position: fixed; top: 34px; left: 0; z-index: 11;   /* under the clock strip, a breath below it (owner, 2026-11-01); above an open pop-up */
   height: 26px;   /* the words alone: no box or border behind them (owner's call) */
-  opacity: 0; transition: opacity 1000ms var(--ease);
+  opacity: 0;
   pointer-events: none;
 }
-.nav.is-shown { opacity: 1; pointer-events: auto; }
+.nav.is-shown { opacity: 1; pointer-events: auto; animation: come-in var(--in) var(--ease) 500ms both; }   /* second in, after the wheel */
 
 .nav-list { display: flex; height: 100%; margin: 0; padding: 0 6px; list-style: none; }
 .nav-item {
