@@ -27,7 +27,8 @@ const DEV = import.meta.env.DEV;
 
 // the location sent for a page: the site's address with the page's name on the end, as a hash. GA4
 // reads the path and the hash into its pages report
-const slug = (name) => name.normalize('NFD').replace(/[̀-ͯʻ]/g, '').trim().replace(/\s+/g, '-');
+// (also the hash a page answers to on arrival: see Wheel.jsx)
+export const slug = (name) => name.normalize('NFD').replace(/[̀-ͯʻ]/g, '').trim().replace(/\s+/g, '-').toLowerCase();
 const where = (name) => `${location.origin}${location.pathname}${name === 'home' ? '' : `#${slug(name)}`}`;
 
 // gtag's loader, the way Google writes it, once per page

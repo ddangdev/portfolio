@@ -16,7 +16,7 @@ import PageDialog from '../page/PageDialog.jsx';
 import Nav from '../nav/Nav.jsx';
 import Counter from '../counter/Counter.jsx';
 import Walls from './Walls.jsx';
-import { track, view } from '../measure/measure.js';
+import { track, view, slug } from '../measure/measure.js';
 
 // Every post round the wheel, in order of angle. The wheel only ever comes to rest with one of them
 // on the selector, however unevenly they are spaced.
@@ -140,6 +140,21 @@ export default function Wheel({ shown }) {
   const shut = () => { setOpened(false); setShownJ(null); };
   // opening the selected page, and how (analytics)
   const open = (how) => { track('page_open', { page: POSTS[postAt(rot.current)].name, how }); setOpened(true); };
+  // A link straight to a page (owner's ask, 2026-11-04): ddanghnl.com/#contact, /#hale-build, /#notes.
+  // On arrival the hash names a page by its slug (the one analytics uses, so the two agree), the wheel
+  // is set to it before the first paint and the pop-up opens on it. Only on arrival: the hash is not
+  // kept up to date as the wheel turns, so the address stays plain while people browse.
+  useEffect(() => {
+    const h = slug(decodeURIComponent(location.hash.slice(1)));   // so '#ʻāina-moana' and '#aina-moana' both land
+    if (!h) return;
+    const j = POSTS.findIndex((p) => slug(p.name) === h);
+    if (j < 0) return;
+    rot.current = restFor(j, rot.current); goal.current = j;
+    paint();
+    track('page_open', { page: POSTS[j].name, how: 'link' });
+    setOpened(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // analytics: each page the pop-up comes to show is a page view, however it got there (a click, the
   // nav, a link, the arrows, the back arrow); the pop-up going away is a close
   const onShow = opened ? POSTS[shownJ ?? chosen].name : null;
