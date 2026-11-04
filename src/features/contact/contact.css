@@ -73,6 +73,8 @@
 .ask-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: #000; }
 .ask-input.is-bad { border-color: var(--accent); }
 .ask-bad { margin: 8px 0 0; font: 500 13px/1.3 var(--sans); color: var(--accent); }
+.ask-mail { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
+.ask-go:disabled { opacity: 0.6; cursor: default; }
 
 /* a few words, with the room left shown as it runs low */
 .ask-note {
@@ -85,13 +87,8 @@
 .ask-count { display: block; margin-top: -4px; text-align: right; font: 500 11px/1 var(--sans); letter-spacing: 0.04em; color: rgb(0 0 0 / 0.45); opacity: 0; transition: opacity 160ms var(--ease); }
 .ask-count.is-on { opacity: 1; }
 
-/* where the captcha will sit: a dashed box the size of one, with a square where its tick would be */
-.ask-captcha {
-  display: flex; align-items: center; gap: 12px; width: min(100%, 300px); height: 66px; padding: 0 14px;
-  border: 1px dashed rgb(0 0 0 / 0.3); border-radius: 10px; color: rgb(0 0 0 / 0.45);
-  font: 500 clamp(0.9rem, 1.5vw, 1rem)/1 var(--sans);
-}
-.ask-captcha-box { flex: none; width: 22px; height: 22px; border: 1.5px solid rgb(0 0 0 / 0.3); border-radius: 4px; }
+/* the anti-spam check: Turnstile draws its own box in here (flexible width, 65px tall) */
+.ask-captcha { width: min(100%, 360px); min-height: 65px; }
 
 @media (prefers-reduced-motion: reduce) { .ask-step, .ask-step.is-on { animation: none; } .ask-start { transition: none; } .ask-opt, .ask-go, .ask-arrow, .ask-opt-mark { transition: none; } }
 

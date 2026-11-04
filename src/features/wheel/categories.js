@@ -187,7 +187,7 @@ export const CATEGORIES = [
   // (owner's call, 2026-11-02, in place of a list of services)
   { name: 'contact', at: 67.5, light: true, body: [
     { lead: "let's make something" },
-    { p: 'a few quick questions, and an email opens with your answers filled in.' },
+    { p: 'a few quick questions, and it goes straight to the studio.' },
     { email: EMAIL, asks: SERVICES.map((s) => s.service) },
   ] },
   // notes, one stop on from contact (owner's call, 2026-11-02): short notes from the studio, and the

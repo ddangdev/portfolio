@@ -2,8 +2,10 @@
    block of fields): each question in readable words, its answers as buttons where they can be - the
    services, roughly when - and a single field where they cannot - a name, a number, an email, a few
    words. Answers given so far sit above as short lines, each with a `change` that goes back to it. The
-   last step opens an email to the studio with everything filled in. No server: the visitor's own mail
-   app sends it. The address itself is not shown (owner's call, 2026-11-02).
+   last step sends it to the studio (owner's call, 2026-11-04: it posts to /api/lead, the Pages function
+   in the deploy repo that checks a Turnstile token and emails the owner through Resend; before this it
+   only opened the visitor's mail app). If the post fails, a mail link is offered instead. The address
+   itself is not shown (owner's call, 2026-11-02).
    Rendered by page/PageDialog.jsx for a page with `email` and `asks`. */
 
 import { useEffect, useRef, useState } from 'react';
@@ -13,6 +15,20 @@ import { track } from '../measure/measure.js';
 const NOTE_MAX = 500;
 // how long the copy and the start button take to fade out before the first question comes in
 const FADE = 320;
+// Turnstile: the public site key for ddanghnl.com; in development Cloudflare's always-passes test key,
+// since the real one refuses localhost (and the endpoint is not there in development anyway)
+const SITE_KEY = import.meta.env.DEV ? '1x00000000000000000000AA' : '0x4AAAAAADwv0OfinxrncT6S';
+const MAIL_FALLBACK = 'you can write to the studio by email instead:';
+const TURNSTILE_JS = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+// the script, loaded once, however many times the form is opened
+let turnstileReady = null;
+const loadTurnstile = () => turnstileReady ||= new Promise((ok, no) => {
+  if (window.turnstile) return ok(window.turnstile);
+  const sc = document.createElement('script');
+  sc.src = TURNSTILE_JS; sc.async = true;
+  sc.onload = () => ok(window.turnstile); sc.onerror = () => { turnstileReady = null; no(new Error('turnstile')); };
+  document.head.appendChild(sc);
+});
 // a phone number as people type them here: ten digits, with or without +1, spaces, dots, dashes, brackets
 const PHONE = /^\+?1?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,7 +66,13 @@ export default function ContactForm({ email, asks, onAsk }) {
   const [a, setA] = useState({ picked: [], when: '', name: '', phone: '', email: '', note: '' });
   const [draft, setDraft] = useState('');
   const [bad, setBad] = useState(false);
+  // the send: a token from the anti-spam check, then 'sending', 'sent', or the error to show
+  const [token, setToken] = useState('');
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [fail, setFail] = useState('');
   const field = useRef(null);
+  const captcha = useRef(null);
   const step = STEPS[at];
   const put = (k, v) => setA((x) => ({ ...x, [k]: v }));
   const toggle = (s) => put('picked', a.picked.includes(s) ? a.picked.filter((x) => x !== s) : [...a.picked, s]);
@@ -80,6 +102,23 @@ export default function ContactForm({ email, asks, onAsk }) {
     next();
   };
 
+  // the anti-spam check: drawn into its box when the last step is reached, and again after a `change`
+  useEffect(() => {
+    if (step.kind !== 'send' || sent) return undefined;
+    let id = null, gone = false;
+    setToken('');
+    loadTurnstile().then((ts) => {
+      if (gone || !captcha.current) return;
+      captcha.current.innerHTML = '';
+      id = ts.render(captcha.current, {
+        sitekey: SITE_KEY, theme: 'light', size: 'flexible',
+        callback: (t) => setToken(t), 'expired-callback': () => setToken(''), 'error-callback': () => setToken(''),
+      });
+    }).catch(() => setFail('the anti-spam check did not load. ' + MAIL_FALLBACK));
+    return () => { gone = true; if (id && window.turnstile) window.turnstile.remove(id); };
+  }, [step.kind, sent]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // the mail link, for when the post cannot go: the same answers, in the visitor's own mail app
   const subject = `${a.picked.length ? a.picked.join(', ') : 'hello'} - ddanghnl studio`;
   const body = [
     `name: ${a.name.trim()}`, `phone: ${a.phone.trim()}`, a.email.trim() && `email: ${a.email.trim()}`,
@@ -87,10 +126,33 @@ export default function ContactForm({ email, asks, onAsk }) {
     a.note.trim() && `\n${a.note.trim()}`,
   ].filter(Boolean).join('\n');
   const href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const send = () => {
+
+  // the send: the answers posted to the studio's endpoint, with the anti-spam token
+  const send = async () => {
+    if (sending || sent) return;
+    if (!token) { setFail('tick the anti-spam box first.'); return; }
+    setSending(true); setFail('');
     // analytics: which services, roughly when, whether an email was given, how much was written (not what)
     track('contact_submit', { services: a.picked.length ? a.picked.join(', ') : 'none', when: a.when, has_email: Boolean(a.email.trim()), note_chars: a.note.trim().length });
-    location.href = href;
+    const em = a.email.trim();
+    const situation = [{ q: 'roughly when', a: a.when }, em ? { q: 'phone', a: a.phone.trim() } : null].filter(Boolean);
+    try {
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 12000);
+      const res = await fetch('/api/lead', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: ctl.signal,
+        // contact: the email when there is one (the studio can reply to it), else the phone
+        body: JSON.stringify({ name: a.name.trim(), contact: em || a.phone.trim(), services: a.picked, situation, message: a.note.trim(), turnstileToken: token, page: location.href, company: '' }),
+      });
+      clearTimeout(timer);
+      const out = res.ok ? await res.json() : { ok: false, error: `the studio's inbox did not answer (${res.status}).` };
+      if (out.ok) { setSent(true); track('contact_sent'); }
+      else { setFail((out.error || 'it did not go through.') + ' ' + MAIL_FALLBACK); window.turnstile?.reset(); setToken(''); }
+    } catch {
+      setFail('it did not go through. ' + MAIL_FALLBACK);
+    } finally {
+      setSending(false);
+    }
   };
 
   const typed = step.kind === 'text' || step.kind === 'tel' || step.kind === 'email';
@@ -114,9 +176,10 @@ export default function ContactForm({ email, asks, onAsk }) {
   return (
     <div className="ask" aria-live="polite">
       <form key={step.key} className="ask-step is-on" onSubmit={(e) => { e.preventDefault(); if (step.kind === 'send') send(); else if (typed || step.kind === 'note') give(false); }}>
-        <p className="ask-q" id={`ask-q-${step.key}`}>{step.q}</p>
+        <p className="ask-q" id={`ask-q-${step.key}`}>{sent ? 'sent. thank you.' : step.q}</p>
+        {sent && <p className="ask-p">the studio has it, and you will hear back soon.</p>}
 
-        {step.kind === 'send' && STEPS.slice(0, at).map((s, i) => (
+        {step.kind === 'send' && !sent && STEPS.slice(0, at).map((s, i) => (
           <div key={s.key} className="ask-given">
             <span className="ask-given-q">{s.q}</span>
             <span className="ask-given-a">{shown(s, a[s.key])}</span>
@@ -164,22 +227,21 @@ export default function ContactForm({ email, asks, onAsk }) {
           </div>
         )}
 
-        {step.kind === 'send' && (
+        {step.kind === 'send' && !sent && (
           <div className="ask-row ask-row-note">
-            <p className="ask-p">an email to the studio opens with your answers in it. send that, and you will hear back soon.</p>
-            {/* where the captcha goes (owner's call, 2026-11-02): a placeholder the size of a Turnstile or
-                reCAPTCHA box, until one is wired up with a form service */}
-            <div className="ask-captcha" aria-hidden="true"><span className="ask-captcha-box" /><span>captcha goes here</span></div>
+            {/* the anti-spam check (Cloudflare Turnstile), drawn in here */}
+            <div ref={captcha} className="ask-captcha" />
+            {fail && <p className="ask-bad">{fail} {fail.endsWith(':') && <a className="ask-mail" href={href}>open an email</a>}</p>}
             <div className="ask-row">
-              <button ref={field} type="submit" className="ask-go ask-send">write to the studio<span className="ask-arrow" aria-hidden="true">→</span></button>
+              <button ref={field} type="submit" className="ask-go ask-send" disabled={sending}>{sending ? 'sending' : 'send to the studio'}<span className="ask-arrow" aria-hidden="true">→</span></button>
             </div>
           </div>
         )}
       </form>
       {/* where you are: a dot a question, the one being asked filled (owner's call, 2026-11-04) */}
-      <div className="ask-dots" aria-label={`question ${at + 1} of ${STEPS.length}`}>
+      {!sent && <div className="ask-dots" aria-label={`question ${at + 1} of ${STEPS.length}`}>
         {STEPS.map((s, i) => <span key={s.key} className={`ask-dot${i === at ? ' is-on' : i < at ? ' is-done' : ''}`} />)}
-      </div>
+      </div>}
     </div>
   );
 }
